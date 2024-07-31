@@ -1,9 +1,9 @@
 package com.backend.server.repository;
 
-import com.backend.server.model.Class;
+import com.backend.server.model.ClassRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IClassRepository extends JpaRepository<Class, String> {
+public interface IClassRoomRepository extends JpaRepository<ClassRoom, String> {
 }
