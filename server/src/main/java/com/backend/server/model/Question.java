@@ -22,8 +22,8 @@ public class Question {
     @Column(name = "answer")
     private String answer;
 
-    @Column(name = "options")
-    private String options;
+//    @Column(name = "options")
+//    private String options;
     //Note: Options này cho các câu hỏi trắc nghiệm, tách nhau bằng dấu |
     //Ví dụ: option1|option2|option3
 

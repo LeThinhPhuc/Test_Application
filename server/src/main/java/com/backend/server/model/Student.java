@@ -33,11 +33,14 @@ public class Student {
     @JoinColumn(name = "accountId")
     private Account account;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(
-            name = "student_test",
-            joinColumns = @JoinColumn(name = "studentId"),
-            inverseJoinColumns = @JoinColumn(name = "testId")
-    )
-    private List<Test> tests;
+//    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    @JoinTable(
+//            name = "student_test",
+//            joinColumns = @JoinColumn(name = "studentId"),
+//            inverseJoinColumns = @JoinColumn(name = "testId")
+//    )
+//    private List<Test> tests;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentTest> studentTests;
 }

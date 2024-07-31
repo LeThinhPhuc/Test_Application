@@ -14,19 +14,19 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name="test")
+@Table(name = "test")
 public class Test {
     @Id
-    @Column(name="testid")
+    @Column(name = "testid")
     private String testId;
 
-    @Column(name="testname")
+    @Column(name = "testname")
     private String testName;
 
-    @Column(name="testtime")
+    @Column(name = "testtime")
     private Integer testTime;
 
-    @Column(name="testday")
+    @Column(name = "testday")
     @Temporal(TemporalType.DATE)
     private Date testDay;
 
@@ -41,10 +41,11 @@ public class Test {
     //! Getter Setter Construcor dùng lombok cho nhanh/gọn
 
 
-
-    @ManyToMany(mappedBy = "tests",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<Student> students;
+    //    @ManyToMany(mappedBy = "tests",
+//            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    private List<Student> students;
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentTest> studentTests;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
