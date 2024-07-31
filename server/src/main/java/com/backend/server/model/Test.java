@@ -1,9 +1,18 @@
 package com.backend.server.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name="test")
 public class Test {
@@ -29,51 +38,19 @@ public class Test {
     @Temporal(TemporalType.TIME)
     private Date endStart;
 
-    public String getTestId() {
-        return testId;
-    }
+    //! Getter Setter Construcor dùng lombok cho nhanh/gọn
 
-    public void setTestId(String testId) {
-        this.testId = testId;
-    }
 
-    public String getTestName() {
-        return testName;
-    }
 
-    public void setTestName(String testName) {
-        this.testName = testName;
-    }
+    @ManyToMany(mappedBy = "tests",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Student> students;
 
-    public Integer getTestTime() {
-        return testTime;
-    }
-
-    public void setTestTime(Integer testTime) {
-        this.testTime = testTime;
-    }
-
-    public Date getTestDay() {
-        return testDay;
-    }
-
-    public void setTestDay(Date testDay) {
-        this.testDay = testDay;
-    }
-
-    public Date getTimeStart() {
-        return timeStart;
-    }
-
-    public void setTimeStart(Date timeStart) {
-        this.timeStart = timeStart;
-    }
-
-    public Date getEndStart() {
-        return endStart;
-    }
-
-    public void setEndStart(Date endStart) {
-        this.endStart = endStart;
-    }
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "test_question",
+            joinColumns = @JoinColumn(name = "testId"),
+            inverseJoinColumns = @JoinColumn(name = "questionId")
+    )
+    private List<Question> questions;
 }
