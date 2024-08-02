@@ -4,8 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@EqualsAndHashCode
 @Table(name="classroom")
 public class ClassRoom {
     @Id
@@ -20,36 +26,4 @@ public class ClassRoom {
 
     @Column(name="semester")
     private String semester;
-
-    public String getClassRoomId() {
-        return classRoomId;
-    }
-
-    public void setClassRoomId(String classRoomId) {
-        this.classRoomId = classRoomId;
-    }
-
-    public String getClassRoomName() {
-        return classRoomName;
-    }
-
-    public void setClassRoomName(String classRoomName) {
-        this.classRoomName = classRoomName;
-    }
-
-    public String getSchoolYear() {
-        return schoolYear;
-    }
-
-    public void setSchoolYear(String schoolYear) {
-        this.schoolYear = schoolYear;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
-    }
 }
