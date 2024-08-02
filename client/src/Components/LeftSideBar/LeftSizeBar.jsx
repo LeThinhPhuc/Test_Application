@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import Header from "../Header/Header"
 
-const LeftSizeBar = () => {
+const LeftSideBar = () => {
     return (
         <>
             <aside  id="default-sidebar" class="top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
@@ -69,4 +69,4 @@ const LeftSizeBar = () => {
     )
 }
 
-export default LeftSizeBar
+export default LeftSideBar
