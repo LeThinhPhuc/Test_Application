@@ -1,15 +1,11 @@
 package com.backend.server.service;
 
-import com.backend.server.model.Authority;
 import com.backend.server.model.Student;
 import com.backend.server.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -21,6 +17,7 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
+    //- Helper
     private Student findStudentById(String id) {
         return studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found with ID: " + id));
@@ -68,8 +65,8 @@ public class StudentService {
         if (student.getPhone() != null) {
             studentDB.setPhone(student.getPhone());
         }
-        if (student.getDob() != null) {
-            studentDB.setDob(student.getDob());
+        if (student.getGender() != null) {
+            studentDB.setGender(student.getGender());
         }
 
         return studentRepository.save(studentDB);
