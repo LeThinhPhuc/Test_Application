@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,11 +26,11 @@ public class Student {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "dob")
-    private String dob; //day of birth
+    @Column(name="gender")
+    private String gender;
 
-    @OneToOne(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "accountId")
     private Account account;
 
