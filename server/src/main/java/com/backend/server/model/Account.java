@@ -39,4 +39,8 @@ public class Account {
     @OneToOne(mappedBy = "account",
             cascade = CascadeType.ALL)
     private Student student;
+
+    @OneToOne(mappedBy = "account",
+            cascade = CascadeType.ALL)
+    private Teacher teacher;
 }

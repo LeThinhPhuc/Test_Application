@@ -19,13 +19,14 @@ public class Question {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "answer")
-    private String answer;
+    @Column(name = "type")
+    private String type;  // e.g., "Multiple Choice", "True/False", "Short Answer"
 
-//    @Column(name = "options")
-//    private String options;
-    //Note: Options này cho các câu hỏi trắc nghiệm, tách nhau bằng dấu |
-    //Ví dụ: option1|option2|option3
+    @Column(name = "topic")
+    private String topic; // e.g., "Mathematics", "Science"
+
+    @Column(name = "content")
+    private String content; // Nội dung câu hỏi
 
     @Column(name = "point")
     private double point;
@@ -36,6 +37,4 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
-
-
 }

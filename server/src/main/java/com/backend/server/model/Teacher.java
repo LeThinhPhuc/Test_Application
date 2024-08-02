@@ -31,4 +31,9 @@ public class Teacher {
 
     @OneToMany(mappedBy = "teacher")
     private List<ClassRoom> classRooms;
+
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinColumn(name = "accountId")
+    private Account account;
 }
