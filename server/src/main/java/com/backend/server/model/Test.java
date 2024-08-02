@@ -54,4 +54,8 @@ public class Test {
             inverseJoinColumns = @JoinColumn(name = "questionId")
     )
     private List<Question> questions;
+
+    @ManyToOne
+    @JoinColumn(name="teacherid")
+    private Teacher teacher;
 }

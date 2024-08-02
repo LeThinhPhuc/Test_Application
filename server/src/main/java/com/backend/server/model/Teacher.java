@@ -1,12 +1,11 @@
 package com.backend.server.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,4 +25,10 @@ public class Teacher {
 
     @Column(name="gender")
     private String gender;
+
+    @OneToMany(mappedBy = "teacher")
+    private List<Test> tests;
+
+    @OneToMany(mappedBy = "teacher")
+    private List<ClassRoom> classRooms;
 }

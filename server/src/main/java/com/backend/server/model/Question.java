@@ -33,4 +33,9 @@ public class Question {
     @ManyToMany(mappedBy = "questions",
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Test> tests;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers;
+
+
 }
