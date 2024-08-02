@@ -8,6 +8,7 @@ const TeacherPage = () => {
             <Header />
             <div className="flex" >
                 <LeftSideBar />
+                
                 <Outlet/>
             </div>
         </>
