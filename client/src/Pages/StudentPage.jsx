@@ -42,7 +42,7 @@ const StudentPage = () => {
     return (
         <>
             <Header />
-            <div className="text-5xl flex justify-center items-center justify-around my-10">Futured Exams</div>
+            <div className="text-5xl flex justify-center items-center my-10">Futured Exams</div>
 
             <div className="flex flex-wrap -mx-2">
                 {futuredExams.map((f, index) => (
@@ -57,7 +57,7 @@ const StudentPage = () => {
                 ))}
             </div>
 
-            <div className="text-5xl flex justify-center items-center justify-around my-10">
+            <div className="text-5xl flex justify-center items-center  my-10">
                 Copmleted Exams
             </div>
 
