@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header/Header";
+import { Link } from "react-router-dom";
 
 const ExamPage = () => {
   const [modal, setModel] = useState(false);
@@ -151,12 +152,13 @@ const ExamPage = () => {
               >
                 Cancel
               </button>
-              <button
+              <Link
+                to="/afterexam"
                 className="px-4 py-2 bg-blue-500 text-white rounded-md"
                 onClick={toggleModal}
               >
                 Confirm
-              </button>
+              </Link>
             </div>
           </div>
         </div>
