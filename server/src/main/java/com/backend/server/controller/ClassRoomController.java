@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Service
+@RestController
+@RequestMapping("/classrooms")
 public class ClassRoomController {
     private final ClassRoomService classRoomService;
 
