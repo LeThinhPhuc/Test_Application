@@ -9,8 +9,12 @@ import java.util.List;
 
 @Service
 public class TeacherService {
-    @Autowired
-    private ITeacherRepository teacherRepository;
+
+    private final ITeacherRepository teacherRepository;
+
+    public TeacherService(ITeacherRepository teacherRepository){
+        this.teacherRepository=teacherRepository;
+    }
 
     public void createTeacher(Teacher teacher){
         teacherRepository.save(teacher);
