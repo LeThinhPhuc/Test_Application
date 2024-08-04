@@ -16,8 +16,18 @@ public class TeacherService {
         teacherRepository.save(teacher);
     }
 
-    public void updateTeacher(Teacher teacher){
-        teacherRepository.save(teacher);
+    public Teacher updateTeacher(String id, Teacher teacher){
+        Teacher teacherInfo = getTeacherById(id);
+        if(teacher.getGender()!=null){
+            teacherInfo.setGender(teacher.getGender());
+        }
+        if(teacher.getFullName()!=null){
+            teacherInfo.setFullName(teacher.getFullName());
+        }
+        if(teacher.getPhoneNumber()!=null){
+            teacherInfo.setPhoneNumber(teacher.getPhoneNumber());
+        }
+        return teacherRepository.save(teacherInfo);
     }
 
     public void deleteTeacherById(String id){
