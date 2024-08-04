@@ -1,7 +1,9 @@
 package com.backend.server.service;
 
 import com.backend.server.model.ClassRoom;
+import com.backend.server.model.Student;
 import com.backend.server.repository.IClassRoomRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,7 @@ public class ClassRoomService {
     }
 
     public ClassRoom getClassById(String id){
-        return classRoomRepository.findById(id).orElseThrow(() -> new RuntimeException("Class not found with ID: " + id));
+        return classRoomRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found with ID: " + id));
     }
 
     public List<ClassRoom> getAllClass(){
@@ -43,7 +45,12 @@ public class ClassRoomService {
     }
 
     public void deleteClass(String id){
-        classRoomRepository.deleteById(id);
+        ClassRoom classRoom = classRoomRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Classroom not found with ID: "+id));
+        for(Student student: classRoom.getStudents()){
+            student.getClassRooms().remove(classRoom);
+        }
+        classRoom.getStudents().clear();
+        classRoomRepository.delete(classRoom);
     }
 
 
