@@ -101,7 +101,7 @@ public class ClassRoomController {
         try{
             if(classRoomService.getClassById(id)!=null){
                 classRoomService.deleteClass(id);
-                return ResponseEntity.ok("Deleted Success");
+                return ResponseEntity.ok("Classroom Deleted Success");
             }else{
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Classroom not found with ID: "+id);
             }
