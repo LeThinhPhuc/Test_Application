@@ -38,4 +38,6 @@ public class ClassRoom {
     @JoinColumn(name="teacherid")
     private Teacher teacher;
 
+    @OneToMany(mappedBy = "classRoom",  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Test> tests;
 }

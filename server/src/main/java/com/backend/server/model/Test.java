@@ -58,4 +58,9 @@ public class Test {
     @ManyToOne
     @JoinColumn(name="teacherid")
     private Teacher teacher;
+
+    @ManyToOne
+    @JoinColumn(name="classroomid")
+    private ClassRoom classRoom;
+
 }

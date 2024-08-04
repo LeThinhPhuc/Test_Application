@@ -36,4 +36,6 @@ public class Teacher {
             cascade = CascadeType.ALL)
     @JoinColumn(name = "accountId")
     private Account account;
+
+
 }
