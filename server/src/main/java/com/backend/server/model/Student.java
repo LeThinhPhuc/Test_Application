@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -28,6 +29,16 @@ public class Student {
 
     @Column(name="gender")
     private String gender;
+
+    public Student(String phone, String name, String gender) {
+        this.id = GenerateID.generateID();
+        this.name = name;
+        this.phone = phone;
+        this.gender = gender;
+        //- Account set ở ngoài
+        this.studentTests = new ArrayList<StudentTest>();
+        this.classRooms = new ArrayList<ClassRoom>();
+    }
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
