@@ -3,6 +3,7 @@ package com.backend.server.service;
 import com.backend.server.model.ClassRoom;
 import com.backend.server.model.Student;
 import com.backend.server.repository.IClassRoomRepository;
+import com.backend.server.repository.StudentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,12 @@ import java.util.List;
 public class ClassRoomService {
     private final IClassRoomRepository classRoomRepository;
 
+    private final StudentRepository studentRepository;
+
     @Autowired
-    public ClassRoomService(IClassRoomRepository classRoomRepository){
+    public ClassRoomService(IClassRoomRepository classRoomRepository, StudentRepository studentRepository){
         this.classRoomRepository = classRoomRepository;
+        this.studentRepository = studentRepository;
     }
 
     public ClassRoom createClass(ClassRoom classRoom){
@@ -48,6 +52,7 @@ public class ClassRoomService {
         ClassRoom classRoom = classRoomRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Classroom not found with ID: "+id));
         for(Student student: classRoom.getStudents()){
             student.getClassRooms().remove(classRoom);
+            studentRepository.save(student);
         }
         classRoom.getStudents().clear();
         classRoomRepository.delete(classRoom);

@@ -36,7 +36,7 @@ public class Test {
 
     @Column(name = "timeend")
     @Temporal(TemporalType.TIME)
-    private Date endStart;
+    private Date timeEnd;
 
     //! Getter Setter Construcor dùng lombok cho nhanh/gọn
 
