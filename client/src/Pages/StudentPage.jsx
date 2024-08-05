@@ -34,10 +34,6 @@ const StudentPage = () => {
             duration: "90m",
             startTime : "15:00"
         },
-
-       
-
-        
     ])
     return (
         <>
