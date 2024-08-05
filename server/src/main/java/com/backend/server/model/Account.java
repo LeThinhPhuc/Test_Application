@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -27,6 +28,17 @@ public class Account {
 
     @Column(name = "enabled")
     private Integer enabled;
+
+    public Account(String username, String password) {
+        //- ID
+        this.id = GenerateID.generateID();
+        this.username = username;
+        this.password = password;
+        this.enabled = 1;
+        this.authorities = new ArrayList<>(); //!
+        //- Student set ở ngoài
+        this.teacher = null;
+    }
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
