@@ -3,10 +3,10 @@ import './ComingExam.css'
 
 const ComingExam = (props) => {
 
-    const [modal, setModel] = useState(false);
+    const [modal, setModal] = useState(false);
 
     const toggleModal = () => {
-        setModel(!modal);
+        setModal(!modal);
     }
     return (
         <>
@@ -45,8 +45,6 @@ const ComingExam = (props) => {
                                     </span>
 
                                 </button>
-
-
 
                                 <div class="p-4 md:p-5 text-center">
                                     <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
