@@ -1,8 +1,5 @@
 import { createBrowserRouter, Route, BrowserRouter as Router, RouterProvider } from "react-router-dom";
-import AppRoutes from "./Routes/AppRoutes";
 import { AuthProvider } from "./Contexts/AuthContext";
-import StudentLayout from "./Layouts/Student/StudentLayout";
-import LoginPage from "./Pages/Student/LoginPage";
 import StudentPage from "./Pages/StudentPage";
 import TeacherPage from "./Pages/TeacherPage";
 import ClassManagement from "./Components/ClassManagement/ClassManagement";

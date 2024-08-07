@@ -7,15 +7,7 @@ import Pagination from "../Pagination/Pagination";
 
 const StudentManagement = () => {
 
-    const [studentList, setStudentList] = useState([
-        {
-            studentId: "12345",
-            fullName: "Chan be du",
-            gender: "Male",
-            dateOfBirth: "17-7-2003",
-            account: "chanbedu@student.fpt.hcmus.siu.gov.org.com.vn"
-        }
-    ])
+    const [studentList, setStudentList] = useState([])
     const [modal, setModal] = useState(false);
     const [modal2, setModal2] = useState(false);
     const [fileData, setFileData] = useState([]);
@@ -27,8 +19,7 @@ const StudentManagement = () => {
 
     const toggleModal2 = () => {
         setModal2(!modal2);
-        if(fileData.length !==0)
-        {
+        if (fileData.length !== 0) {
             setFileData([])
         }
     }
@@ -47,9 +38,9 @@ const StudentManagement = () => {
     const totalPages = Math.ceil(totalStudents / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;//
-    const currentStudents = fileData.slice(startIndex, endIndex)
+    const currentStudentsExcel = fileData.slice(startIndex, endIndex)
 
-    console.log(currentStudents)
+    console.log(currentStudentsExcel)
     const handleFile = (e) => {
         let selectedFile = e.target.files[0]
         let validFiles = ['application/vnd.ms-excel', 'text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
@@ -60,8 +51,8 @@ const StudentManagement = () => {
             reader.onload = (e) => {
                 e.preventDefault();
                 const sheet = XLSX.read(e.target.result, { type: 'buffer' });
-                const workSheetName = sheet.SheetNames[0];
-                const workSheet = sheet.Sheets[workSheetName];
+                const workSheetName = sheet.SheetNames[1];
+                const workSheet = sheet.Sheets[workSheetName];//0
                 const data = XLSX.utils.sheet_to_json(workSheet);
                 setFileData(data);
             }
@@ -81,8 +72,15 @@ const StudentManagement = () => {
 
     }
 
-    const selectNewFile = () =>{
+    const selectNewFile = () => {
         setFileData([])
+    }
+
+    const AddListOfStudent = () => {
+        console.log(fileData);
+        setStudentList(fileData)
+        setModal(!modal);
+        setModal2(!modal2);
     }
     return (
         <>
@@ -186,47 +184,15 @@ const StudentManagement = () => {
                                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                                     <tr>
-                                                        <th scope="col" class="p-4">
-                                                            <div class="flex items-center">
-                                                                <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                                <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                                                            </div>
-                                                        </th>
-                                                        {/* <th scope="col" class="px-6 py-3">
-                                                            Student ID
-                                                        </th>
-                                                        <th scope="col" class="px-6 py-3">
-                                                            Full Name
-                                                        </th>
-                                                        <th scope="col" class="px-6 py-3">
-                                                            Gender
-                                                        </th>
-                                                        <th scope="col" class="px-6 py-3">
-                                                            Date of birth
-                                                        </th>
-                                                        <th scope="col" class="px-6 py-3">
-                                                            Account
-                                                        </th>
-
-                                                        <th scope="col" class="px-6 py-3">
-                                                            Action
-                                                        </th> */}
-                                                        {Object.keys(currentStudents[0]).map(key => (
+                                                        {Object.keys(currentStudentsExcel[0]).map(key => (
                                                             <th key={key}>{key}</th>
                                                         ))}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentStudents.map((value, index) => (
+                                                    {currentStudentsExcel.map((value, index) => (
 
                                                         <tr key={index} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                                            <td class="w-4 p-4">
-                                                                <div class="flex items-center">
-                                                                    <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                                    <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                                                </div>
-                                                            </td>
-
                                                             {Object.keys(value).map(key => (
                                                                 <td key={key}>{value[key]}</td>
                                                             ))}
@@ -238,8 +204,9 @@ const StudentManagement = () => {
                                             <Pagination currentPage={currentPage}
                                                 totalPages={totalPages}
                                                 onPageChange={handlePageChange}
-                                                isModal2 = {modal2} 
-                                                selectNewFile= {selectNewFile}/>
+                                                isModal2={modal2}
+                                                selectNewFile={selectNewFile}
+                                                onAdd={AddListOfStudent} />
                                         </div>
                                     )}
                                 </div>
@@ -254,12 +221,6 @@ const StudentManagement = () => {
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                {/* <th scope="col" class="p-4">
-                                    <div class="flex items-center">
-                                        <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                                    </div>
-                                </th> */}
                                 <th scope="col" class="px-6 py-3">
                                     Student ID
                                 </th>
@@ -282,40 +243,20 @@ const StudentManagement = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {studentList.map(item => (
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    {/* <td class="w-4 p-4">
-                                    <div class="flex items-center">
-                                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                    </div>
-                                </td> */}
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {item.studentId}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {item.fullName}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {item.gender}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {item.dateOfBirth}
-                                    </td>
-
-                                    <td class="px-6 py-4">
-                                        {item.account}
-                                    </td>
-
-                                    <td class="px-6 py-4">
-                                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                            {studentList.map((value, index) => (
+                                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    {Object.keys(value).map(key => (
+                                        <td key={key} className="px-6 py-4">
+                                            {value[key]}
+                                        </td>
+                                    ))}
+                                    <td className="px-6 py-4">
+                                        <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                     </td>
                                 </tr>
                             ))}
-
                         </tbody>
                     </table>
-
                     <Pagination />
 
                 </div>
