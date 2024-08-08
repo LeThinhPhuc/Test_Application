@@ -26,8 +26,6 @@ public class Teacher {
     @Column(name="gender")
     private String gender;
 
-    @OneToMany(mappedBy = "teacher")
-    private List<Test> tests;
 
     @OneToMany(mappedBy = "teacher")
     private List<ClassRoom> classRooms;
