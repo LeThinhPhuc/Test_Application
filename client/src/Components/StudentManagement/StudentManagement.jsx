@@ -51,7 +51,7 @@ const StudentManagement = () => {
             reader.onload = (e) => {
                 e.preventDefault();
                 const sheet = XLSX.read(e.target.result, { type: 'buffer' });
-                const workSheetName = sheet.SheetNames[1];
+                const workSheetName = sheet.SheetNames[0];
                 const workSheet = sheet.Sheets[workSheetName];//0
                 const data = XLSX.utils.sheet_to_json(workSheet);
                 setFileData(data);
