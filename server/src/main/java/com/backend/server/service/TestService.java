@@ -58,10 +58,12 @@ public class TestService {
 
     public void deleteTest(String id){
         Test test = testRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Test not found with ID: "+id));
+
+        // n-n BẢNG PHỤ CÓ THUỘC TÍNH
         studentTestRepository.deleteAll(test.getStudentTests());
         testRepository.delete(test);
 
-
+        // n-n BẢNG PHỤ KHÔNG CÓ THUỘC TÍNH
         for (Question question : test.getQuestions()){
             question.getTests().remove(test);
             questionRepository.save(question);
