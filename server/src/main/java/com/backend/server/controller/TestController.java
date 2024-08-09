@@ -1,8 +1,10 @@
 package com.backend.server.controller;
 
+import com.backend.server.model.ClassRoom;
 import com.backend.server.model.Response;
-import com.backend.server.model.Teacher;
+import com.backend.server.model.Test;
 import com.backend.server.service.TeacherService;
+import com.backend.server.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,23 +13,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/teachers")
-public class TeacherController {
-    private final TeacherService teacherService;
-
+@RequestMapping("/tests")
+public class TestController {
+    private final TestService testService;
     @Autowired
-    public TeacherController(TeacherService teacherService){
-        this.teacherService = teacherService;
+    public TestController(TestService testService){
+        this.testService=testService;
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllTeachers(){
+    public ResponseEntity<?> getAllTests(){
         try{
-            List<Teacher> teachers = teacherService.getAllTeachers();
-            if(teachers.size()==0){
-                return ResponseEntity.ok("No Teacher yet !");
+            List<Test> tests = testService.getAllTest();
+            if(tests.size() == 0){
+                return ResponseEntity.ok("No Test yet !");
             }else{
-                return ResponseEntity.ok(teachers);
+                return ResponseEntity.ok(tests);
             }
         }catch (Exception ex){
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
@@ -36,19 +37,18 @@ public class TeacherController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable String id){
+    public ResponseEntity<?> getTestById(@PathVariable String id){
         if(id==null){
-            Response response = Response.of(HttpStatus.BAD_REQUEST,"ID is required");
+            Response response = Response.of(HttpStatus.BAD_REQUEST, "ID is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try{
-            Teacher teacher = teacherService.getTeacherById(id);
-            if(teacher!=null){
-                return ResponseEntity.ok(teacher);
-            }else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Teacher not found");
+            Test test = testService.getTestById(id);
+            if(test != null){
+                return ResponseEntity.ok(test);
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
             }
-
         }catch (Exception ex){
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -56,13 +56,13 @@ public class TeacherController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher){
-        if(teacher==null){
-            Response response = Response.of(HttpStatus.BAD_REQUEST, "Classroom is required");
+    public ResponseEntity<?> createTest(@RequestBody Test test){
+        if(test==null){
+            Response response = Response.of(HttpStatus.BAD_REQUEST, "Test is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try{
-            teacherService.createTeacher(teacher);
+            testService.createTest(test);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (Exception ex){
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
@@ -70,24 +70,19 @@ public class TeacherController {
         }
     }
 
-//    @PutMapping
-//    public void updateTeacher(@RequestBody Teacher teacher){
-//        teacherService.updateTeacher(teacher);
-//    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTeacherById(@PathVariable String id,@RequestBody Teacher teacher){
-        if(teacher==null||id==null){
-            Response response = Response.of(HttpStatus.BAD_REQUEST, "ID and Classroom is required");
+    public ResponseEntity<?> updateTest(@PathVariable String id, @RequestBody Test test){
+        if(test==null||id==null){
+            Response response = Response.of(HttpStatus.BAD_REQUEST, "ID and Test is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
-        try{
-            if(teacherService.getTeacherById(id)!=null){
-                teacher.setTeacherId(id);
-                Teacher updatedTeacher = teacherService.updateTeacher(id, teacher);
-                return ResponseEntity.ok(updatedTeacher);
+        try {
+            if(testService.getTestById(id)!=null){
+                test.setTestId(id);
+                Test updatedTest =  testService.updateTest(id, test);
+                return ResponseEntity.ok(updatedTest);
             }else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Teacher not found with ID: +id");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found with ID: "+id);
             }
         }catch (Exception ex){
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
@@ -96,22 +91,21 @@ public class TeacherController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTeacherById(@PathVariable String id){
+    public ResponseEntity<?> deleteTest(@PathVariable String id){
         if(id==null){
             Response response = Response.of(HttpStatus.BAD_REQUEST, "ID is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try{
-            if(teacherService.getTeacherById(id)!=null){
-                teacherService.deleteTeacherById(id);
-                return ResponseEntity.ok("Teacher Deleted Success");
+            if(testService.getTestById(id)!=null){
+                testService.deleteTest(id);
+                return ResponseEntity.ok("Test Deleted Success");
             }else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Classroom not found with ID: "+id);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found with ID: "+id);
             }
         }catch (Exception ex){
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
 }

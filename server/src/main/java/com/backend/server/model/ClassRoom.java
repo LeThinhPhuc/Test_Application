@@ -1,11 +1,16 @@
 package com.backend.server.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@EqualsAndHashCode
 @Table(name="classroom")
 public class ClassRoom {
     @Id
@@ -21,35 +26,18 @@ public class ClassRoom {
     @Column(name="semester")
     private String semester;
 
-    public String getClassRoomId() {
-        return classRoomId;
-    }
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "classroom_student",
+            joinColumns = @JoinColumn(name = "classroomId"),
+            inverseJoinColumns = @JoinColumn(name = "studentId")
+    )
+    private List<Student> students;
 
-    public void setClassRoomId(String classRoomId) {
-        this.classRoomId = classRoomId;
-    }
+    @ManyToOne
+    @JoinColumn(name="teacherid")
+    private Teacher teacher;
 
-    public String getClassRoomName() {
-        return classRoomName;
-    }
-
-    public void setClassRoomName(String classRoomName) {
-        this.classRoomName = classRoomName;
-    }
-
-    public String getSchoolYear() {
-        return schoolYear;
-    }
-
-    public void setSchoolYear(String schoolYear) {
-        this.schoolYear = schoolYear;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
-    }
+    @OneToMany(mappedBy = "classRoom",  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Test> tests;
 }
