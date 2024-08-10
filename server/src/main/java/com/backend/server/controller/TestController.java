@@ -78,7 +78,7 @@ public class TestController {
         }
         try {
             if(testService.getTestById(id)!=null){
-                test.setTestId(id);
+//                test.setTestId(id);
                 Test updatedTest =  testService.updateTest(id, test);
                 return ResponseEntity.ok(updatedTest);
             }else{

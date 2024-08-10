@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +18,7 @@ import java.util.List;
 @Table(name = "test")
 public class Test {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "testid")
     private String testId;
 
