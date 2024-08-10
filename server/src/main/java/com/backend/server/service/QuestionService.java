@@ -55,15 +55,6 @@ public class QuestionService {
         if (updatedQuestion.getContent() != null) {
             question.setContent(updatedQuestion.getContent());
         }
-        if (updatedQuestion.getType() != null) {
-            question.setType(updatedQuestion.getType());
-        }
-        if (updatedQuestion.getTopic() != null) {
-            question.setTopic(updatedQuestion.getTopic());
-        }
-        if (updatedQuestion.getPoint() != 0) {
-            question.setPoint(updatedQuestion.getPoint());
-        }
 
         return questionRepository.save(question);
     }

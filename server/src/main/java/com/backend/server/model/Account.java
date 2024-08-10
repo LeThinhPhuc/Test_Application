@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "account")
+@Table(name = "Account")
 public class Account {
     @Id
     @Column(name = "id")
@@ -42,7 +42,7 @@ public class Account {
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
-            name = "account_authority",
+            name = "Account_Authority",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "authorityId")
     )

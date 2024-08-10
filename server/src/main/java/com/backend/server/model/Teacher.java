@@ -11,21 +11,20 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Table(name="teacher")
+@Table(name="Teacher")
 public class Teacher {
     @Id
-    @Column(name="teacherid")
+    @Column(name="teacherId")
     private String teacherId;
 
-    @Column(name="fullname")
+    @Column(name="fullName")
     private String fullName;
 
-    @Column(name="phonenumber")
+    @Column(name="phoneNumber")
     private String phoneNumber;
 
     @Column(name="gender")
     private String gender;
-
 
     @OneToMany(mappedBy = "teacher")
     private List<ClassRoom> classRooms;
