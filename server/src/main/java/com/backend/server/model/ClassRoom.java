@@ -11,16 +11,16 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Table(name="classroom")
+@Table(name="ClassRoom")
 public class ClassRoom {
     @Id
-    @Column(name="classroomid")
+    @Column(name="classRoomId")
     private String classRoomId;
 
-    @Column(name="classroomname")
+    @Column(name="classRoomName")
     private String classRoomName;
 
-    @Column(name="schoolyear")
+    @Column(name="schoolYear")
     private String schoolYear;
 
     @Column(name="semester")
@@ -28,14 +28,14 @@ public class ClassRoom {
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
-            name = "classroom_student",
+            name = "Classroom_Student",
             joinColumns = @JoinColumn(name = "classroomId"),
             inverseJoinColumns = @JoinColumn(name = "studentId")
     )
     private List<Student> students;
 
     @ManyToOne
-    @JoinColumn(name="teacherid")
+    @JoinColumn(name="teacherId")
     private Teacher teacher;
 
     @OneToMany(mappedBy = "classRoom",  cascade = CascadeType.ALL, orphanRemoval = true)

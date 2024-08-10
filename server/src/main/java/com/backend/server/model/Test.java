@@ -15,32 +15,29 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "test")
+@Table(name = "Test")
 public class Test {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "testid")
-    private String testId;
+    @Column(name = "id")
+    private String id;
 
-    @Column(name = "testname")
+    @Column(name = "testName")
     private String testName;
 
-    @Column(name = "testtime")
+    @Column(name = "testTime")
     private Integer testTime;
 
-    @Column(name = "testday")
+    @Column(name = "testDay")
     @Temporal(TemporalType.DATE)
     private Date testDay;
 
-    @Column(name = "timestart")
+    @Column(name = "timeStart")
     @Temporal(TemporalType.TIME)
     private Date timeStart;
 
-    @Column(name = "timeend")
+    @Column(name = "timeEnd")
     @Temporal(TemporalType.TIME)
     private Date timeEnd;
-
-    //! Getter Setter Construcor dùng lombok cho nhanh/gọn
 
 
     //    @ManyToMany(mappedBy = "tests",
@@ -51,7 +48,7 @@ public class Test {
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
-            name = "test_question",
+            name = "Test_Question",
             joinColumns = @JoinColumn(name = "testId"),
             inverseJoinColumns = @JoinColumn(name = "questionId")
     )
@@ -59,7 +56,7 @@ public class Test {
 
 
     @ManyToOne
-    @JoinColumn(name="classroomid")
+    @JoinColumn(name = "classRoomId")
     private ClassRoom classRoom;
 
 }

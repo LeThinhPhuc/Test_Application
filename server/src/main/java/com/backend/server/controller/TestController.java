@@ -2,6 +2,7 @@ package com.backend.server.controller;
 
 import com.backend.server.model.ClassRoom;
 import com.backend.server.model.Response;
+import com.backend.server.model.Student;
 import com.backend.server.model.Test;
 import com.backend.server.service.TeacherService;
 import com.backend.server.service.TestService;
@@ -108,4 +109,17 @@ public class TestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+    //--------------------------------------------------
+    //- API Statistics for Exam Results
+    //    @GetMapping("/{id}")
+    //    public ResponseEntity<?> getStudentById(@PathVariable String id) {
+    //        try {
+    //            Student student = studentService.getStudentById(id);
+    //            return ResponseEntity.ok(student);
+    //        } catch (Exception ex) {
+    //            Response response = Response.of(HttpStatus.NOT_FOUND, ex.getMessage());
+    //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    //        }
+    //    }
 }

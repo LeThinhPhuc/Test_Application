@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 
@@ -15,11 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "authority")
-
-//public class Authority implements GrantedAuthority {
-
-public class Authority {
+@Table(name = "Authority")
+public class Authority implements GrantedAuthority {
     @Id
     @Column(name = "id")
     private String id;
