@@ -2,6 +2,7 @@ package com.backend.server.service;
 
 import com.backend.server.model.*;
 import com.backend.server.repository.QuestionRepository;
+import com.backend.server.repository.StudentRepository;
 import com.backend.server.repository.StudentTestRepository;
 import com.backend.server.repository.TestRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,15 +17,18 @@ public class TestService {
 
     private final StudentTestRepository studentTestRepository;
 
+    private final StudentRepository studentRepository;
+
     private final QuestionRepository questionRepository;
 
     private final QuestionService questionService;
     @Autowired
-    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService){
+    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService, StudentRepository studentRepository){
         this.testRepository = testRepository;
         this.studentTestRepository=studentTestRepository;
         this.questionRepository =questionRepository;
         this.questionService = questionService;
+        this.studentRepository =studentRepository;
     }
 
     public Test createTest(Test test){
@@ -107,6 +111,29 @@ public class TestService {
         }
     }
 
+    public void addStudentsToTest(String testId, String studentId) throws IllegalAccessException {
+        Test test = testRepository.findById(testId).orElseThrow(()->new EntityNotFoundException("Test not found with ID: "+testId));
+        Student student = studentRepository.findById(studentId).orElseThrow(()->new EntityNotFoundException("Student not found with ID: "+studentId));
+        boolean alreadyExists = test.getStudentTests().stream().anyMatch(ts -> ts.getStudent().getId().equals(studentId));
+        if(alreadyExists){
+            throw new IllegalAccessException("Student is allready in this test");
+        }
+        StudentTest studentTest = new StudentTest();
+        studentTest.setTest(test);
+        studentTest.setStudent(student);
+
+        test.getStudentTests().add(studentTest);
+        student.getStudentTests().add(studentTest);
+
+        testRepository.save(test);
+    }
+
+    public void updateScoreForStudent(String testId, String studentId, float score){
+        Test test = testRepository.findById(testId).orElseThrow(()-> new EntityNotFoundException("Test not found with ID: "+testId));
+        StudentTest studentTest =  test.getStudentTests().stream().filter(ts->ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(()-> new EntityNotFoundException("Student not found with ID: "+studentId));
+        studentTest.setPoint(score);
+
+    }
     
     
 }

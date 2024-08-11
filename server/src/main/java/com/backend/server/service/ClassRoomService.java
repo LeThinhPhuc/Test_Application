@@ -64,9 +64,18 @@ public class ClassRoomService {
 
     public ClassRoom addStudentToClass(String classId, Student studentData){
         ClassRoom classRoom = classRoomRepository.findById(classId).orElseThrow(()->new RuntimeException("Class not found"));
-        Student student = studentService.createStudent(studentData);
-        classRoom.getStudents().add(student);
-        student.getClassRooms().add(classRoom);
+//        Student student = studentService.createStudent(studentData);
+//        classRoom.getStudents().add(student);
+//        student.getClassRooms().add(classRoom);
+        Student studentFind = studentService.getStudentById(studentData.getId());
+        if(studentFind==null){
+            Student student = studentService.createStudent(studentData);
+            classRoom.getStudents().add(student);
+            student.getClassRooms().add(classRoom);
+        }else{
+            classRoom.getStudents().add(studentFind);
+            studentFind.getClassRooms().add(classRoom);
+        }
         return classRoomRepository.save(classRoom);
     }
 
