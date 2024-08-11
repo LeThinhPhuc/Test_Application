@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,18 @@ public class Test {
     @Column(name = "timeEnd")
     @Temporal(TemporalType.TIME)
     private Date timeEnd;
+
+    @Column(name="isGetScore")
+    @ColumnDefault("false")
+    private boolean isGetScore;
+
+    @Column(name="isFixed")
+    @ColumnDefault("false")
+    private boolean isFixed;
+
+    @Column(name="isFinished")
+    @ColumnDefault("false")
+    private boolean isFinished;
 
 
     //    @ManyToMany(mappedBy = "tests",
