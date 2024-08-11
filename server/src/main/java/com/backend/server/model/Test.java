@@ -18,8 +18,8 @@ import java.util.UUID;
 @Table(name = "Test")
 public class Test {
     @Id
-    @Column(name = "id")
-    private String id;
+    @Column(name = "testid")
+    private String testId;
 
     @Column(name = "testName")
     private String testName;
