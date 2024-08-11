@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Answer {
     @Column(name="isCorrect")
     private String isCorrect;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="questionId")
     private Question question;

@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,10 +27,11 @@ public class Teacher {
     @Column(name="gender")
     private String gender;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "teacher")
     private List<ClassRoom> classRooms;
 
-    @OneToOne(fetch = FetchType.LAZY,
+    @OneToOne(
             cascade = CascadeType.ALL)
     @JoinColumn(name = "accountId")
     private Account account;

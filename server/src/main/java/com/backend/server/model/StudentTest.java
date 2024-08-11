@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,15 +17,17 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "Student_Test")
 public class StudentTest {
+    @JsonIgnore
     @EmbeddedId
     private StudentTestId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("studentId")
     @JoinColumn(name = "studentId")
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("testId")
     @JoinColumn(name = "testId")
     private Test test;
