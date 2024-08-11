@@ -72,5 +72,9 @@ public class StudentService {
         return studentRepository.save(studentDB);
     }
 
+    public Student createStudent(Student student){
+        return studentRepository.save(student);
+    }
+
 
 }

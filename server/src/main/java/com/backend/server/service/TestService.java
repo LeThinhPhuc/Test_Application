@@ -17,11 +17,14 @@ public class TestService {
     private final StudentTestRepository studentTestRepository;
 
     private final QuestionRepository questionRepository;
+
+    private final QuestionService questionService;
     @Autowired
-    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository){
+    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService){
         this.testRepository = testRepository;
         this.studentTestRepository=studentTestRepository;
         this.questionRepository =questionRepository;
+        this.questionService = questionService;
     }
 
     public Test createTest(Test test){
@@ -60,24 +63,50 @@ public class TestService {
         Test test = testRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Test not found with ID: "+id));
 
         // n-n BẢNG PHỤ CÓ THUỘC TÍNH
-        studentTestRepository.deleteAll(test.getStudentTests());
-        testRepository.delete(test);
+
+//        studentTestRepository.deleteAll(test.getStudentTests());
+//        testRepository.delete(test);
+
+
+
+
 
         // n-n BẢNG PHỤ KHÔNG CÓ THUỘC TÍNH
-        for (Question question : test.getQuestions()){
-            question.getTests().remove(test);
-            questionRepository.save(question);
-        }
-        test.getQuestions().clear();
-        testRepository.delete(test);
+
+//        for (Question question : test.getQuestions()){
+//            question.getTests().remove(test);
+//            questionRepository.save(question);
+//        }
+//        test.getQuestions().clear();
+//        testRepository.delete(test);
+
+
+
+
         //        for(StudentTest student: test.getStudentTests()){
 //            student
 //        }
 //        classRoom.getStudents().clear();
 //        classRoomRepository.delete(classRoom);
 
+        testRepository.delete(test);
 
     }
+
+    public Test addQuestionToTest(String testId, Question questionData){
+        Test test = testRepository.findById(testId).orElseThrow(()->new RuntimeException("Test not found"));
+        Question question = questionService.createQuestion(questionData);
+        test.getQuestions().add(question);
+        question.getTests().add(test);
+        return testRepository.save(test);
+    }
+
+    public void addQuestionsToTest(String testId, List<Question> questions){
+        for (Question question:questions){
+            addQuestionToTest(testId, question);
+        }
+    }
+
     
     
 }

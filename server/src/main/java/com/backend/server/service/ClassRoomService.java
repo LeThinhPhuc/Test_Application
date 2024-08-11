@@ -16,10 +16,13 @@ public class ClassRoomService {
 
     private final StudentRepository studentRepository;
 
+    private final StudentService studentService;
+
     @Autowired
-    public ClassRoomService(IClassRoomRepository classRoomRepository, StudentRepository studentRepository){
+    public ClassRoomService(IClassRoomRepository classRoomRepository, StudentRepository studentRepository, StudentService studentService){
         this.classRoomRepository = classRoomRepository;
         this.studentRepository = studentRepository;
+        this.studentService =  studentService;
     }
 
     public ClassRoom createClass(ClassRoom classRoom){
@@ -50,13 +53,26 @@ public class ClassRoomService {
 
     public void deleteClass(String id){
         ClassRoom classRoom = classRoomRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Classroom not found with ID: "+id));
-        for(Student student: classRoom.getStudents()){
-            student.getClassRooms().remove(classRoom);
-            studentRepository.save(student);
-        }
-        classRoom.getStudents().clear();
+//        for(Student student: classRoom.getStudents()){
+//            student.getClassRooms().remove(classRoom);
+//            studentRepository.save(student);
+//        }
+//        classRoom.getStudents().clear();
         classRoomRepository.delete(classRoom);
     }
 
 
+    public ClassRoom addStudentToClass(String classId, Student studentData){
+        ClassRoom classRoom = classRoomRepository.findById(classId).orElseThrow(()->new RuntimeException("Class not found"));
+        Student student = studentService.createStudent(studentData);
+        classRoom.getStudents().add(student);
+        student.getClassRooms().add(classRoom);
+        return classRoomRepository.save(classRoom);
+    }
+
+    public void addStudentsToClass(String classId, List<Student> students){
+        for (Student student:students){
+            addStudentToClass(classId, student);
+        }
+    }
 }
