@@ -9,6 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -142,6 +144,13 @@ public class TestService {
         studentTest.setPoint(score);
         testRepository.save(test);
 
+    }
+
+    public void updateStartDoTest(String testId, String studentId, LocalDateTime startTime){
+        Test test = testRepository.findById(testId).orElseThrow(()->new EntityNotFoundException("Test not found with ID: "+testId));
+        StudentTest studentTest = test.getStudentTests().stream().filter(ts->ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(()-> new EntityNotFoundException("Student not found with ID: "+ studentId));
+        studentTest.setStartTime(startTime);
+        testRepository.save(test);
     }
     
     

@@ -1,5 +1,6 @@
     package com.backend.server.model;
 
+    import com.fasterxml.jackson.annotation.JsonFormat;
     import com.fasterxml.jackson.annotation.JsonIgnore;
     import com.fasterxml.jackson.annotation.JsonManagedReference;
     import jakarta.persistence.*;
@@ -32,14 +33,17 @@
 
         @Column(name = "testDay")
         @Temporal(TemporalType.DATE)
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private Date testDay;
 
         @Column(name = "timeStart")
         @Temporal(TemporalType.TIME)
+        @JsonFormat(pattern = "HH:mm:ss")
         private Date timeStart;
 
         @Column(name = "timeEnd")
         @Temporal(TemporalType.TIME)
+        @JsonFormat(pattern = "HH:mm:ss")
         private Date timeEnd;
 
         @Column(name="isGetScore")
