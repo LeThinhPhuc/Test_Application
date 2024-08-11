@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,5 +37,6 @@ public class StudentTest {
     private double point;
 
     @Column(name = "startTime")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startTime;
 }
