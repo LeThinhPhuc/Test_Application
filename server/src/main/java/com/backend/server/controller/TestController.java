@@ -71,6 +71,11 @@ public class TestController {
         }
     }
 
+    @PostMapping("/{testId}/students/{studentId}")
+    public void addStudentTest(@PathVariable String testId, @PathVariable String studentId) throws IllegalAccessException {
+        testService.addStudentToTest(testId,studentId);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTest(@PathVariable String id, @RequestBody Test test){
         if(test==null||id==null){
