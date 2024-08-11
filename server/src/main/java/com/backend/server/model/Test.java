@@ -41,16 +41,13 @@ public class Test {
     private Date timeEnd;
 
     @Column(name="isGetScore")
-    @ColumnDefault("false")
-    private boolean isGetScore;
+    private boolean isGetScore=false;
 
     @Column(name="isFixed")
-    @ColumnDefault("false")
-    private boolean isFixed;
+    private boolean isFixed=false;
 
     @Column(name="isFinished")
-    @ColumnDefault("false")
-    private boolean isFinished;
+    private boolean isFinished=false;
 
 
     //    @ManyToMany(mappedBy = "tests",
