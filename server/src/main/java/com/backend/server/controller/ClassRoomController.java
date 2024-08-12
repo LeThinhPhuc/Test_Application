@@ -1,9 +1,6 @@
 package com.backend.server.controller;
 
-import com.backend.server.model.ClassRoom;
-import com.backend.server.model.Response;
-import com.backend.server.model.Student;
-import com.backend.server.model.Test;
+import com.backend.server.model.*;
 import com.backend.server.service.ClassRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,6 +49,22 @@ public class ClassRoomController {
                 return ResponseEntity.ok(classRoom);
             }else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Classroom not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/gettestsforclass/{classId}")
+    public ResponseEntity<?> getTestsOfClass(@PathVariable String classId){
+        try {
+            ClassRoom classRoom = classRoomService.getClassById(classId);
+            if(classRoom!=null){
+                List<Test> tests = classRoomService.getTestsForClass(classId);
+                return ResponseEntity.ok(tests);
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
             }
         }catch (Exception ex){
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());

@@ -2,6 +2,7 @@ package com.backend.server.service;
 
 import com.backend.server.model.ClassRoom;
 import com.backend.server.model.Student;
+import com.backend.server.model.Test;
 import com.backend.server.repository.IClassRoomRepository;
 import com.backend.server.repository.StudentRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,6 +36,11 @@ public class ClassRoomService {
 
     public List<ClassRoom> getAllClass(){
         return classRoomRepository.findAll();
+    }
+
+    public List<Test> getTestsForClass(String classId){
+        ClassRoom classRoom = getClassById(classId);
+        return classRoom.getTests();
     }
 
     public ClassRoom updateClass(String id, ClassRoom updatedClass){
