@@ -1,5 +1,6 @@
 package com.backend.server.service;
 
+import com.backend.server.model.ClassRoom;
 import com.backend.server.model.Teacher;
 import com.backend.server.repository.ITeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,12 @@ public class TeacherService {
     public List<Teacher> getAllTeachers(){
         return teacherRepository.findAll();
     }
+
+    public List<ClassRoom> getAllClassForTeacher(String teacherId){
+        Teacher teacher = getTeacherById(teacherId);
+        return teacher.getClassRooms();
+    }
+
 
 
 }
