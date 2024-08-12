@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "Account")
 public class Account {
     @Id
-    @Column(name = "id")
+    @Column( name = "id")
     private String id;
 
     @Column(name = "username")
@@ -29,7 +29,7 @@ public class Account {
     @Column(name = "enabled")
     private Integer enabled;
 
-    public Account(String username, String password) {
+    public Account (String username, String password) {
         //- ID
         this.id = GenerateID.generateID();
         this.username = username;
