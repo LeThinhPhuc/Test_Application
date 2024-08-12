@@ -45,6 +45,11 @@ public class TestService {
         return testRepository.findAll();
     }
 
+    public List<Question> getAllQuestionForTest(String testId){
+        Test test = getTestById(testId);
+        return test.getQuestions();
+    }
+
     public Test updateTest(String id, Test updatedTest){
         Test testInfo = getTestById(id);
         if(updatedTest.getTestDay()!=null){

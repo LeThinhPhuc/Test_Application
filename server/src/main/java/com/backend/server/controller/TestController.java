@@ -56,6 +56,22 @@ public class TestController {
         }
     }
 
+    @GetMapping("getquestionsfortest/{testId}")
+    public ResponseEntity<?> getQuestionsOfTest(@PathVariable String testId){
+        try{
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                List<Question> questions = testService.getAllQuestionForTest(testId);
+                return ResponseEntity.ok(questions);
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> createTest(@RequestBody Test test){
         if(test==null){
