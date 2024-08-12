@@ -1,5 +1,6 @@
 package com.backend.server.controller;
 
+import com.backend.server.model.ClassRoom;
 import com.backend.server.model.Response;
 import com.backend.server.model.Teacher;
 import com.backend.server.service.TeacherService;
@@ -55,10 +56,26 @@ public class TeacherController {
         }
     }
 
+    @GetMapping("/getclassesforteacher/{teacherId}")
+    public ResponseEntity<?> getClassesOfTeacher(@PathVariable String teacherId){
+        try {
+            Teacher teacher = teacherService.getTeacherById(teacherId);
+            if(teacher!=null){
+                List<ClassRoom> classRooms = teacherService.getAllClassForTeacher(teacherId);
+                return ResponseEntity.ok(classRooms);
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Teacher not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher){
         if(teacher==null){
-            Response response = Response.of(HttpStatus.BAD_REQUEST, "Classroom is required");
+            Response response = Response.of(HttpStatus.BAD_REQUEST, "Teacher data is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try{
