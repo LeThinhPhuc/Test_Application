@@ -7,8 +7,13 @@ export default {
     "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        montserrat: ["Montserrat", "sans-serif"],
+        palanquin: ["Palanquin", "sans-serif"],
+        roboto: ["Roboto", "sans-serif"],
+      },
+    },
   },
   plugins: [],
-}
-
+};

@@ -1,7 +1,10 @@
 package com.backend.server.controller;
 
 import com.backend.server.DTO.ExamStatisticsDTO;
-import com.backend.server.model.*;
+import com.backend.server.model.ClassRoom;
+import com.backend.server.model.Response;
+import com.backend.server.model.Student;
+import com.backend.server.model.Test;
 import com.backend.server.service.TeacherService;
 import com.backend.server.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/tests")
@@ -27,7 +28,7 @@ public class TestController {
     public ResponseEntity<?> getAllTests() {
         try {
             List<Test> tests = testService.getAllTest();
-            if (tests.isEmpty()) {
+            if (tests.size() == 0) {
                 return ResponseEntity.ok("No Test yet !");
             } else {
                 return ResponseEntity.ok(tests);

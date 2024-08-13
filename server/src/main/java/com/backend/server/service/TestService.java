@@ -10,10 +10,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
+import java.time.LocalDateTime;
 import java.util.*;
+
 
 @Service
 public class TestService {
@@ -46,6 +48,12 @@ public class TestService {
 
     public List<Test> getAllTest() {
         return testRepository.findAll();
+    }
+
+
+    public List<Question> getAllQuestionForTest(String testId) {
+        Test test = getTestById(testId);
+        return test.getQuestions();
     }
 
     public Test updateTest(String id, Test updatedTest) {
@@ -111,7 +119,8 @@ public class TestService {
         }
     }
 
-    public void addStudentsToTest(String testId, String studentId) throws IllegalAccessException {
+
+    public void addStudentToTest(String testId, String studentId) throws IllegalAccessException {
         Test test = testRepository.findById(testId).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
         boolean alreadyExists = test.getStudentTests().stream().anyMatch(ts -> ts.getStudent().getId().equals(studentId));
@@ -128,13 +137,23 @@ public class TestService {
         testRepository.save(test);
     }
 
+
+    public void addStudentsToTest(String testId, List<Student> students) throws IllegalAccessException {
+        Test test = testRepository.findById(testId)
+                .orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
+
+        for (Student student : students) {
+            addStudentToTest(testId, student.getId()); // Gọi phương thức đã có để thêm học sinh vào test
+        }
+    }
+
     public void updateScoreForStudent(String testId, String studentId, float score) {
         Test test = testRepository.findById(testId).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
         StudentTest studentTest = test.getStudentTests().stream().filter(ts -> ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
         studentTest.setPoint(score);
+        testRepository.save(test);
 
     }
-
 
     public ExamStatisticsDTO getStudentTests() {
         List<StudentTest> studentTests = studentTestRepository.findAll();
@@ -179,5 +198,10 @@ public class TestService {
         return statisticsDTO;
     }
 
-
+    public void updateStartDoTest(String testId, String studentId, LocalDateTime startTime) {
+        Test test = testRepository.findById(testId).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
+        StudentTest studentTest = test.getStudentTests().stream().filter(ts -> ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
+        studentTest.setStartTime(startTime);
+        testRepository.save(test);
+    }
 }
