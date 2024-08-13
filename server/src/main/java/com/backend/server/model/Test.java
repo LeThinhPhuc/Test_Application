@@ -1,79 +1,81 @@
-package com.backend.server.model;
+    package com.backend.server.model;
 
-import jakarta.persistence.*;
+    import com.fasterxml.jackson.annotation.JsonFormat;
+    import com.fasterxml.jackson.annotation.JsonIgnore;
+    import com.fasterxml.jackson.annotation.JsonManagedReference;
+    import jakarta.persistence.*;
+    import lombok.AllArgsConstructor;
+    import lombok.Getter;
+    import lombok.NoArgsConstructor;
+    import lombok.Setter;
+    import org.hibernate.annotations.ColumnDefault;
 
-import java.util.Date;
+    import java.util.Date;
+    import java.util.List;
+    import java.util.UUID;
 
-@Entity
-@Table(name="test")
-public class Test {
-    @Id
-    @Column(name="testid")
-    private String testId;
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @Entity
+    @Table(name = "Test")
+    public class Test {
+        @Id
+        @Column(name = "id")
+        private String id;
 
-    @Column(name="testname")
-    private String testName;
+        @Column(name = "testName")
+        private String testName;
 
-    @Column(name="testtime")
-    private Integer testTime;
+        @Column(name = "testTime")
+        private Integer testTime;
 
-    @Column(name="testday")
-    @Temporal(TemporalType.DATE)
-    private Date testDay;
+        @Column(name = "testDay")
+        @Temporal(TemporalType.DATE)
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private Date testDay;
 
-    @Column(name = "timestart")
-    @Temporal(TemporalType.TIME)
-    private Date timeStart;
+        @Column(name = "timeStart")
+        @Temporal(TemporalType.TIME)
+        @JsonFormat(pattern = "HH:mm:ss")
+        private Date timeStart;
 
-    @Column(name = "timeend")
-    @Temporal(TemporalType.TIME)
-    private Date endStart;
+        @Column(name = "timeEnd")
+        @Temporal(TemporalType.TIME)
+        @JsonFormat(pattern = "HH:mm:ss")
+        private Date timeEnd;
 
-    public String getTestId() {
-        return testId;
+        @Column(name="isGetScore")
+        private boolean isGetScore=false;
+
+        @Column(name="isFixed")
+        private boolean isFixed=false;
+
+        @Column(name="isFinished")
+        private boolean isFinished=false;
+
+
+        //    @ManyToMany(mappedBy = "tests",
+    //            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    //    private List<Student> students;
+        @JsonManagedReference
+        @OneToMany(mappedBy = "test",
+                cascade = CascadeType.ALL, orphanRemoval = true)
+        private List<StudentTest> studentTests;
+
+        @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+        @JoinTable(
+                name = "Test_Question",
+                joinColumns = @JoinColumn(name = "testId"),
+                inverseJoinColumns = @JoinColumn(name = "questionId")
+        )
+        private List<Question> questions;
+
+
+        @JsonIgnore
+        @ManyToOne
+        @JoinColumn(name = "classRoomId")
+        private ClassRoom classRoom;
+
     }
-
-    public void setTestId(String testId) {
-        this.testId = testId;
-    }
-
-    public String getTestName() {
-        return testName;
-    }
-
-    public void setTestName(String testName) {
-        this.testName = testName;
-    }
-
-    public Integer getTestTime() {
-        return testTime;
-    }
-
-    public void setTestTime(Integer testTime) {
-        this.testTime = testTime;
-    }
-
-    public Date getTestDay() {
-        return testDay;
-    }
-
-    public void setTestDay(Date testDay) {
-        this.testDay = testDay;
-    }
-
-    public Date getTimeStart() {
-        return timeStart;
-    }
-
-    public void setTimeStart(Date timeStart) {
-        this.timeStart = timeStart;
-    }
-
-    public Date getEndStart() {
-        return endStart;
-    }
-
-    public void setEndStart(Date endStart) {
-        this.endStart = endStart;
-    }
-}

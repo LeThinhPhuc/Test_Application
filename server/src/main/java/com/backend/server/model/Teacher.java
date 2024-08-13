@@ -1,55 +1,40 @@
 package com.backend.server.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
-@Table(name="teacher")
+@Getter
+@Setter
+@EqualsAndHashCode
+@Table(name="Teacher")
 public class Teacher {
     @Id
-    @Column(name="teacherid")
+    @Column(name="teacherId")
     private String teacherId;
 
-    @Column(name="fullname")
+    @Column(name="fullName")
     private String fullName;
 
-    @Column(name="phonenumber")
+    @Column(name="phoneNumber")
     private String phoneNumber;
 
     @Column(name="gender")
     private String gender;
 
-    public String getTeacherId() {
-        return teacherId;
-    }
+    @JsonIgnore
+    @OneToMany(mappedBy = "teacher")
+    private List<ClassRoom> classRooms;
 
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
-    }
+    @OneToOne(
+            cascade = CascadeType.ALL)
+    @JoinColumn(name = "accountId")
+    private Account account;
 
-    public String getFullName() {
-        return fullName;
-    }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 }

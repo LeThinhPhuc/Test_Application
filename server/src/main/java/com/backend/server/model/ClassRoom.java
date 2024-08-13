@@ -1,55 +1,45 @@
 package com.backend.server.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
-@Table(name="classroom")
+@Getter
+@Setter
+@EqualsAndHashCode
+@Table(name="ClassRoom")
 public class ClassRoom {
     @Id
-    @Column(name="classroomid")
+    @Column(name="classRoomId")
     private String classRoomId;
 
-    @Column(name="classroomname")
+    @Column(name="classRoomName")
     private String classRoomName;
 
-    @Column(name="schoolyear")
+    @Column(name="schoolYear")
     private String schoolYear;
 
     @Column(name="semester")
     private String semester;
 
-    public String getClassRoomId() {
-        return classRoomId;
-    }
+    @JsonManagedReference
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "Classroom_Student",
+            joinColumns = @JoinColumn(name = "classroomId"),
+            inverseJoinColumns = @JoinColumn(name = "studentId")
+    )
+    private List<Student> students;
 
-    public void setClassRoomId(String classRoomId) {
-        this.classRoomId = classRoomId;
-    }
+    @ManyToOne
+    @JoinColumn(name="teacherId")
+    private Teacher teacher;
 
-    public String getClassRoomName() {
-        return classRoomName;
-    }
-
-    public void setClassRoomName(String classRoomName) {
-        this.classRoomName = classRoomName;
-    }
-
-    public String getSchoolYear() {
-        return schoolYear;
-    }
-
-    public void setSchoolYear(String schoolYear) {
-        this.schoolYear = schoolYear;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
-    }
+    @OneToMany(mappedBy = "classRoom",  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Test> tests;
 }

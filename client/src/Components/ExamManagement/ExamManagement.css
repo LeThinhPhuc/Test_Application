@@ -1,0 +1,36 @@
+.ml-4{
+    width: 120px;
+    height: 50px;
+    margin: 10px;
+    font-size: 16px;
+    border:1px solid gray ;
+  }
+
+.table-wrapper {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  .thead {
+    background-color: #002366;
+    color: white;
+  }
+  
+  .th, .td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+
+
