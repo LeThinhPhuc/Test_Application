@@ -31,6 +31,7 @@ public class Teacher {
     @OneToMany(mappedBy = "teacher")
     private List<ClassRoom> classRooms;
 
+    @JsonIgnore
     @OneToOne(
             cascade = CascadeType.ALL)
     @JoinColumn(name = "accountId")
