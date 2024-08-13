@@ -1,5 +1,6 @@
 package com.backend.server.service;
 
+import com.backend.server.DTO.StudentUpdateDTO;
 import com.backend.server.model.Student;
 import com.backend.server.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,30 @@ public class StudentService {
         return findStudentById(id);
     }
 
-//    @Transactional
+
+
+    @Transactional
+    public Student updateStudent(String id, StudentUpdateDTO student) {
+        Student studentDB = findStudentById(id);
+
+        if (student.getName() != null) {
+            studentDB.setName(student.getName());
+        }
+        if (student.getPhone() != null) {
+            studentDB.setPhone(student.getPhone());
+        }
+        if (student.getGender() != null) {
+            studentDB.setGender(student.getGender());
+        }
+
+        return studentRepository.save(studentDB);
+    }
+
+    public Student createStudent(Student student){
+        return studentRepository.save(student);
+    }
+
+    //    @Transactional
 //    public Student deleteStudent(String id) {
 //        Student student = findStudentById(id);
 //
@@ -54,27 +78,4 @@ public class StudentService {
 //        userRepository.delete(user);
 //        return userMapper.toUserResponseDTO(user);
 //    }
-
-    @Transactional
-    public Student updateStudent(String id, Student student) {
-        Student studentDB = findStudentById(id);
-
-        if (student.getName() != null) {
-            studentDB.setName(student.getName());
-        }
-        if (student.getPhone() != null) {
-            studentDB.setPhone(student.getPhone());
-        }
-        if (student.getGender() != null) {
-            studentDB.setGender(student.getGender());
-        }
-
-        return studentRepository.save(studentDB);
-    }
-
-    public Student createStudent(Student student){
-        return studentRepository.save(student);
-    }
-
-
 }

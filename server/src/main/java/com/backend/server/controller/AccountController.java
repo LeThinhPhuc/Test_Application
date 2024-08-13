@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.backend.server.service.AccountService;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/accounts")
 public class AccountController {
@@ -28,6 +30,17 @@ public class AccountController {
         this.accountService = accountService;
         this.authenticationManager = authenticationManager;
         this.jwtGenerator = jwtGenerator;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAccounts() {
+        try {
+            List<Account> accounts = accountService.getAllAccounts();
+            return ResponseEntity.ok(accounts);
+        } catch (RuntimeException ex) {
+            Response response = Response.of(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
     // Get an account by username

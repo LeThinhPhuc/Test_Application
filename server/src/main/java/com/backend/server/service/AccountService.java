@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class AccountService {
@@ -26,6 +27,10 @@ public class AccountService {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+    }
+
+    public List<Account> getAllAccounts() {
+        return accountRepository.findAll();
     }
 
     public Account getAccountByUsername(String username) {
@@ -46,11 +51,13 @@ public class AccountService {
         String hashedPassword = passwordEncoder.encode(registryDTO.getPassword());
         registryDTO.setPassword(hashedPassword);
 
+        //- ID được tạo ở Contructor
         Student student = new Student(registryDTO.getPhone(), registryDTO.getName(), registryDTO.getGender());
         Account account = new Account(registryDTO.getUsername(), registryDTO.getPassword());
         account.setStudent(student);
         student.setAccount(account);
 
+        //- Set-up trước trong DB: 1: ROLE_USER, 2: ROLE_ADMIN
         Authority userAuthority = authorityRepository.findById("1")
                 .orElseThrow(() -> new RuntimeException(Response.notFound("Authority", "1")));
         account.setAuthorities(Collections.singletonList(userAuthority));

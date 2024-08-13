@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,10 +49,12 @@ public class Account {
     )
     private List<Authority> authorities;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "account",
             cascade = CascadeType.ALL)
     private Student student;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "account",
             cascade = CascadeType.ALL)
     private Teacher teacher;

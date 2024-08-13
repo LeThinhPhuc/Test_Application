@@ -1,5 +1,6 @@
 package com.backend.server.controller;
 
+import com.backend.server.DTO.StudentUpdateDTO;
 import com.backend.server.model.Response;
 import com.backend.server.model.Student;
 import com.backend.server.service.StudentService;
@@ -42,7 +43,7 @@ public class StudentController {
 
     // Update a student
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable String id, @RequestBody Student student) {
+    public ResponseEntity<?> updateStudent(@PathVariable String id, @RequestBody StudentUpdateDTO student) {
         try {
             Student updatedStudent = studentService.updateStudent(id, student);
             return ResponseEntity.ok(updatedStudent);
