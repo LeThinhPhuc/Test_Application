@@ -1,5 +1,6 @@
 package com.backend.server.service;
 
+import com.backend.server.DTO.ExamStatisticsDTO;
 import com.backend.server.model.*;
 import com.backend.server.repository.QuestionRepository;
 import com.backend.server.repository.StudentRepository;
@@ -9,9 +10,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 
 @Service
 public class TestService {
@@ -24,62 +28,61 @@ public class TestService {
     private final QuestionRepository questionRepository;
 
     private final QuestionService questionService;
+
     @Autowired
-    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService, StudentRepository studentRepository){
+    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService, StudentRepository studentRepository) {
         this.testRepository = testRepository;
-        this.studentTestRepository=studentTestRepository;
-        this.questionRepository =questionRepository;
+        this.studentTestRepository = studentTestRepository;
+        this.questionRepository = questionRepository;
         this.questionService = questionService;
-        this.studentRepository =studentRepository;
+        this.studentRepository = studentRepository;
     }
 
-    public Test createTest(Test test){
+    public Test createTest(Test test) {
         return testRepository.save(test);
     }
 
-    public Test getTestById(String id){
+    public Test getTestById(String id) {
         return testRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + id));
     }
 
-    public List<Test> getAllTest(){
+    public List<Test> getAllTest() {
         return testRepository.findAll();
     }
 
-    public List<Question> getAllQuestionForTest(String testId){
+
+    public List<Question> getAllQuestionForTest(String testId) {
         Test test = getTestById(testId);
         return test.getQuestions();
     }
 
-    public Test updateTest(String id, Test updatedTest){
+    public Test updateTest(String id, Test updatedTest) {
         Test testInfo = getTestById(id);
-        if(updatedTest.getTestDay()!=null){
+        if (updatedTest.getTestDay() != null) {
             testInfo.setTestDay(updatedTest.getTestDay());
         }
-        if(updatedTest.getTestTime()!=null){
+        if (updatedTest.getTestTime() != null) {
             testInfo.setTestTime(updatedTest.getTestTime());
         }
-        if(updatedTest.getTimeStart()!=null){
+        if (updatedTest.getTimeStart() != null) {
             testInfo.setTimeStart(updatedTest.getTimeStart());
         }
-        if(updatedTest.getTimeEnd()!=null){
+        if (updatedTest.getTimeEnd() != null) {
             testInfo.setTimeEnd(updatedTest.getTimeEnd());
         }
-        if(updatedTest.getTestName()!=null){
+        if (updatedTest.getTestName() != null) {
             testInfo.setTestName(updatedTest.getTestName());
         }
         return testRepository.save(testInfo);
     }
 
-    public void deleteTest(String id){
-        Test test = testRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Test not found with ID: "+id));
+    public void deleteTest(String id) {
+        Test test = testRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + id));
 
         // n-n BẢNG PHỤ CÓ THUỘC TÍNH
 
 //        studentTestRepository.deleteAll(test.getStudentTests());
 //        testRepository.delete(test);
-
-
-
 
 
         // n-n BẢNG PHỤ KHÔNG CÓ THUỘC TÍNH
@@ -92,8 +95,6 @@ public class TestService {
 //        testRepository.delete(test);
 
 
-
-
         //        for(StudentTest student: test.getStudentTests()){
 //            student
 //        }
@@ -104,25 +105,26 @@ public class TestService {
 
     }
 
-    public Test addQuestionToTest(String testId, Question questionData){
-        Test test = testRepository.findById(testId).orElseThrow(()->new RuntimeException("Test not found"));
+    public Test addQuestionToTest(String testId, Question questionData) {
+        Test test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
         Question question = questionService.createQuestion(questionData);
         test.getQuestions().add(question);
         question.getTests().add(test);
         return testRepository.save(test);
     }
 
-    public void addQuestionsToTest(String testId, List<Question> questions){
-        for (Question question:questions){
+    public void addQuestionsToTest(String testId, List<Question> questions) {
+        for (Question question : questions) {
             addQuestionToTest(testId, question);
         }
     }
 
+
     public void addStudentToTest(String testId, String studentId) throws IllegalAccessException {
-        Test test = testRepository.findById(testId).orElseThrow(()->new EntityNotFoundException("Test not found with ID: "+testId));
-        Student student = studentRepository.findById(studentId).orElseThrow(()->new EntityNotFoundException("Student not found with ID: "+studentId));
+        Test test = testRepository.findById(testId).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
         boolean alreadyExists = test.getStudentTests().stream().anyMatch(ts -> ts.getStudent().getId().equals(studentId));
-        if(alreadyExists){
+        if (alreadyExists) {
             throw new IllegalAccessException("Student is allready in this test");
         }
         StudentTest studentTest = new StudentTest();
@@ -135,6 +137,7 @@ public class TestService {
         testRepository.save(test);
     }
 
+
     public void addStudentsToTest(String testId, List<Student> students) throws IllegalAccessException {
         Test test = testRepository.findById(testId)
                 .orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
@@ -143,20 +146,62 @@ public class TestService {
             addStudentToTest(testId, student.getId()); // Gọi phương thức đã có để thêm học sinh vào test
         }
     }
-    public void updateScoreForStudent(String testId, String studentId, float score){
-        Test test = testRepository.findById(testId).orElseThrow(()-> new EntityNotFoundException("Test not found with ID: "+testId));
-        StudentTest studentTest =  test.getStudentTests().stream().filter(ts->ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(()-> new EntityNotFoundException("Student not found with ID: "+studentId));
+
+    public void updateScoreForStudent(String testId, String studentId, float score) {
+        Test test = testRepository.findById(testId).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
+        StudentTest studentTest = test.getStudentTests().stream().filter(ts -> ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
         studentTest.setPoint(score);
         testRepository.save(test);
 
     }
 
-    public void updateStartDoTest(String testId, String studentId, LocalDateTime startTime){
-        Test test = testRepository.findById(testId).orElseThrow(()->new EntityNotFoundException("Test not found with ID: "+testId));
-        StudentTest studentTest = test.getStudentTests().stream().filter(ts->ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(()-> new EntityNotFoundException("Student not found with ID: "+ studentId));
+    public ExamStatisticsDTO getStudentTests() {
+        List<StudentTest> studentTests = studentTestRepository.findAll();
+
+        // TreeMap to automatically sort scores in ascending order
+        Map<Double, Integer> scoreMap = new TreeMap<>();
+        double totalScore = 0;
+        int totalCount = 0;
+        StudentTest topScorer = null;
+
+        for (StudentTest t : studentTests) {
+            double score = t.getPoint();
+            scoreMap.put(score, scoreMap.getOrDefault(score, 0) + 1);
+            totalScore += score;
+            totalCount++;
+
+            // Determine the top scorer
+            if (topScorer == null || t.getPoint() > topScorer.getPoint()) {
+                topScorer = t;
+            }
+        }
+
+        // Calculate the average score and round to 2 decimal places
+        double average = totalCount == 0 ? 0 : totalScore / totalCount;
+        BigDecimal roundedAverage = new BigDecimal(average).setScale(2, RoundingMode.HALF_UP);
+
+        // Convert Map to List<Map<String, Object>> for score distribution
+        List<Map<String, Object>> result = new ArrayList<>();
+        scoreMap.forEach((score, total) -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("score", score);
+            map.put("total", total);
+            result.add(map);
+        });
+
+        // Create the DTO
+        ExamStatisticsDTO statisticsDTO = new ExamStatisticsDTO();
+        statisticsDTO.setAverage(roundedAverage.doubleValue());
+        statisticsDTO.setTopScorer(topScorer);
+        statisticsDTO.setScoreDistribution(result);
+
+        return statisticsDTO;
+    }
+
+    public void updateStartDoTest(String testId, String studentId, LocalDateTime startTime) {
+        Test test = testRepository.findById(testId).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
+        StudentTest studentTest = test.getStudentTests().stream().filter(ts -> ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
         studentTest.setStartTime(startTime);
         testRepository.save(test);
     }
-    
-    
 }
