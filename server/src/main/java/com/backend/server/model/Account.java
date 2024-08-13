@@ -49,12 +49,12 @@ public class Account {
     )
     private List<Authority> authorities;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToOne(mappedBy = "account",
             cascade = CascadeType.ALL)
     private Student student;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToOne(mappedBy = "account",
             cascade = CascadeType.ALL)
     private Teacher teacher;

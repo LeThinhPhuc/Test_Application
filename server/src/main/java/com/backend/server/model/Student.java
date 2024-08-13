@@ -41,6 +41,7 @@ public class Student {
         this.classRooms = new ArrayList<ClassRoom>();
     }
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "accountId")
     private Account account;

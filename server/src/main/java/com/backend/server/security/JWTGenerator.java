@@ -1,10 +1,14 @@
 package com.backend.server.security;
 
+import com.backend.server.model.Account;
+import com.backend.server.repository.AccountRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -16,31 +20,48 @@ import java.util.stream.Collectors;
 
 @Component
 public class JWTGenerator {
-
     private final Key key;
 
-    public JWTGenerator() {
-        //- Initialize the key using the secret string
+    private final AccountRepository accountRepository;
+
+    @Autowired
+    public JWTGenerator(AccountRepository accountRepository) {
+        // Initialize the key using the secret string
         byte[] keyBytes = SecurityConstants.JWT_SECRET.getBytes();
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.accountRepository = accountRepository;
     }
 
     public String generateToken(Authentication authentication) {
+
         String username = authentication.getName();
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
+
+        Account account = accountRepository.findByUsername(username);
+
+        if(account == null) {
+            throw new UsernameNotFoundException(username);
+        }
+
 
         //- Add custom claims (payload)
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
-//        claims.put("customClaim", "customValue"); // Add custom claim
+        claims.put("username", username);
+        claims.put("accountId", account.getId());
 
+        if(account.getStudent() != null) {
+            claims.put("student", account.getStudent());
+        } else  {
+            claims.put("teacher", account.getTeacher());
+        }
 
         String token = Jwts.builder()
                 .setClaims(claims) // Set custom claims
-                .setSubject(username)
+//                .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .signWith(key, SignatureAlgorithm.HS512)
@@ -59,9 +80,11 @@ public class JWTGenerator {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
 
+        claims.put("username", username);
+
         String refreshToken = Jwts.builder()
                 .setClaims(claims) // Set custom claims
-                .setSubject(username)
+//                .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .signWith(key, SignatureAlgorithm.HS512)
