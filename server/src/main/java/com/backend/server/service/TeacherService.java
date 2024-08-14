@@ -1,6 +1,7 @@
 package com.backend.server.service;
 
 import com.backend.server.model.ClassRoom;
+import com.backend.server.model.GenerateID;
 import com.backend.server.model.Teacher;
 import com.backend.server.repository.ITeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ public class TeacherService {
     }
 
     public void createTeacher(Teacher teacher){
+        teacher.setTeacherId(GenerateID.generateID());
         teacherRepository.save(teacher);
     }
 

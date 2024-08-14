@@ -1,6 +1,7 @@
 package com.backend.server.service;
 
 import com.backend.server.model.ClassRoom;
+import com.backend.server.model.GenerateID;
 import com.backend.server.model.Student;
 import com.backend.server.model.Test;
 import com.backend.server.repository.IClassRoomRepository;
@@ -27,6 +28,7 @@ public class ClassRoomService {
     }
 
     public ClassRoom createClass(ClassRoom classRoom){
+        classRoom.setClassRoomId(GenerateID.generateID());
         return classRoomRepository.save(classRoom);
     }
 
@@ -41,6 +43,11 @@ public class ClassRoomService {
     public List<Test> getTestsForClass(String classId){
         ClassRoom classRoom = getClassById(classId);
         return classRoom.getTests();
+    }
+
+    public List<Student> getStudentsForClass(String classId){
+        ClassRoom classRoom = getClassById(classId);
+        return classRoom.getStudents();
     }
 
     public ClassRoom updateClass(String id, ClassRoom updatedClass){
@@ -76,11 +83,17 @@ public class ClassRoomService {
         Student studentFind = studentService.getStudentById(studentData.getId());
         if(studentFind==null){
             Student student = studentService.createStudent(studentData);
-            classRoom.getStudents().add(student);
-            student.getClassRooms().add(classRoom);
-        }else{
-            classRoom.getStudents().add(studentFind);
-            studentFind.getClassRooms().add(classRoom);
+            // Thêm học sinh vào lớp học nếu chưa có
+            if (!classRoom.getStudents().contains(student)) {
+                classRoom.getStudents().add(student);
+                student.getClassRooms().add(classRoom);
+            }
+        } else {
+            // Nếu học sinh đã tồn tại, kiểm tra xem đã có trong lớp học chưa
+            if (!classRoom.getStudents().contains(studentFind)) {
+                classRoom.getStudents().add(studentFind);
+                studentFind.getClassRooms().add(classRoom);
+            }
         }
         return classRoomRepository.save(classRoom);
     }
