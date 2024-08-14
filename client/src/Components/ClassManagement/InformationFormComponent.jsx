@@ -11,31 +11,27 @@ const InformationForm = (onChange, examInfo) => {
             type="text"
             onChange={onChange}
             placeholder="Enter exam name"
-            className="border-[1px] rounded-lg border-[#7676DC] text-[21px] px-5 py-2 "
+            onChange={onChange}
+            value={examInfo.ten}
           />
         </div>
 
-        <div className="flex justify-between">
-          <div className="flex flex-col gap-2">
-            <p className="text-[18px]">Ngày thi</p>
-            <input
+          <div className="w-[75%] flex justify-between gap-2">
+            <CustomInputComponent
+              label="Ngày thi"
               name="ngaythi"
-              value={examInfo.ngaythi}
-              onChange={onChange}
               type="date"
-              className="w-[300px] border-[1px] rounded-lg border-[#7676DC] text-[21px] px-5 py-2 "
+              onChange={onChange}
+              value={examInfo.ngaythi}
             />
-          </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-[18px]">Thời gian ( phút )</p>
-            <input
+            <CustomInputComponent
+              label="Thời gian"
               name="thoigian"
               value={examInfo.thoigian}
               onChange={onChange}
               type="number"
-              min="30"
-              max="120"
-              className="w-[300px] border-[1px] rounded-lg border-[#7676DC] text-[21px] px-5 py-2 "
+              onChange={onChange}
+              value={examInfo.thoigian}
             />
           </div>
         </div>
@@ -47,7 +43,8 @@ const InformationForm = (onChange, examInfo) => {
               value={examInfo.giobatdau}
               onChange={onChange}
               type="time"
-              className="w-[300px] border-[1px] rounded-lg border-[#7676DC] text-[21px] px-5 py-2 "
+              onChange={onChange}
+              value={examInfo.giobatdau}
             />
           </div>
         </div>

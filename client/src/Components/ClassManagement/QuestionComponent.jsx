@@ -6,18 +6,18 @@ const QuestionComponent = ({
 }) => {
   return (
     <div className="flex flex-col w-[82%]">
-      <div className="flex justify-between">
-        <p className="text-[25px] text-black/25 mb-5">Question</p>
-        <div className="">
+      <div className="flex justify-between mb-5">
+        <p className="text-[25px] text-black/25 ">Question</p>
+        <div className="flex gap-5">
           <button
             onClick={toggleModal}
-            className="border-[1px] border-black/25 bg-white rounded-xl text-[16px] text-[#01008A] px-6 py-[5px] hover:text-white hover:bg-[#01008A]/80"
+            className="border-[1px] border-black/25 bg-white rounded-xl text-[16px] text-[#01008A] px-6 py-1 hover:text-white hover:bg-[#01008A]/80"
           >
             + Add Question
           </button>
           <button
             onClick={handleDeleteAll}
-            className="ml-4 border-[1px] border-black/25 bg-white rounded-xl text-[16px] text-red-600 px-6 py-[5px] hover:text-white hover:bg-red-600/80"
+            className="border-[1px] border-black/25 bg-white rounded-xl text-[16px] text-red-600 px-6 py-1 hover:text-white hover:bg-red-600/80"
           >
             Delete All
           </button>
