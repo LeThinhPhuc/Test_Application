@@ -8,6 +8,7 @@ import com.backend.server.model.Question;
 import com.backend.server.model.Response;
 import com.backend.server.model.Student;
 import com.backend.server.model.Test;
+import com.backend.server.service.ClassRoomService;
 import com.backend.server.service.TeacherService;
 import com.backend.server.service.StudentService;
 import com.backend.server.service.TestService;
@@ -23,10 +24,12 @@ import java.util.List;
 public class TestController {
     private final TestService testService;
     private final StudentService studentService;
+    private final ClassRoomService classRoomService;
     @Autowired
-    public TestController(TestService testService, StudentService studentService){
+    public TestController(TestService testService, StudentService studentService, ClassRoomService classRoomService){
         this.testService=testService;
         this.studentService=studentService;
+        this.classRoomService=classRoomService;
     }
 
     @GetMapping
@@ -96,14 +99,17 @@ public class TestController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> createTest(@RequestBody Test test) {
+    @PostMapping("/{classId}")
+    public ResponseEntity<?> createTest(@PathVariable String classId,@RequestBody Test test) {
         if (test == null) {
             Response response = Response.of(HttpStatus.BAD_REQUEST, "Test is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try {
-            testService.createTest(test);
+            Test testData = testService.createTest(test);
+            ClassRoom classRoom = classRoomService.getClassById(classId);
+            testService.addStudentsToTest(testData.getId(), classRoom.getStudents());
+
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception ex) {
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());

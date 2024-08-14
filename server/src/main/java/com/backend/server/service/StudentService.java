@@ -2,6 +2,8 @@ package com.backend.server.service;
 
 import com.backend.server.DTO.StudentUpdateDTO;
 import com.backend.server.model.Student;
+import com.backend.server.model.StudentTest;
+import com.backend.server.model.Test;
 import com.backend.server.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
