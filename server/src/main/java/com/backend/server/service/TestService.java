@@ -15,7 +15,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.*;
-
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TestService {
@@ -176,9 +178,10 @@ public class TestService {
         }
     }
 
-    public void updateScoreForStudent(String testId, String studentId, float score) {
-        Test test = testRepository.findById(testId).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
-        StudentTest studentTest = test.getStudentTests().stream().filter(ts -> ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
+    public void updateScoreForStudent(String testId, String studentId, double score){
+        Test test = testRepository.findById(testId).orElseThrow(()-> new EntityNotFoundException("Test not found with ID: "+testId));
+        StudentTest studentTest =  test.getStudentTests().stream().filter(ts->ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(()-> new EntityNotFoundException("Student not found with ID: "+studentId));
+
         studentTest.setPoint(score);
         testRepository.save(test);
 
@@ -227,10 +230,11 @@ public class TestService {
         return statisticsDTO;
     }
 
-    public void updateStartDoTest(String testId, String studentId, LocalDateTime startTime) {
-        Test test = testRepository.findById(testId).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
-        StudentTest studentTest = test.getStudentTests().stream().filter(ts -> ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
-        studentTest.setStartTime(startTime);
+
+    public void updateStartDoTest(String testId, String studentId, String startTime){
+        Test test = testRepository.findById(testId).orElseThrow(()->new EntityNotFoundException("Test not found with ID: "+testId));
+        StudentTest studentTest = test.getStudentTests().stream().filter(ts->ts.getStudent().getId().equals(studentId)).findFirst().orElseThrow(()-> new EntityNotFoundException("Student not found with ID: "+ studentId));
+        studentTest.setStartTime(LocalDateTime.parse(startTime));
         testRepository.save(test);
     }
 }
