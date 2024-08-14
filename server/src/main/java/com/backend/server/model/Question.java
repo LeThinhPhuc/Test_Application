@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,28 +14,20 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "question")
+@Table(name = "Question")
 public class Question {
     @Id
     @Column(name = "id")
     private String id;
 
-    @Column(name = "type")
-    private String type;  // e.g., "Multiple Choice", "True/False", "Short Answer"
-
-    @Column(name = "topic")
-    private String topic; // e.g., "Mathematics", "Science"
-
     @Column(name = "content")
     private String content; // Nội dung câu hỏi
 
-    @Column(name = "point")
-    private double point;
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "questions",
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Test> tests;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Answer> answers;
 }

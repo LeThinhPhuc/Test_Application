@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,10 +15,10 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "account")
+@Table(name = "Account")
 public class Account {
     @Id
-    @Column(name = "id")
+    @Column( name = "id")
     private String id;
 
     @Column(name = "username")
@@ -29,7 +30,7 @@ public class Account {
     @Column(name = "enabled")
     private Integer enabled;
 
-    public Account(String username, String password) {
+    public Account (String username, String password) {
         //- ID
         this.id = GenerateID.generateID();
         this.username = username;
@@ -42,16 +43,18 @@ public class Account {
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
-            name = "account_authority",
+            name = "Account_Authority",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "authorityId")
     )
     private List<Authority> authorities;
 
+//    @JsonIgnore
     @OneToOne(mappedBy = "account",
             cascade = CascadeType.ALL)
     private Student student;
 
+//    @JsonIgnore
     @OneToOne(mappedBy = "account",
             cascade = CascadeType.ALL)
     private Teacher teacher;

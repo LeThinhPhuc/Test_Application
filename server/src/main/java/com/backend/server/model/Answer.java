@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,21 +11,20 @@ import org.hibernate.annotations.Cache;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Table(name="answer")
+@Table(name="Answer")
 public class Answer {
     @Id
-    @Column(name="answerid")
-    private String answerId;
+    @Column(name="id")
+    private String id;
 
-    @Column(name = "contentanswer")
-    private String contentAnswer;
+    @Column(name="content")
+    private String content; //- Nội dung câu trả lời
 
-    @Column(name="optionanswer")
-    private String optionAnswer;
+    @Column(name="isCorrect")
+    private String isCorrect;
 
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="questionid")
+    @JoinColumn(name="questionId")
     private Question question;
-
-
 }

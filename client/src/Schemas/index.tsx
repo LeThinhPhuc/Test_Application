@@ -12,3 +12,10 @@ export const CreateClassSchema = yup.object().shape({
     .max(2030, "Vui lòng nhập năm hợp lệ")
     .required("Required"),
 });
+
+export const CreateExamSchema = yup.object().shape({
+  ten: yup.string().required("Required"),
+  ngaythi: yup.date().required("Required"),
+  thoigian: yup.number().required("Required"),
+  giobatdau: yup.string().required("Required"),
+});

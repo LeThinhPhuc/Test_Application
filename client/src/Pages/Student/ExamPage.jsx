@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import Header from "../../Components/Header/Header";
-import { Link } from "react-router-dom";
+import ModalComponent from "../../Components/Exam/ModalComponent";
+import TimerComponent from "../../Components/Exam/TimerComponent";
+import QuestionCard from "../../Components/Exam/QuestionCard";
+import IndexCardComponent from "../../Components/Exam/IndexCardComponent";
 
 const ExamPage = () => {
-  const [modal, setModel] = useState(false);
-
-  const toggleModal = () => {
-    setModel(!modal);
-  };
-
   const questions = [
     {
       title: "Con voi có bao nhiêu cái chân?",
@@ -52,81 +49,64 @@ const ExamPage = () => {
     },
   ];
 
+  const [modal, setModel] = useState(false);
+  const [modal2, setModel2] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(10);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   useEffect(() => {
-    setSelectedOptions(Array(questions.length).fill(null));
-  }, []);
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+    }, 1000);
 
+    if (timeLeft === 0) {
+      if (modal === true) {
+        setModel(false);
+      }
+      setModel2(true);
+    }
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  useEffect(() => {
+    setSelectedOptions(Array(questions.length).fill(null));
+  }, [questions.length]);
+
+  const toggleModal = () => {
+    setModel(!modal);
+  };
   const handleOptionChange = (questionIndex, optionIndex) => {
     const newSelectedOptions = [...selectedOptions];
     newSelectedOptions[questionIndex] = optionIndex;
     setSelectedOptions(newSelectedOptions);
   };
+
   return (
     <div className={`w-full h-full`}>
-      {modal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
-      )}
-      <div className={`w-full h-full ${modal && "blur-sm"}`}>
+      <div className={`w-full h-full ${modal || (modal2 && "blur-sm")}`}>
         <Header />
         <div className="flex items-start mt-10 mx-[50px] mb-[100px]">
           {/* left */}
           <div className=" w-[60%] items-center flex flex-col gap-[36px]">
             {questions.map((question, i) => (
-              <div
-                id={i}
+              <QuestionCard
+                question={question}
                 key={i}
-                className="bg-white border-black/5 border-2 w-full flex flex-col  p-[36px] drop-shadow-lg rounded-[10px]"
-              >
-                <div className="text-[24px] flex font-montserrat font-medium">
-                  <p>{i + 1}. </p>
-                  <p>
-                    {" "}
-                    {question.title}
-                    {question.options.map((option, oi) => (
-                      <div
-                        key={oi}
-                        className=" flex gap-3 font-light text-[20px]"
-                      >
-                        <input
-                          type="radio"
-                          id={`q${i}o${oi}`}
-                          name={`question${i}`}
-                          onChange={() => handleOptionChange(i, oi)}
-                        />
-                        {option}
-                      </div>
-                    ))}
-                  </p>
-                </div>
-              </div>
+                questionIndex={i}
+                handleOptionChange={handleOptionChange}
+              />
             ))}
           </div>
           {/* right */}
           <div className="overflow-y-auto fixed w-[30%] right-20 flex-[2] top-[90px] bottom-[10px] flex flex-col gap-[20px] justify-center items-center">
-            <div className="bg-white w-full flex flex-col items-center py-5  rounded-[10px]">
-              <h2 className=" font-roboto text-[20px] font-[800] ">
-                FINISH BEFORE
-              </h2>
-              <div className="mt-3 border-8 border-[#28AE00] font-palanquin text-[25px] rounded-full w-[140px] h-[140px] flex justify-center items-center">
-                00:00:10
-              </div>
-            </div>
+            <TimerComponent timeLeft={timeLeft} />
             <div className="bg-white w-full px-8 flex justify-start py-5 border-black/5 border-2 rounded-[10px] flex-wrap gap-[34px]">
               {questions.map((question, i) => (
-                <a
-                  href={`#${i}`}
+                <IndexCardComponent
                   key={i}
-                  className={`w-[60px] h-[60px] rounded-[9px] border-2 flex justify-center items-center font-montserrat 
-                  ${
-                    selectedOptions[i] !== null
-                      ? "bg-[#EAFDE7] text-green-600"
-                      : ""
-                  }`}
-                >
-                  {i + 1}
-                </a>
+                  questionIndex={i}
+                  selectedOptions={selectedOptions}
+                />
               ))}
             </div>
             <button
@@ -139,29 +119,18 @@ const ExamPage = () => {
         </div>
       </div>
       {modal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-md shadow-md">
-            <h2 className="text-[24px] font-montserrat font-medium mb-4">
-              Confirm Submit
-            </h2>
-            <p>Are you sure you want to submit your answers?</p>
-            <div className="mt-4 flex justify-end gap-4">
-              <button
-                className="px-4 py-2 bg-gray-300 rounded-md"
-                onClick={toggleModal}
-              >
-                Cancel
-              </button>
-              <Link
-                to="/afterexam"
-                className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                onClick={toggleModal}
-              >
-                Confirm
-              </Link>
-            </div>
-          </div>
-        </div>
+        <ModalComponent
+          toggleModal={toggleModal}
+          header="Confirm Submit"
+          content="Are you sure you want to submit your answers?"
+        />
+      )}
+      {modal2 && (
+        <ModalComponent
+          toggleModal={toggleModal}
+          header="Time Up"
+          content="Time is up. Please confirm"
+        />
       )}
     </div>
   );

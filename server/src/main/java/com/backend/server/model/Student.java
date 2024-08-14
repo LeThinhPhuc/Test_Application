@@ -1,5 +1,6 @@
 package com.backend.server.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "student")
+@Table(name = "Student")
 public class Student {
     @Id
     @Column(name = "id")
@@ -27,7 +28,7 @@ public class Student {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name="gender")
+    @Column(name = "gender")
     private String gender;
 
     public Student(String phone, String name, String gender) {
@@ -41,13 +42,19 @@ public class Student {
     }
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "accountId")
     private Account account;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    //    @JsonIgnore
+    @JsonBackReference
+    @OneToMany(mappedBy = "student",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentTest> studentTests;
 
-    @ManyToMany(mappedBy = "students", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    //    @JsonIgnore
+    @JsonBackReference
+    @ManyToMany(mappedBy = "students",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ClassRoom> classRooms;
 }

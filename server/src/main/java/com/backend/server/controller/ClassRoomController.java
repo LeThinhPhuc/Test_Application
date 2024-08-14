@@ -1,7 +1,6 @@
 package com.backend.server.controller;
 
-import com.backend.server.model.ClassRoom;
-import com.backend.server.model.Response;
+import com.backend.server.model.*;
 import com.backend.server.service.ClassRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,6 +56,22 @@ public class ClassRoomController {
         }
     }
 
+    @GetMapping("/gettestsforclass/{classId}")
+    public ResponseEntity<?> getTestsOfClass(@PathVariable String classId){
+        try {
+            ClassRoom classRoom = classRoomService.getClassById(classId);
+            if(classRoom!=null){
+                List<Test> tests = classRoomService.getTestsForClass(classId);
+                return ResponseEntity.ok(tests);
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> createClassRoom(@RequestBody ClassRoom classRoom){
         if(classRoom==null){
@@ -71,6 +86,42 @@ public class ClassRoomController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+    @PostMapping("/{classroomId}/student")
+    public ResponseEntity<?> addStudentToClassroom(@PathVariable String classroomId, @RequestBody Student student){
+        try{
+            ClassRoom classRoom = classRoomService.getClassById(classroomId);
+            if(classRoom != null){
+                classRoomService.addStudentToClass(classroomId, student);
+                return ResponseEntity.ok("Add student to class success");
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Class not found");
+            }
+
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/{classroomId}/students")
+    public ResponseEntity<?> addStudentsToClassroom(@PathVariable String classroomId, @RequestBody List<Student> students){
+        try{
+            ClassRoom classRoom = classRoomService.getClassById(classroomId);
+            if(classRoom != null){
+                classRoomService.addStudentsToClass(classroomId, students);
+                return ResponseEntity.ok("Add students to class success");
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Class not found");
+            }
+
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClassRoom(@PathVariable String id, @RequestBody ClassRoom classRoom){
