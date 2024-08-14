@@ -180,41 +180,6 @@ public class TestController {
         }
     }
 
-//    @PostMapping("/{testId}/question")
-//    public ResponseEntity<?> addQuestionToTest(@PathVariable String testId, @RequestBody QuestionAnswerDTO question){
-//        try{
-//            Test test = testService.getTestById(testId);
-//            if(test != null){
-//                testService.addQuestionToTest(testId, question);
-//                return ResponseEntity.ok("Add question to test success");
-//            }else {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
-//            }
-//        }catch (Exception ex){
-//            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-//
-//        }
-//    }
-//
-//
-//    @PostMapping("/{testId}/questions")
-//    public ResponseEntity<?> addQuestionsToTest(@PathVariable String testId, @RequestBody List<QuestionAnswerDTO> questions){
-//        try{
-//            Test test = testService.getTestById(testId);
-//            if(test != null){
-//                testService.addQuestionsToTest(testId, questions);
-//                return ResponseEntity.ok("Add questions to test success");
-//            }else {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
-//            }
-//        }catch (Exception ex){
-//            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-//
-//        }
-//    }
-
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTest(@PathVariable String id, @RequestBody Test test) {
         if (test == null || id == null) {
