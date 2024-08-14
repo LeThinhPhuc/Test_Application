@@ -22,12 +22,9 @@ const Login = () => {
         localStorage.setItem("user", JSON.stringify(response.data));
         const token = response.data.accessToken;
 
-        if (typeof token === 'string') {
           const decodedToken = jwtDecode(token);
-          
+          const userRole = decodedToken.roles[0]; 
 
-          const userRole = decodedToken.roles; // Adjust based on actual token structure
-         
           console.log("Decoded Token:", decodedToken);
           console.log("User Role:", userRole);
          
@@ -46,7 +43,7 @@ const Login = () => {
               draggable: true,
               progress: undefined,
             });
-          }
+          
         }
       }
     } catch (error) {
