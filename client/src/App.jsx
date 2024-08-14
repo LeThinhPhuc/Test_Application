@@ -16,9 +16,10 @@ import CreateClassPage from "./Pages/Teacher/ClassManagementPage/CreateClassPage
 import ClassManagementPage from "./Pages/Teacher/ClassManagementPage/ClassManagementPage";
 import ClassDetailPage from "./Pages/Teacher/ClassManagementPage/ClassDetailPage";
 import CreateExamPage from "./Pages/Teacher/ClassManagementPage/CreateExamPage";
+import Login from "./Components/Login/Login";
 
 const router = createBrowserRouter([
-  { path: "/", element: <StudentPage /> },
+  { path: "/", element: <Login /> },
   {
     path: "/student",
     element: <StudentPage />,
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
       { path: "exammanagement", element: <ExamManagement /> },
       { path: "studenetmanagement", element: <StudentManagement /> },
       { path: "questionbankmanagement", element: <QuestionBankManagement /> },
+
     ],
   },
 ]);
@@ -47,6 +49,7 @@ function App() {
   return (
     <AuthProvider>
       <RouterProvider router={router} />
+    
     </AuthProvider>
   );
 }
