@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 const Pagination = ({
   currentPage,
   totalPages,
@@ -9,9 +7,8 @@ const Pagination = ({
   fileData,
   toggleModal2,
   toggleModal,
+  onImportData,
 }) => {
-  const navigate = useNavigate();
-
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       onPageChange(currentPage + 1);
@@ -27,6 +24,7 @@ const Pagination = ({
   const handleImport = () => {
     toggleModal();
     toggleModal2();
+    onImportData(fileData);
   };
 
   return (

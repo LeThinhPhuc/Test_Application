@@ -89,13 +89,16 @@ const CreateClassPage = () => {
                 fileData={fileData}
                 setFileData={setFileData}
                 modal2={modal2}
+                isQuestion={false}
               />
             )}
-            <TableComponent
-              objects={fileData}
-              headers={headers}
-              getColumns={getStudentColumns}
-            />
+            {fileData.length > 0 && (
+              <TableComponent
+                objects={fileData}
+                headers={headers}
+                getColumns={getStudentColumns}
+              />
+            )}
           </Form>
         </Formik>
       </div>
