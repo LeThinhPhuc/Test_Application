@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Pagination = ({ currentPage, totalPages, onPageChange,isModal2, selectNewFile }) => {
+const Pagination = ({ currentPage, totalPages, onPageChange,isModal2, selectNewFile, onAdd }) => {
 
     const goToNextPage = () => {
         if (currentPage < totalPages) {
@@ -14,18 +14,18 @@ const Pagination = ({ currentPage, totalPages, onPageChange,isModal2, selectNewF
         }
     }
 
-    
-  
-   
     return (
         <>
-            <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+            <nav class="" aria-label="Table navigation">
                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
                     Showing <span class="font-semibold text-gray-900 dark:text-white">{currentPage}</span> of <span class="font-semibold text-gray-900 dark:text-white">{totalPages}</span>
                 </span>
 
                 {isModal2 && (
-                    <button onClick={selectNewFile} type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Select other file</button>
+                    <div className="flex justify-around">
+                        <button onClick={selectNewFile} type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Select other file</button>
+                        <button onClick={onAdd} type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Add</button>
+                    </div>
                 )}
                 
                 <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
