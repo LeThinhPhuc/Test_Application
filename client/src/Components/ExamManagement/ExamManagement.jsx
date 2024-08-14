@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./ExamManagement.css";
+import StatisticComponent from "../Statistic/StatisticComponent";
 
 const ExamManagement = () => {
   const examData = [
@@ -105,6 +106,13 @@ const ExamManagement = () => {
     const year = inputDate.getFullYear();
     setDate(event.target.value);
   };
+  const [statistic, setStatistic] = useState(false);
+  const [currentExam, setCurrentExam] = useState();
+  const handleClick = (exam) => {
+    setStatistic(true);
+    setCurrentExam(exam);
+  };
+
   return (
     <div className="flex-1">
       <div class="max-w-2xl mx-auto flex items-center">
@@ -169,7 +177,7 @@ const ExamManagement = () => {
           </thead>
           <tbody className="tbody">
             {examData.map((exam, index) => (
-              <tr key={index}>
+              <tr key={index} onClick={() => handleClick(exam)}>
                 <td className="td">{exam.code}</td>
                 <td className="td">{exam.name}</td>
                 <td className="td">{exam.date}</td>
@@ -180,6 +188,7 @@ const ExamManagement = () => {
           </tbody>
         </table>
       </div>
+      {statistic && <StatisticComponent examData={currentExam} />}
       <input type="datetime"></input>
     </div>
   );

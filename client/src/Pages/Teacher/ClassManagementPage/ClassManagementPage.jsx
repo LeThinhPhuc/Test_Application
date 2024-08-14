@@ -1,6 +1,7 @@
-import CreateButtonComponent from "../../../Components/ClassManagement/CreateButtonComponent";
+import ButtonComponent from "../../../Components/ClassManagement/ButtonComponent";
 import SearchBarComponent from "../../../Components/ClassManagement/SearchBarComponent";
-import ClassCardComponent from "./ClassCardComponent";
+import ClassCardComponent from "../../../Components/ClassManagement/ClassCardComponent";
+import { useNavigate } from "react-router-dom";
 
 const ClassManagementPage = () => {
   const classes = [
@@ -9,12 +10,17 @@ const ClassManagementPage = () => {
     { ma: "COMP3432", ten: "Lý thuyết đồ thị", nam: "2024", hocky: 1 },
     { ma: "COMP4432", ten: "Cấu trúc dữ liệu", nam: "2024", hocky: 1 },
   ];
+  const navigate = useNavigate();
   return (
     <>
       <div className="flex flex-col w-full mx-20 mt-10 font-roboto gap-14">
         {/* searchbar */}
         <div className="flex justify-between">
-          <SearchBarComponent /> <CreateButtonComponent />
+          <SearchBarComponent />{" "}
+          <ButtonComponent
+            label="+ Create Class"
+            onClick={() => navigate("/teacher/classmanagement/createClass")}
+          />
         </div>
         {/* Class Cards  */}
         <div className="flex flex-wrap gap-16 justify-start ">
