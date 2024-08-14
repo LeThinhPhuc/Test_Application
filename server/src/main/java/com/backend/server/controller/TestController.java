@@ -2,6 +2,9 @@ package com.backend.server.controller;
 
 import com.backend.server.DTO.ExamStatisticsDTO;
 import com.backend.server.model.ClassRoom;
+
+import com.backend.server.DTO.QuestionAnswerDTO;
+import com.backend.server.model.Question;
 import com.backend.server.model.Response;
 import com.backend.server.model.Student;
 import com.backend.server.model.Test;
@@ -52,7 +55,40 @@ public class TestController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
             }
-        } catch (Exception ex) {
+
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/getquestionsfortest/{testId}")
+    public ResponseEntity<?> getQuestionsOfTest(@PathVariable String testId){
+        try{
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                List<Question> questions = testService.getAllQuestionForTest(testId);
+                return ResponseEntity.ok(questions);
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("/getstudentsfortest/{testId}")
+    public ResponseEntity<?> getStudentsOfTest(@PathVariable String testId){
+        try{
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                List<Student> students = testService.getAllStudentsForTest(testId);
+                return ResponseEntity.ok(students);
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -70,6 +106,110 @@ public class TestController {
         } catch (Exception ex) {
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/{testId}/students/{studentId}")
+    public ResponseEntity<?> addStudentTest(@PathVariable String testId, @PathVariable String studentId){
+        try{
+
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.addStudentToTest(testId,studentId);
+                return ResponseEntity.ok("Add student to test success");
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/{testId}/students")
+    public ResponseEntity<?> addStudentsTest(@PathVariable String testId, @RequestBody List<Student> students){
+        try{
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.addStudentsToTest(testId, students);
+                return ResponseEntity.ok("Add students to test success");
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+
+        }
+    }
+
+//    @PostMapping("/{testId}/question")
+//    public ResponseEntity<?> addQuestionToTest(@PathVariable String testId, @RequestBody Question question){
+//        try{
+//            Test test = testService.getTestById(testId);
+//            if(test != null){
+//                testService.addQuestionToTest(testId, question);
+//                return ResponseEntity.ok("Add question to test success");
+//            }else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+//            }
+//        }catch (Exception ex){
+//            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//
+//        }
+//    }
+
+//    @PostMapping("/{testId}/questions")
+//    public ResponseEntity<?> addQuestionsToTest(@PathVariable String testId, @RequestBody List<Question> questions){
+//        try{
+//            Test test = testService.getTestById(testId);
+//            if(test != null){
+//                testService.addQuestionsToTest(testId, questions);
+//                return ResponseEntity.ok("Add questions to test success");
+//            }else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+//            }
+//        }catch (Exception ex){
+//            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//
+//        }
+//    }
+
+    @PostMapping("/{testId}/question")
+    public ResponseEntity<?> addQuestionToTest(@PathVariable String testId, @RequestBody Question question){
+        try{
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.addQuestionToTest(testId, question);
+                return ResponseEntity.ok("Add question to test success");
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+
+        }
+    }
+
+
+    @PostMapping("/{testId}/questions")
+    public ResponseEntity<?> addQuestionsToTest(@PathVariable String testId, @RequestBody List<Question> questions){
+        try{
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.addQuestionsToTest(testId, questions);
+                return ResponseEntity.ok("Add questions to test success");
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+
         }
     }
 

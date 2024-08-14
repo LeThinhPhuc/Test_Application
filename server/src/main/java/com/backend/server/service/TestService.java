@@ -29,13 +29,16 @@ public class TestService {
 
     private final QuestionService questionService;
 
+
+    private final AnswerService answerService;
     @Autowired
-    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService, StudentRepository studentRepository) {
+    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService, StudentRepository studentRepository, AnswerService answerService){
         this.testRepository = testRepository;
         this.studentTestRepository = studentTestRepository;
         this.questionRepository = questionRepository;
         this.questionService = questionService;
-        this.studentRepository = studentRepository;
+        this.studentRepository =studentRepository;
+        this.answerService = answerService;
     }
 
     public Test createTest(Test test) {
@@ -56,7 +59,13 @@ public class TestService {
         return test.getQuestions();
     }
 
-    public Test updateTest(String id, Test updatedTest) {
+//    LẤY DS HS CHO TEST, LẤY CLASS R VỚI GET STUDENT
+    public List<Student> getAllStudentsForTest(String testId){
+        Test test= getTestById(testId);
+        return test.getClassRoom().getStudents();
+    }
+
+    public Test updateTest(String id, Test updatedTest){
         Test testInfo = getTestById(id);
         if (updatedTest.getTestDay() != null) {
             testInfo.setTestDay(updatedTest.getTestDay());
@@ -106,10 +115,30 @@ public class TestService {
     }
 
     public Test addQuestionToTest(String testId, Question questionData) {
+        // Kiểm tra xem Test có tồn tại không
         Test test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
-        Question question = questionService.createQuestion(questionData);
-        test.getQuestions().add(question);
-        question.getTests().add(test);
+
+        // Kiểm tra xem câu hỏi đã tồn tại chưa dựa trên ID của câu hỏi (nếu có)
+        Optional<Question> existingQuestion = questionRepository.findById(questionData.getId());
+        Question question;
+
+        if (existingQuestion.isPresent()) {
+            // Nếu câu hỏi đã tồn tại, sử dụng lại câu hỏi này
+            question = existingQuestion.get();
+        } else {
+            // Nếu câu hỏi chưa tồn tại, tạo mới câu hỏi
+            question = questionService.createQuestion(questionData);
+        }
+
+        // Kiểm tra xem câu hỏi đã có trong bài kiểm tra chưa
+        if (!test.getQuestions().contains(question)) {
+            // Thêm câu hỏi vào danh sách câu hỏi của bài kiểm tra
+            test.getQuestions().add(question);
+            // Thêm bài kiểm tra vào danh sách các bài kiểm tra liên quan đến câu hỏi
+            question.getTests().add(test);
+        }
+
+        // Lưu bài kiểm tra và các câu hỏi liên quan
         return testRepository.save(test);
     }
 

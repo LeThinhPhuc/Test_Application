@@ -43,6 +43,11 @@ public class ClassRoomService {
         return classRoom.getTests();
     }
 
+    public List<Student> getStudentsForClass(String classId){
+        ClassRoom classRoom = getClassById(classId);
+        return classRoom.getStudents();
+    }
+
     public ClassRoom updateClass(String id, ClassRoom updatedClass){
         ClassRoom classInfo = getClassById(id);
         if(updatedClass.getClassRoomName()!=null){
