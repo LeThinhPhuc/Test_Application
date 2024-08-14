@@ -27,6 +27,8 @@ public class TestService {
 
     private final StudentRepository studentRepository;
 
+    private final StudentService studentService;
+
     private final QuestionRepository questionRepository;
 
     private final QuestionService questionService;
@@ -34,16 +36,18 @@ public class TestService {
 
     private final AnswerService answerService;
     @Autowired
-    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService, StudentRepository studentRepository, AnswerService answerService){
+    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService, StudentRepository studentRepository, AnswerService answerService, StudentService studentService){
         this.testRepository = testRepository;
         this.studentTestRepository = studentTestRepository;
         this.questionRepository = questionRepository;
         this.questionService = questionService;
         this.studentRepository =studentRepository;
         this.answerService = answerService;
+        this.studentService=studentService;
     }
 
     public Test createTest(Test test) {
+        test.setId(GenerateID.generateID());
         return testRepository.save(test);
     }
 
@@ -151,22 +155,38 @@ public class TestService {
     }
 
 
-    public void addStudentToTest(String testId, String studentId) throws IllegalAccessException {
-        Test test = testRepository.findById(testId).orElseThrow(() -> new EntityNotFoundException("Test not found with ID: " + testId));
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
-        boolean alreadyExists = test.getStudentTests().stream().anyMatch(ts -> ts.getStudent().getId().equals(studentId));
-        if (alreadyExists) {
-            throw new IllegalAccessException("Student is allready in this test");
+    public Test addStudentToTest(String testId, String studentId) {
+        Test test = testRepository.findById(testId)
+                .orElseThrow(() -> new RuntimeException("Test not found"));
+
+        Student student = studentService.getStudentById(studentId);
+        if (student == null) {
+            throw new RuntimeException("Student not found");
         }
-        StudentTest studentTest = new StudentTest();
-        studentTest.setTest(test);
-        studentTest.setStudent(student);
 
-        test.getStudentTests().add(studentTest);
-        student.getStudentTests().add(studentTest);
+        // Kiểm tra xem học sinh đã có trong danh sách bài test chưa
+        boolean studentAlreadyExists = test.getStudentTests().stream()
+                .anyMatch(studentTest -> studentTest.getStudent().getId().equals(studentId));
 
-        testRepository.save(test);
+        if (!studentAlreadyExists) {
+            // Nếu chưa có, tạo một StudentTest mới và thêm vào bài test
+            StudentTest studentTest = new StudentTest();
+            studentTest.setStudent(student);
+            studentTest.setTest(test);
+
+            // Thiết lập các thuộc tính cần thiết
+            studentTest.setPoint(0); // Ví dụ điểm khởi tạo là 0
+            studentTest.setStartTime(LocalDateTime.now()); // Ví dụ thời gian bắt đầu là hiện tại
+
+            test.getStudentTests().add(studentTest);
+            student.getClassRooms().add(test.getClassRoom()); // Nếu cần thêm học sinh vào lớp của bài test
+
+            testRepository.save(test);
+        }
+
+        return test;
     }
+
 
 
     public void addStudentsToTest(String testId, List<Student> students) throws IllegalAccessException {
