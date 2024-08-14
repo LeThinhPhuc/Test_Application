@@ -25,7 +25,6 @@ const Pagination = ({
   };
 
   const handleImport = () => {
-    console.log(fileData);
     toggleModal();
     toggleModal2();
   };

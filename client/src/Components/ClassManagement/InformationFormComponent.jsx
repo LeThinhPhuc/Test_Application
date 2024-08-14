@@ -16,14 +16,24 @@ const InformationForm = (onChange, examInfo) => {
             name="ten"
             type="text"
             placeholder="Enter exam name"
+            onChange={onChange}
+            value={examInfo.ten}
           />
 
           <div className="w-[75%] flex justify-between gap-2">
-            <CustomInputComponent label="Ngày thi" name="ngaythi" type="date" />
+            <CustomInputComponent
+              label="Ngày thi"
+              name="ngaythi"
+              type="date"
+              onChange={onChange}
+              value={examInfo.ngaythi}
+            />
             <CustomInputComponent
               label="Thời gian"
               name="thoigian"
               type="number"
+              onChange={onChange}
+              value={examInfo.thoigian}
             />
           </div>
           <div className="w-[50%] flex justify-between">
@@ -31,6 +41,8 @@ const InformationForm = (onChange, examInfo) => {
               label="Giờ bắt đầu"
               name="giobatdau"
               type="time"
+              onChange={onChange}
+              value={examInfo.giobatdau}
             />
           </div>
         </Form>

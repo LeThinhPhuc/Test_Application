@@ -33,6 +33,7 @@ const CreateExamPage = () => {
 
   const handleExamInfoChange = (e) => {
     setExamInfo({ ...examInfo, [e.target.name]: e.target.value });
+    console.log(examInfo);
   };
   const handleDeleteAll = () => {
     setSelectedQuestions([]);
