@@ -1,4 +1,9 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Route,
+  BrowserRouter as Router,
+  RouterProvider,
+} from "react-router-dom";
 import { AuthProvider } from "./Contexts/AuthContext";
 import StudentPage from "./Pages/StudentPage";
 import TeacherPage from "./Pages/TeacherPage";
