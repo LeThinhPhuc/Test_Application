@@ -2,23 +2,25 @@ import ButtonComponent from "../../../Components/ClassManagement/ButtonComponent
 import SearchBarComponent from "../../../Components/ClassManagement/SearchBarComponent";
 import ClassCardComponent from "../../../Components/ClassManagement/ClassCardComponent";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchClasses } from "../../../redux/Action/classAction";
+import { classes } from "../../../redux/Reducer/classSlice";
 const ClassManagementPage = () => {
-  const classes = [
-    { ma: "COMP1432", ten: "Lập trình cơ bản", nam: "2024", hocky: 1 },
-    { ma: "COMP2432", ten: "Xác suất thống kê", nam: "2024", hocky: 1 },
-    { ma: "COMP3432", ten: "Lý thuyết đồ thị", nam: "2024", hocky: 1 },
-    { ma: "COMP4432", ten: "Cấu trúc dữ liệu", nam: "2024", hocky: 1 },
-  ];
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [filteredClasses, setFilteredClasses] = useState(classes);
+
+  useEffect(() => {
+    dispatch(fetchClasses());
+  }, [dispatch]);
+  const classesData = useSelector(classes);
+  const [filteredClasses, setFilteredClasses] = useState(classesData);
 
   const handleSearch = (query) => {
-    const filtered = classes.filter(
+    const filtered = classesData.filter(
       (c) =>
-        c.ten.toLowerCase().includes(query.toLowerCase()) ||
-        c.ma.toLowerCase().includes(query.toLowerCase())
+        c.classRoomName.toLowerCase().includes(query.toLowerCase()) ||
+        c.classRoomId.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredClasses(filtered);
   };
