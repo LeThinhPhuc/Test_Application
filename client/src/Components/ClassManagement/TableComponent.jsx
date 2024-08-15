@@ -8,11 +8,10 @@ const TableComponent = ({
   getColumns,
 }) => {
   const navigate = useNavigate();
-  console.log(classData?.ma);
   return (
     <div className="flex flex-col">
       <div className="text-[18px] pb-5 flex justify-between">
-        <p className="text-[18px] pb-5 ml-6">{label}</p>
+        {label !== "" && <p className="text-[18px] pb-5 ml-6">{label}</p>}
         {label === "Danh sách kỳ thi" && (
           <button
             onClick={() =>

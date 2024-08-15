@@ -1,6 +1,7 @@
 package com.backend.server.service;
 
 import com.backend.server.DTO.ExamStatisticsDTO;
+import com.backend.server.DTO.TestDTO;
 import com.backend.server.model.*;
 import com.backend.server.repository.QuestionRepository;
 import com.backend.server.repository.StudentRepository;
@@ -32,11 +33,12 @@ public class TestService {
     private final QuestionRepository questionRepository;
 
     private final QuestionService questionService;
+    private final ClassRoomService classRoomService;
 
 
     private final AnswerService answerService;
     @Autowired
-    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService, StudentRepository studentRepository, AnswerService answerService, StudentService studentService){
+    public TestService(TestRepository testRepository, StudentTestRepository studentTestRepository, QuestionRepository questionRepository, QuestionService questionService, StudentRepository studentRepository, AnswerService answerService, StudentService studentService, ClassRoomService classRoomService){
         this.testRepository = testRepository;
         this.studentTestRepository = studentTestRepository;
         this.questionRepository = questionRepository;
@@ -44,10 +46,23 @@ public class TestService {
         this.studentRepository =studentRepository;
         this.answerService = answerService;
         this.studentService=studentService;
+        this.classRoomService=classRoomService;
     }
 
-    public Test createTest(Test test) {
+//    public Test createTest(Test test) {
+//        test.setId(GenerateID.generateID());
+//        return testRepository.save(test);
+//    }
+
+    public Test createTest(TestDTO testDTO) {
+        Test test=new Test();
         test.setId(GenerateID.generateID());
+        test.setTestName(testDTO.getTestName());
+        test.setTestDay(testDTO.getTestDay());
+        test.setTimeEnd(testDTO.getTimeEnd());
+        test.setTimeStart(testDTO.getTimeStart());
+        test.setTestTime(testDTO.getTestTime());
+        test.setClassRoom(classRoomService.getClassById(testDTO.getClassRoomId()));
         return testRepository.save(test);
     }
 

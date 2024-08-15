@@ -67,16 +67,39 @@ public class AccountController {
         }
     }
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<?> registerAccount(@RequestBody RegistryDTO registryDTO) {
+    @PostMapping(value = "/register/{type}")
+    public ResponseEntity<?> registerAccount(@PathVariable String type, @RequestBody RegistryDTO registryDTO) {
         try {
-            Account savedAccount = accountService.createUser(registryDTO);
+            Account savedAccount = accountService.createUser(registryDTO, type);
             return ResponseEntity.ok(savedAccount);
         } catch (Exception ex) {
             Response response = Response.of(HttpStatus.BAD_REQUEST, ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+
+
+//    @PostMapping(value = "/register/student")
+//    public ResponseEntity<?> registerAccountForStudent(@RequestBody RegistryDTO registryDTO) {
+//        try {
+//            Account savedAccount = accountService.createUser(registryDTO, "student");
+//            return ResponseEntity.ok(savedAccount);
+//        } catch (Exception ex) {
+//            Response response = Response.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+//        }
+//    }
+//
+//    @PostMapping(value = "/register/teacher")
+//    public ResponseEntity<?> registerAccountForTeacher(@RequestBody RegistryDTO registryDTO) {
+//        try {
+//            Account savedAccount = accountService.createUser(registryDTO, "teacher");
+//            return ResponseEntity.ok(savedAccount);
+//        } catch (Exception ex) {
+//            Response response = Response.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+//        }
+//    }
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody RegistryDTO registryDTO) {
