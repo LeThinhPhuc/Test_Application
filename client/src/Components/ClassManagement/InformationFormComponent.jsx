@@ -16,8 +16,6 @@ const InformationForm = (onChange, examInfo) => {
             name="ten"
             type="text"
             placeholder="Enter exam name"
-            onChange={onChange}
-            value={examInfo.ten}
           />
 
           <div className="w-[75%] flex justify-between gap-2">
