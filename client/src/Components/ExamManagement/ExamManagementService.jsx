@@ -1,8 +1,8 @@
+import axios from "axios";
 
 const ExamManagementService= {
-    getAll: () => {
-        return axios
-            .create({
+    getAll: (classId) => {
+        return axios.create({
         baseURL: "http://localhost:8080",
         timeout: 5000,
         headers: {
@@ -12,7 +12,7 @@ const ExamManagementService= {
             "Access-Control-Allow-Origin": "http://localhost:8080",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
         },
-        }).get('', )
+        }).get(`tests/${classId}`)
     }
 };
 

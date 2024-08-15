@@ -1,72 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./ExamManagement.css";
-import StatisticComponent from "../Statistic/StatisticComponent";
+import ExamManagementService from "./ExamManagementService";
 
 const ExamManagement = () => {
-  const examData = [
-    {
-      code: "00080423",
-      name: "LẬP TRÌNH NÂNG CAO - GIỮA KỲ 1",
-      date: "2024-08-08",
-      startTime: "08:00",
-      endTime: "08:00",
-    },
-    {
-      code: "00081024",
-      name: "LẬP TRÌNH NÂNG CAO - GIỮA KỲ 2",
-      date: "2024-09-09",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087825",
-      name: "LẬP TRÌNH NÂNG CAO - GIỮA KỲ 1",
-      date: "2024-08-10",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087826",
-      name: "LẬP TRÌNH NÂNG CAO - GIỮA KỲ 1",
-      date: "2024-08-11",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087833",
-      name: "LẬP TRÌNH NÂNG CAO - CUỐI KÌ 1",
-      date: "2024-08-12",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087834",
-      name: "LẬP TRÌNH NÂNG CAO - CUỐI KÌ 1",
-      date: "2024-08-13",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087835",
-      name: "LẬP TRÌNH NÂNG CAO - CUỐI KÌ 2",
-      date: "2024-09-14",
-      startTime: "",
-      endTime: "",
-    },
-  ];
+    const [examData, setExamData] = useState([]);
+    const [date, setDate] = useState('');
+    const [selectedType, setSelectedType] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  const [date, setDate] = useState("");
-  const [selectedType, setSelectedType] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statistic, setStatistic] = useState(false);
-  const [currentExam, setCurrentExam] = useState();
-  const handleClick = (exam) => {
-    setStatistic(true);
-    setCurrentExam(exam);
-  };
-  const handleDateChange = (event) => {
-    setDate(event.target.value);
-  };
+    useEffect(() => {
+        const classId = "1412";
+        ExamManagementService.getAll(classId)
+            .then(response => {
+                setExamData(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                setError('Error retrieving tests');
+                setLoading(false);
+            });
+    }, []);
 
   const handleTypeChange = (event) => {
     setSelectedType(event.target.value);
