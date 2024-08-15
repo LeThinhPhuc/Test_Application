@@ -2,12 +2,13 @@ package com.backend.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Getter
 @Setter
@@ -37,5 +38,12 @@ public class Teacher {
     @JoinColumn(name = "accountId")
     private Account account;
 
-
+    public Teacher(String fullName, String gender, String phoneNumber) {
+        this.teacherId = GenerateID.generateID();
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        //- Account set ở ngoài
+        this.classRooms = new ArrayList<>();
+    }
 }
