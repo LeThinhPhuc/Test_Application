@@ -23,7 +23,7 @@ public class ServerApplication {
             public void addCorsMappings(CorsRegistry registry) {
                 // registry.addMapping("/**").allowedOrigins("http://localhost:3000");
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173") // Cấu hình tại đây cho phép gửi yêu cầu từ origin này
+                        .allowedOrigins("http://localhost:5175") // Cấu hình tại đây cho phép gửi yêu cầu từ origin này
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*");
             }
