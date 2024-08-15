@@ -1,6 +1,7 @@
 package com.backend.server.controller;
 
 import com.backend.server.DTO.ExamStatisticsDTO;
+import com.backend.server.DTO.TestDTO;
 import com.backend.server.model.ClassRoom;
 
 import com.backend.server.DTO.QuestionAnswerDTO;
@@ -100,13 +101,13 @@ public class TestController {
     }
 
     @PostMapping("/{classId}")
-    public ResponseEntity<?> createTest(@PathVariable String classId,@RequestBody Test test) {
-        if (test == null) {
+    public ResponseEntity<?> createTest(@PathVariable String classId, @RequestBody TestDTO testDTO) {
+        if (testDTO == null) {
             Response response = Response.of(HttpStatus.BAD_REQUEST, "Test is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try {
-            Test testData = testService.createTest(test);
+            Test testData = testService.createTest(testDTO);
             ClassRoom classRoom = classRoomService.getClassById(classId);
             testService.addStudentsToTest(testData.getId(), classRoom.getStudents());
 
