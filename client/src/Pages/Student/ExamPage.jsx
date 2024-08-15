@@ -4,6 +4,7 @@ import ModalComponent from "../../Components/Exam/ModalComponent";
 import TimerComponent from "../../Components/Exam/TimerComponent";
 import QuestionCard from "../../Components/Exam/QuestionCard";
 import IndexCardComponent from "../../Components/Exam/IndexCardComponent";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ExamPage = () => {
   const questions = [
@@ -48,10 +49,15 @@ const ExamPage = () => {
       options: ["Đúng", "Sai", "3 chân", "4 chân"],
     },
   ];
-
+  const id = useParams();
+  const navigate = useNavigate();
   const [modal, setModel] = useState(false);
   const [modal2, setModel2] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const currentTime = new Date();
+  const startTime = new Date("2024-08-15 08:15:00");
+  const endTime = new Date("2024-08-15 09:55:10");
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [timeLeft, setTimeLeft] = useState();
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   useEffect(() => {
@@ -69,8 +75,29 @@ const ExamPage = () => {
   }, [timeLeft]);
 
   useEffect(() => {
+    if (currentTime < startTime) {
+      navigate("/student/examnotavailable");
+      setTimeLeft(Math.floor((endTime - startTime) / 1000));
+    } else {
+      setTimeLeft(Math.floor((endTime - currentTime) / 1000));
+    }
+  }, [startTime, endTime]);
+
+  useEffect(() => {
     setSelectedOptions(Array(questions.length).fill(null));
   }, [questions.length]);
+
+  useEffect(() => {
+    if (timeLeft === 0 || modal2) {
+      navigate("afterexam");
+    }
+  }, [timeLeft, modal2, navigate]);
+
+  useEffect(() => {
+    if (isSubmit) {
+      navigate(`/student/${id}/afterexam`);
+    }
+  }, [id, navigate]);
 
   const toggleModal = () => {
     setModel(!modal);
@@ -120,9 +147,12 @@ const ExamPage = () => {
       </div>
       {modal && (
         <ModalComponent
+          id={id}
+          setIsSubmit={setIsSubmit}
           toggleModal={toggleModal}
           header="Confirm Submit"
           content="Are you sure you want to submit your answers?"
+          setTimeLeft={setTimeLeft}
         />
       )}
       {modal2 && (

@@ -1,8 +1,4 @@
-import {
-  createBrowserRouter,
-  BrowserRouter as Router,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./Contexts/AuthContext";
 import StudentPage from "./Pages/StudentPage";
 import TeacherPage from "./Pages/TeacherPage";
@@ -16,15 +12,18 @@ import CreateClassPage from "./Pages/Teacher/ClassManagementPage/CreateClassPage
 import ClassManagementPage from "./Pages/Teacher/ClassManagementPage/ClassManagementPage";
 import ClassDetailPage from "./Pages/Teacher/ClassManagementPage/ClassDetailPage";
 import CreateExamPage from "./Pages/Teacher/ClassManagementPage/CreateExamPage";
+import ExamNotAvailablePage from "./Pages/Student/ExamNotAvailablePage";
 
 const router = createBrowserRouter([
   { path: "/", element: <StudentPage /> },
   {
     path: "/student",
     element: <StudentPage />,
+    children: [],
   },
-  { path: "/exam", element: <ExamPage /> },
-  { path: "/afterexam", element: <AfterExamPage /> },
+  { path: "/student/examnotavailable", element: <ExamNotAvailablePage /> },
+  { path: "/student/:id", element: <ExamPage /> },
+  { path: "/student/:id/afterexam", element: <AfterExamPage /> },
   {
     path: "/teacher",
     element: <TeacherPage />,
