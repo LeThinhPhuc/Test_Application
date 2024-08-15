@@ -1,11 +1,14 @@
 package com.backend.server.service;
 
+import com.backend.server.DTO.ClassRoomDTO;
 import com.backend.server.model.ClassRoom;
 import com.backend.server.model.GenerateID;
 import com.backend.server.model.Student;
 import com.backend.server.model.Test;
 import com.backend.server.repository.IClassRoomRepository;
+import com.backend.server.repository.ITeacherRepository;
 import com.backend.server.repository.StudentRepository;
+import com.backend.server.repository.TestRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,15 +23,27 @@ public class ClassRoomService {
 
     private final StudentService studentService;
 
+    private final TeacherService teacherService;
     @Autowired
-    public ClassRoomService(IClassRoomRepository classRoomRepository, StudentRepository studentRepository, StudentService studentService){
+    public ClassRoomService(IClassRoomRepository classRoomRepository, StudentRepository studentRepository, StudentService studentService, TeacherService teacherService){
         this.classRoomRepository = classRoomRepository;
         this.studentRepository = studentRepository;
         this.studentService =  studentService;
+        this.teacherService=teacherService;
     }
 
-    public ClassRoom createClass(ClassRoom classRoom){
+//    public ClassRoom createClass(ClassRoom classRoom){
+//        classRoom.setClassRoomId(GenerateID.generateID());
+//        return classRoomRepository.save(classRoom);
+//    }
+
+    public ClassRoom createClass(ClassRoomDTO classRoomDTO){
+        ClassRoom classRoom = new ClassRoom();
         classRoom.setClassRoomId(GenerateID.generateID());
+        classRoom.setClassRoomName(classRoomDTO.getClassRoomName());
+        classRoom.setSchoolYear(classRoomDTO.getSchoolYear());
+        classRoom.setSemester(classRoomDTO.getSemester());
+        classRoom.setTeacher(teacherService.getTeacherById(classRoomDTO.getTeacherId()));
         return classRoomRepository.save(classRoom);
     }
 

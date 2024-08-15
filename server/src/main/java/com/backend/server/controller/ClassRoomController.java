@@ -1,5 +1,6 @@
 package com.backend.server.controller;
 
+import com.backend.server.DTO.ClassRoomDTO;
 import com.backend.server.model.*;
 import com.backend.server.service.ClassRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,14 +73,29 @@ public class ClassRoomController {
         }
     }
 
+//    @PostMapping
+//    public ResponseEntity<?> createClassRoom(@RequestBody ClassRoom classRoom){
+//        if(classRoom==null){
+//            Response response = Response.of(HttpStatus.BAD_REQUEST, "Classroom is required");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+//        }
+//        try{
+//            classRoomService.createClass(classRoom);
+//            return new ResponseEntity<>(HttpStatus.CREATED);
+//        }catch (Exception ex){
+//            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//        }
+//    }
+
     @PostMapping
-    public ResponseEntity<?> createClassRoom(@RequestBody ClassRoom classRoom){
-        if(classRoom==null){
+    public ResponseEntity<?> createClassRoom(@RequestBody ClassRoomDTO classRoomDTO){
+        if(classRoomDTO==null){
             Response response = Response.of(HttpStatus.BAD_REQUEST, "Classroom is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try{
-            classRoomService.createClass(classRoom);
+            classRoomService.createClass(classRoomDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (Exception ex){
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
