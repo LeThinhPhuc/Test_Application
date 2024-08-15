@@ -31,8 +31,8 @@ public class Student {
     @Column(name = "gender")
     private String gender;
 
-    public Student(String phone, String name, String gender) {
-        this.id = GenerateID.generateID();
+    public Student(String id, String phone, String name, String gender) {
+        this.id = id;
         this.name = name;
         this.phone = phone;
         this.gender = gender;
