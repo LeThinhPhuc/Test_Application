@@ -43,7 +43,7 @@ const router = createBrowserRouter([
       { path: "classmanagement/:classId", element: <ClassDetailPage /> },
       { path: "createExam/:classId", element: <CreateExamPage /> },
       { path: "exammanagement", element: <ExamManagement /> },
-      { path: "studenetmanagement", element: <StudentManagement /> },
+      { path: "studentmanagement", element: <StudentManagement /> },
       { path: "questionbankmanagement", element: <QuestionBankManagement /> },
     ],
   },

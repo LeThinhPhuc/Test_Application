@@ -39,6 +39,37 @@ const CreateClassPage = () => {
       setFileData([]);
     }
   };
+
+  const handleFile = (e) => {
+        let selectedFile = e.target.files[0]
+        let validFiles = ['application/vnd.ms-excel', 'text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+        if (selectedFile && validFiles.includes(selectedFile.type)) {
+            console.log(selectedFile.type)
+            let reader = new FileReader();
+            reader.readAsArrayBuffer(selectedFile)
+            reader.onload = (e) => {
+                e.preventDefault();
+                const sheet = XLSX.read(e.target.result, { type: 'buffer' });
+                const workSheetName = sheet.SheetNames[0];
+                const workSheet = sheet.Sheets[workSheetName];//0
+                const data = XLSX.utils.sheet_to_json(workSheet);
+                setFileData(data);
+            }
+        }
+        else {
+            toast.error('Please select valid file', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+
+    }
   return (
     <div className="flex flex-col w-full mx-20 mt-10 font-roboto mb-3">
       <BackComponent />
