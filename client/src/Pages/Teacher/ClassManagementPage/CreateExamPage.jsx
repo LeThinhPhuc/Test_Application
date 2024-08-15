@@ -4,22 +4,22 @@ import BackComponent from "../../../Components/ClassManagement/BackComponent";
 import InformationForm from "../../../Components/ClassManagement/InformationFormComponent";
 import QuestionComponent from "../../../Components/ClassManagement/QuestionComponent";
 import DetailsSetupComponent from "../../../Components/ClassManagement/DetailsSetupComponent";
-import ModalComponent from "../../../Components/ClassManagement/ModalComponent";
 import HeaderComponent from "../../../Components/ClassManagement/HeaderComponent";
+import ModalImport from "../../../Components/ClassManagement/ModalImport";
+import Modal2Component from "../../../Components/ClassManagement/Modal2Component";
 
 const CreateExamPage = () => {
-  const subjects = [
-    "Chương 1",
-    "Chương 2",
-    "Chương 3",
-    "Chương 4",
-    "Chương 5",
-    "Chương 6",
-  ];
   const navigate = useNavigate();
-  const [modal, setModel] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState(subjects[0]);
-  const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [modal2, setModal2] = useState(false);
+  const [fileData, setFileData] = useState([]);
+
+  const toggleModal = () => {
+    setModal(!modal);
+  };
+  const toggleModal2 = () => {
+    setModal2(!modal2);
+  };
   const [examInfo, setExamInfo] = useState({
     ten: "",
     ngaythi: "",
@@ -33,31 +33,16 @@ const CreateExamPage = () => {
 
   const handleExamInfoChange = (e) => {
     setExamInfo({ ...examInfo, [e.target.name]: e.target.value });
+    console.log(examInfo);
   };
   const handleDeleteAll = () => {
-    setSelectedQuestions([]);
+    setFileData([]);
   };
-  const handleDeleteSelectedQuestion = (question) => {
-    setSelectedQuestions((prevSelected) => {
-      return prevSelected.filter((q) => q.ma !== question.ma);
-    });
+  const handleImport = (data) => {
+    setFileData(data);
   };
   const handleChangeDetails = (e) => {
     setDetails({ details, [e.target.name]: e.target.checked });
-  };
-  const toggleModal = () => {
-    setModel(!modal);
-  };
-
-  const handleCheckboxChange = (question) => {
-    setSelectedQuestions((prevSelected) => {
-      const isSelected = prevSelected.some((q) => q.ma === question.ma);
-      if (isSelected) {
-        return prevSelected.filter((q) => q.ma !== question.ma);
-      } else {
-        return [...prevSelected, question];
-      }
-    });
   };
   return (
     <div className="flex flex-col w-full mx-20 mt-10 font-roboto mb-24">
@@ -69,8 +54,7 @@ const CreateExamPage = () => {
         {/* Question */}
         <QuestionComponent
           toggleModal={toggleModal}
-          selectedQuestions={selectedQuestions}
-          handleDeleteSelectedQuestion={handleDeleteSelectedQuestion}
+          fileData={fileData}
           handleDeleteAll={handleDeleteAll}
         />
         {/* Details  */}
@@ -89,14 +73,17 @@ const CreateExamPage = () => {
         </div>
       </div>
       {modal && (
-        <ModalComponent
-          subjects={subjects}
-          selectedSubject={selectedSubject}
-          setSelectedSubject={setSelectedSubject}
-          selectedQuestions={selectedQuestions}
-          setSelectedQuestions={setSelectedQuestions}
-          handleCheckboxChange={handleCheckboxChange}
-          setModel={setModel}
+        <ModalImport toggleModal={toggleModal} toggleModal2={toggleModal2} />
+      )}
+      {modal2 && (
+        <Modal2Component
+          toggleModal={toggleModal}
+          toggleModal2={toggleModal2}
+          fileData={fileData}
+          setFileData={setFileData}
+          modal2={modal2}
+          isQuestion={true}
+          onImportData={handleImport}
         />
       )}
     </div>
