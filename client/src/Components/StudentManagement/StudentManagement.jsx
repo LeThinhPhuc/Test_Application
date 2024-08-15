@@ -40,7 +40,6 @@ const StudentManagement = () => {
     const endIndex = startIndex + itemsPerPage;//
     const currentStudentsExcel = fileData.slice(startIndex, endIndex)
 
-    console.log(currentStudentsExcel)
     const handleFile = (e) => {
         let selectedFile = e.target.files[0]
         let validFiles = ['application/vnd.ms-excel', 'text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
@@ -83,6 +82,81 @@ const StudentManagement = () => {
         setModal(!modal);
         setModal2(!modal2);
     }
+
+    const handleQuestion = (e) => {
+        //lấy file
+        let selectedFile = e.target.files[0]
+
+        //các file hợp lệ
+        let validFiles = ['application/vnd.ms-excel', 'text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+
+        //kiểm tra file có hợp lệ không
+        //nếu hợp lệ
+        if (selectedFile && validFiles.includes(selectedFile.type)) {
+
+            let reader = new FileReader();
+            reader.readAsArrayBuffer(selectedFile)
+            reader.onload = (e) => {
+                e.preventDefault();
+                const sheet = XLSX.read(e.target.result, { type: 'buffer' });
+                const workSheetName = sheet.SheetNames[0]; //lấy name của sheet[0]
+                const workSheet = sheet.Sheets[workSheetName];//từ name của sheet lấy dữ liệu của sheet đó
+                const data = XLSX.utils.sheet_to_json(workSheet);//chuyển data thành json
+                console.log(data);
+
+                //chuyển json thô thành json gửi xuống database
+                parseJsonToQuesion(data);
+            }
+        }
+        else {
+            toast.error('Please select valid file', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+    }
+
+    
+    const parseJsonToQuesion = (data) => {
+
+        const options = ['A', 'B', 'C', 'D'];//
+        const questions = [];//mảng để lưu kết quả cuối
+        
+        //duyệt qua các object thô
+        for (let i = 0; i < data.length; i++) {
+
+            //tạo 1 question
+            const question = {
+                id : uuidv4(),
+                content : data[i].Question,
+                answers: []
+            }
+            for (let j = 0; j < 4; j++) 
+            {
+                question.answers.push(
+                    {
+                        id : uuidv4(),
+                        content : data[i][options[j]], //data[i]['A'] , data[i]['B'],... => key - value
+                        isCorrect : options[j] === data[i].Answer
+                    }
+                )
+            }
+            questions.push(question)
+        }
+        console.log(questions);
+    }
+
+    function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+          (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+        );
+      }
     return (
         <>
             <div className="flex-1">
