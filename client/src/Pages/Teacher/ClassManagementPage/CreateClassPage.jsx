@@ -41,9 +41,14 @@ const CreateClassPage = () => {
         }
     };
 
+    const onImportData = (data) =>{
+        setFileData(data);
+    }
+
     const handleFile = (e) => {
         let selectedFile = e.target.files[0]
         let validFiles = ['application/vnd.ms-excel', 'text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+        
         if (selectedFile && validFiles.includes(selectedFile.type)) {
             console.log(selectedFile.type)
             let reader = new FileReader();
@@ -105,8 +110,7 @@ const CreateClassPage = () => {
                             />
                         </div>
 
-                        <StudentManagement/>
-                        {/* <div className="flex justify-between items-center mt-10">
+                        <div className="flex justify-between items-center mt-10">
                             <p className="text-[25px] text-black/25  mb-5">Student</p>
                             <ButtonComponent label="Import" onClick={toggleModal} />
                         </div>
@@ -124,6 +128,7 @@ const CreateClassPage = () => {
                                 setFileData={setFileData}
                                 modal2={modal2}
                                 isQuestion={false}
+                                onImportData={onImportData}
                             />
                         )}
                         {fileData.length > 0 && (
@@ -132,7 +137,7 @@ const CreateClassPage = () => {
                                 headers={headers}
                                 getColumns={getStudentColumns}
                             />
-                        )} */}
+                        )}
                     </Form>
                 </Formik>
             </div>

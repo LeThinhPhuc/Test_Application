@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 import BlankFileComponent from "./Modals2/BlankFileComponent";
 import CloseButtonComponent from "./Modals2/CloseButtonComponent";
-import TableComponent from "./Modals2/TableComponent";
+import TableComponent from ".././ClassManagement/TableComponent";
 
 const Modal2Component = ({
     toggleModal,
@@ -22,6 +22,8 @@ const Modal2Component = ({
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const currentObjects = fileData.slice(startIndex, endIndex);
+
+
     console.log(isQuestion);
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -107,10 +109,27 @@ const Modal2Component = ({
                             <BlankFileComponent handleFile={handleFile} />
                         ) : (
                             <div>
-                                <TableComponent
-                                    currentObjects={currentObjects}
-                                    startIndex={startIndex}
-                                />
+                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            {Object.keys(currentObjects[0]).map(key => (
+                                                <th key={key}>{key}</th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentObjects.map((value, index) => (
+
+                                            <tr key={index} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                {Object.keys(value).map(key => (
+                                                    <td key={key}>{value[key]}</td>
+                                                ))}
+                                            </tr>
+                                        ))}
+
+                                    </tbody>
+                                </table>
+
                                 <Pagination
                                     currentPage={currentPage}
                                     totalPages={totalPages}

@@ -22,7 +22,7 @@ const ClassDetailPage = () => {
     { ma: "HS005", ten: "Vo Thi Thu Hoa", gioi: "Nữ", sdt: "0932478347" },
     { ma: "HS006", ten: "Vo Thi Thu Hoa", gioi: "Nữ", sdt: "0932478347" },
     { ma: "HS007", ten: "Vo Thi Thu Hoa", gioi: "Nữ", sdt: "0932478347" },
-    { ma: "HS008", ten: "Vo Thi Thu Hoa", gioi: "Nữ", sdt: "0932478347" },
+    { ma: "HS008", ten: "Vo Thi Thu Hoa", gioi: "Nữ", sdt: "    " },
   ];
   const exams = [
     {
