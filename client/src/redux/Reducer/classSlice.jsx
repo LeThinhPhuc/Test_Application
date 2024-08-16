@@ -20,4 +20,5 @@ const classSlice = createSlice({
 
 export const { getClasses, getClassById, getTestsOfClass } = classSlice.actions;
 export const classes = (state) => state.class.classes;
+
 export default classSlice.reducer;
