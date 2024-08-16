@@ -38,10 +38,11 @@ const TableComponent = ({
                 </thead>
                 <tbody>
                     {objects.map((value, index) => (
-
-                        <tr key={index} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                             {Object.keys(value).map(key => (
-                                <td className="border border-black/50 p-2" key={key}>{value[key]}</td>
+                                <td className="border border-black/50 p-2" key={key}>
+                                    {key === "gender" ? (value[key] === 0 ? "Nam" : "Nữ") : value[key]}
+                                </td>
                             ))}
                         </tr>
                     ))}

@@ -10,6 +10,10 @@ import ModalImport from "../../../Components/ClassManagement/ModalImport";
 import Modal2Component from "../../../Components/ClassManagement/Modal2Component";
 import TableComponent from "../../../Components/ClassManagement/TableComponent";
 import StudentManagement from "../../../Components/StudentManagement/StudentManagement";
+import { toast, ToastContainer } from "react-toastify";
+import { jwtDecode } from 'jwt-decode'
+import classService from "../../../Services/ClassService";
+
 const CreateClassPage = () => {
     const headers = [
         "Mã học sinh",
@@ -17,6 +21,7 @@ const CreateClassPage = () => {
         "Giới tính",
         "Ngày sinh",
         "Tài khoản",
+        "Số điện thoại"
     ];
     const getStudentColumns = (fileData) => [
         fileData.ID,
@@ -31,13 +36,12 @@ const CreateClassPage = () => {
     const [modal2, setModal2] = useState(false);
     const [fileData, setFileData] = useState([]);
 
-    const [classRoomName, setClassRoomName] = useState();
-    const [schoolYear, setSchoolYear] = useState();
-    const [semester, setSemester] = useState();
-    const [teacherId, setTeacherId] = useState();
+    const [classroomName, setClassroomName] = useState('');
+    const [schoolYear, setSchoolYear] = useState('');
+    const [semester, setSemester] = useState('');
 
     const handleClassroomNameChange = (value) => {
-        setClassRoomName(value);
+        setClassroomName(value);
     }
 
     const hanleSchoolYearChange = (value) => {
@@ -65,17 +69,49 @@ const CreateClassPage = () => {
     }
 
     const confirmCreate = () => {
-        createClassroom()
-        importStudentstoDatabase();
+        if(classroomName === '' || schoolYear === '' || semester === '' || fileData.length <= 0)
+        {
+            toast.error('Vui lòng nhập đủ thông tin', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+
+        else 
+        {
+            createClassroom()
+            importStudentstoDatabase();
+        }
     }
 
-    const createClassroom = () => {
+    const createClassroom = async () => {
         const classroomInfo = {
-            classRoomName: classRoomName,
+            classRoomName: classroomName,
             schoolYear: schoolYear,
             semester: semester,
         }
-        console.log(classroomInfo);
+
+        const token = JSON.parse(localStorage.getItem("user")).accessToken;
+        const decoded = jwtDecode(token);
+        const teacherId = decoded.teacher.teacherId
+        classroomInfo.teacherId = teacherId
+        // const response = await classService.createClassAsync(classroomInfo) 
+        const response = 201
+        if(response === '201')
+        {
+            importStudentstoDatabase();
+            toast.success("Tạo lớp thành công")
+        }
+        else 
+        {
+            toast.error("Tạo lớp thất bại")
+        }
     }
 
     const importStudentstoDatabase = () => {
@@ -151,7 +187,10 @@ const CreateClassPage = () => {
 
                         <div className="flex justify-between items-center mt-10">
                             <p className="text-[25px] text-black/25  mb-5">Student</p>
-                            <ButtonComponent label="Import" onClick={toggleModal} />
+                            <div>
+                                <ButtonComponent label="Clear" onClick={() => setFileData([])}/>
+                                <ButtonComponent label="Import" onClick={toggleModal} />
+                            </div>
                         </div>
                         {modal && (
                             <ModalImport
@@ -189,6 +228,8 @@ const CreateClassPage = () => {
                 </div>
 
             )}
+
+            <ToastContainer/>
         </div>
     );
 };
