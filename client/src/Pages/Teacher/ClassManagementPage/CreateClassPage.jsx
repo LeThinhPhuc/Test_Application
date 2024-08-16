@@ -31,6 +31,25 @@ const CreateClassPage = () => {
     const [modal2, setModal2] = useState(false);
     const [fileData, setFileData] = useState([]);
 
+    const [classRoomName, setClassRoomName] = useState();
+    const [schoolYear, setSchoolYear] = useState();
+    const [semester, setSemester] = useState();
+    const [teacherId, setTeacherId] = useState();
+
+    const handleClassroomNameChange = (value) => {
+        setClassRoomName(value);
+    }
+
+    const hanleSchoolYearChange = (value) => {
+        setSchoolYear(value)
+    }
+
+    const hanleSemesterChange = (value) => {
+        setSemester(value)
+    }
+
+
+
     const toggleModal = () => {
         setModal(!modal);
     };
@@ -41,16 +60,33 @@ const CreateClassPage = () => {
         }
     };
 
-    const onImportData = (data) =>{
+    const onImportData = (data) => {
         setFileData(data);
+    }
+
+    const confirmCreate = () => {
+        createClassroom()
+        importStudentstoDatabase();
+    }
+
+    const createClassroom = () => {
+        const classroomInfo = {
+            classRoomName: classRoomName,
+            schoolYear: schoolYear,
+            semester: semester,
+        }
+        console.log(classroomInfo);
+    }
+
+    const importStudentstoDatabase = () => {
+        console.log(fileData)
     }
 
     const handleFile = (e) => {
         let selectedFile = e.target.files[0]
         let validFiles = ['application/vnd.ms-excel', 'text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
-        
+
         if (selectedFile && validFiles.includes(selectedFile.type)) {
-            console.log(selectedFile.type)
             let reader = new FileReader();
             reader.readAsArrayBuffer(selectedFile)
             reader.onload = (e) => {
@@ -94,6 +130,7 @@ const CreateClassPage = () => {
                             name="ten"
                             type="text"
                             placeholder="Nhập tên lớp"
+                            onChange={handleClassroomNameChange}
                         />
                         <div className="w-[75%] flex justify-between gap-2">
                             <CustomInputComponent
@@ -101,12 +138,14 @@ const CreateClassPage = () => {
                                 name="nam"
                                 type="number"
                                 placeholder="Nhập năm"
+                                onChange={hanleSchoolYearChange}
                             />
                             <CustomInputComponent
                                 label="Học kỳ"
                                 name="hocky"
                                 type="text"
                                 placeholder="Nhập học kỳ"
+                                onChange={hanleSemesterChange}
                             />
                         </div>
 
@@ -140,7 +179,16 @@ const CreateClassPage = () => {
                         )}
                     </Form>
                 </Formik>
+
             </div>
+            {fileData.length > 0 && (
+                <div class="flex justify-center mt-5">
+                    <button onClick={confirmCreate} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                        Xác nhận
+                    </button>
+                </div>
+
+            )}
         </div>
     );
 };

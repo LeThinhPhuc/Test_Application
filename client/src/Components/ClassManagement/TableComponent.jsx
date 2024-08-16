@@ -8,8 +8,6 @@ const TableComponent = ({
     getColumns,
 }) => {
 
-    console.log(objects)
-
     const navigate = useNavigate();
     return (
         <div className="flex flex-col">
