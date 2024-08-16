@@ -28,16 +28,6 @@ body.active-modal {
   background: rgba(49, 49, 49, 0.8);
 }
 
-.overlay2 {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: fixed;
-    background: rgba(49, 49, 49, 0.8);
-    
-}
-
 .overlay {
   background: rgba(49, 49, 49, 0.8);
 }
@@ -55,17 +45,16 @@ body.active-modal {
 }
 
 .modal-content2 {
-    /* position: absolute; */
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    line-height: 1.4;
-    padding: 14px 28px;
-    border-radius: 3px;
-    max-width: 100rem;
-    min-width: 300px;
+  /* position: absolute; */
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1.4;
+  padding: 14px 28px;
+  border-radius: 3px;
+  max-width: 100rem;
+  min-width: 300px;
 }
-
 
 .close-modal {
   position: absolute;

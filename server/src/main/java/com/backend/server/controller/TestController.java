@@ -1,6 +1,7 @@
 package com.backend.server.controller;
 
 import com.backend.server.DTO.ExamStatisticsDTO;
+import com.backend.server.DTO.TestDTO;
 import com.backend.server.model.ClassRoom;
 
 import com.backend.server.DTO.QuestionAnswerDTO;
@@ -100,13 +101,13 @@ public class TestController {
     }
 
     @PostMapping("/{classId}")
-    public ResponseEntity<?> createTest(@PathVariable String classId,@RequestBody Test test) {
-        if (test == null) {
+    public ResponseEntity<?> createTest(@PathVariable String classId, @RequestBody TestDTO testDTO) {
+        if (testDTO == null) {
             Response response = Response.of(HttpStatus.BAD_REQUEST, "Test is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try {
-            Test testData = testService.createTest(test);
+            Test testData = testService.createTest(testDTO);
             ClassRoom classRoom = classRoomService.getClassById(classId);
             testService.addStudentsToTest(testData.getId(), classRoom.getStudents());
 
@@ -183,6 +184,54 @@ public class TestController {
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 
+        }
+    }
+
+    @PostMapping("/changefinished/{testId}")
+    public ResponseEntity<?> changeFinished(@PathVariable String testId){
+        try {
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.toggleIsFinished(testId);
+                return ResponseEntity.ok("Finished mode is : "+ testService.getTestById(testId).isFinished());
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/changefixed/{testId}")
+    public ResponseEntity<?> changeFixed(@PathVariable String testId){
+        try {
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.toggleIsFinished(testId);
+                return ResponseEntity.ok("Fixed mode is : "+ testService.getTestById(testId).isFixed());
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/changegetscore/{testId}")
+    public ResponseEntity<?> changeGetScore(@PathVariable String testId){
+        try {
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.toggleIsFinished(testId);
+                return ResponseEntity.ok("Finished mode is : "+ testService.getTestById(testId).isFinished());
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
