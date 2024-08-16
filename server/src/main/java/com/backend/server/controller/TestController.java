@@ -187,6 +187,54 @@ public class TestController {
         }
     }
 
+    @PostMapping("/changefinished/{testId}")
+    public ResponseEntity<?> changeFinished(@PathVariable String testId){
+        try {
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.toggleIsFinished(testId);
+                return ResponseEntity.ok("Finished mode is : "+ testService.getTestById(testId).isFinished());
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/changefixed/{testId}")
+    public ResponseEntity<?> changeFixed(@PathVariable String testId){
+        try {
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.toggleIsFinished(testId);
+                return ResponseEntity.ok("Fixed mode is : "+ testService.getTestById(testId).isFixed());
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/changegetscore/{testId}")
+    public ResponseEntity<?> changeGetScore(@PathVariable String testId){
+        try {
+            Test test = testService.getTestById(testId);
+            if(test != null){
+                testService.toggleIsFinished(testId);
+                return ResponseEntity.ok("Finished mode is : "+ testService.getTestById(testId).isFinished());
+            }else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
+            }
+        }catch (Exception ex){
+            Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTest(@PathVariable String id, @RequestBody Test test) {
         if (test == null || id == null) {
