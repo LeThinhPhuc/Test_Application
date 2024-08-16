@@ -33,6 +33,7 @@ const Modal2Component = ({
             "text/csv",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         ];
+
         if (selectedFile && validFiles.includes(selectedFile.type)) {
             let reader = new FileReader();
             reader.readAsArrayBuffer(selectedFile);
@@ -42,6 +43,8 @@ const Modal2Component = ({
                 const workSheetName = sheet.SheetNames[0];
                 const workSheet = sheet.Sheets[workSheetName];
                 const data = XLSX.utils.sheet_to_json(workSheet);
+
+                console.log(data)
                 if (isQuestion) {
                     // Chuyển đổi dữ liệu
                     const formattedData = data.map((row) => {

@@ -1,8 +1,8 @@
 import {
-  createBrowserRouter,
-  Route,
-  BrowserRouter as Router,
-  RouterProvider,
+    createBrowserRouter,
+    Route,
+    BrowserRouter as Router,
+    RouterProvider,
 } from "react-router-dom";
 import { AuthProvider } from "./Contexts/AuthContext";
 import StudentPage from "./Pages/StudentPage";
@@ -21,39 +21,39 @@ import Login from "./Components/Login/Login";
 import ExamNotAvailablePage from "./Pages/Student/ExamNotAvailablePage";
 
 const router = createBrowserRouter([
-  { path: "/", element: <Login /> },
-  {
-    path: "/student",
-    element: <StudentPage />,
-    children: [],
-  },
-  { path: "/student/examnotavailable", element: <ExamNotAvailablePage /> },
-  { path: "/student/:id", element: <ExamPage /> },
-  { path: "/student/:id/afterexam", element: <AfterExamPage /> },
-  {
-    path: "/teacher",
-    element: <TeacherPage />,
-    children: [
-      { path: "", element: <Dashboard /> },
-      {
-        path: "classmanagement",
-        element: <ClassManagementPage />,
-      },
-      { path: "classmanagement/createClass", element: <CreateClassPage /> },
-      { path: "classmanagement/:classId", element: <ClassDetailPage /> },
-      { path: "createExam/:classId", element: <CreateExamPage /> },
-      { path: "exammanagement", element: <ExamManagement /> },
-      { path: "studentmanagement", element: <StudentManagement /> },
-      { path: "questionbankmanagement", element: <QuestionBankManagement /> },
-    ],
-  },
+    { path: "/", element: <Login /> },
+    {
+        path: "/student",
+        element: <StudentPage />,
+        children: [],
+    },
+    { path: "/student/examnotavailable", element: <ExamNotAvailablePage /> },
+    { path: "/student/:id", element: <ExamPage /> },
+    { path: "/student/:id/afterexam", element: <AfterExamPage /> },
+    {
+        path: "/teacher",
+        element: <TeacherPage />,
+        children: [
+            { path: "", element: <Dashboard /> },
+            {
+                path: "classmanagement",
+                element: <ClassManagementPage />
+            },
+            { path: "classmanagement/createClass", element: <CreateClassPage /> },
+            { path: "classmanagement/:classId", element: <ClassDetailPage /> },
+            { path: "createExam/:classId", element: <CreateExamPage /> },
+            { path: "exammanagement", element: <ExamManagement /> },
+            { path: "studentmanagement", element: <StudentManagement /> },
+            { path: "questionbankmanagement", element: <QuestionBankManagement /> },
+        ],
+    },
 ]);
 function App() {
-  return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  );
+    return (
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
+    );
 }
 
 export default App;
