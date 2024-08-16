@@ -272,4 +272,22 @@ public class TestService {
         studentTest.setStartTime(LocalDateTime.parse(startTime));
         testRepository.save(test);
     }
+
+    public Test toggleIsFinished(String testId){
+        Test test = testRepository.findById(testId).orElseThrow(()-> new RuntimeException("Text not found with id: "+testId));
+        test.setFinished(!test.isFinished());
+        return testRepository.save(test);
+    }
+
+    public Test toggleIsFixed(String testId){
+        Test test = testRepository.findById(testId).orElseThrow(()->new RuntimeException("Test not found with id: "+testId));
+        test.setFixed(!test.isFixed());
+        return testRepository.save(test);
+    }
+
+    public Test toggleIsGetScore(String testId){
+        Test test = testRepository.findById(testId).orElseThrow(()->new RuntimeException("Test not found with id: "+testId));
+        test.setGetScore(!test.isGetScore());
+        return testRepository.save(test);
+    }
 }
