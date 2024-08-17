@@ -10,6 +10,7 @@
     import lombok.Setter;
     import org.hibernate.annotations.ColumnDefault;
 
+    import java.util.ArrayList;
     import java.util.Date;
     import java.util.List;
     import java.util.UUID;
@@ -62,7 +63,7 @@
         @JsonManagedReference
         @OneToMany(mappedBy = "test",
                 cascade = CascadeType.ALL, orphanRemoval = true)
-        private List<StudentTest> studentTests;
+        private List<StudentTest> studentTests= new ArrayList<>();;
 
         @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
         @JoinTable(
@@ -70,7 +71,7 @@
                 joinColumns = @JoinColumn(name = "testId"),
                 inverseJoinColumns = @JoinColumn(name = "questionId")
         )
-        private List<Question> questions;
+        private List<Question> questions= new ArrayList<>();;
 
 
         @JsonIgnore

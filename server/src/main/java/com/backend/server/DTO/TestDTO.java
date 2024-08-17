@@ -12,6 +12,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class TestDTO {
+    private String id;
     private String testName;
     private Integer testTime;
 
@@ -28,4 +29,9 @@ public class TestDTO {
     private Date timeEnd;
 
     private String classRoomId;
+
+    public TestDTO(String id, String testName){
+        this.id=id;
+        this.testName=testName;
+    }
 }
