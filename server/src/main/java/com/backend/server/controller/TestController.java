@@ -102,8 +102,8 @@ public class TestController {
 
     @PostMapping("/{classId}")
     public ResponseEntity<?> createTest(@PathVariable String classId, @RequestBody TestDTO testDTO) {
-        if (testDTO == null) {
-            Response response = Response.of(HttpStatus.BAD_REQUEST, "Test is required");
+        if (testDTO.getClassRoomId() == null) {
+            Response response = Response.of(HttpStatus.BAD_REQUEST, "ClassroomId is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try {
@@ -208,7 +208,7 @@ public class TestController {
         try {
             Test test = testService.getTestById(testId);
             if(test != null){
-                testService.toggleIsFinished(testId);
+                testService.toggleIsFixed(testId);
                 return ResponseEntity.ok("Fixed mode is : "+ testService.getTestById(testId).isFixed());
             }else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
@@ -224,7 +224,7 @@ public class TestController {
         try {
             Test test = testService.getTestById(testId);
             if(test != null){
-                testService.toggleIsFinished(testId);
+                testService.toggleIsGetScore(testId);
                 return ResponseEntity.ok("Finished mode is : "+ testService.getTestById(testId).isFinished());
             }else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
