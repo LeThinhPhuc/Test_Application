@@ -1,6 +1,7 @@
 package com.backend.server.service;
 
 import com.backend.server.model.Answer;
+import com.backend.server.model.GenerateID;
 import com.backend.server.model.Question;
 import com.backend.server.model.Test;
 import com.backend.server.repository.AnswerRepository;
@@ -44,8 +45,17 @@ public class QuestionService {
     // Create a new question
     @Transactional
     public Question createQuestion(Question question) {
+//        question.getAnswers().forEach(answer -> {answer.setId(GenerateID.generateID()); answer.setQuestion(question)};
+        if (question.getAnswers() != null) {
+            question.getAnswers().forEach(answer -> {
+                answer.setId(GenerateID.generateID());
+                answer.setQuestion(question);
+            });
+        }
+
         return questionRepository.save(question);
     }
+
 
     // Update a question
     @Transactional
