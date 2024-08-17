@@ -1,30 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit'; // Use createSlice for cleaner reducers
-
+import { createSlice } from "@reduxjs/toolkit"; // Use createSlice for cleaner reducers
 
 const initialState = {
-  tests: [],
-  loading: false,
-  error: null,
+  exams: [],
+  selectedExam: null,
 };
 
 const examSlice = createSlice({
-  name: 'exams', 
+  name: "exam",
   initialState,
   reducers: {
-    fetchExamOfClass( state,action)  {
-        state.error = null;
-        state.tests = action.payload;
-      }
-  }, 
-  
-  
-     
-      
-
+    getExamById(state, action) {
+      state.selectedExam = action.payload;
+    },
+    getAllExam(state, action) {
+      state.exams = action.payload;
+    },
+  },
 });
-export const {
-    fetchExamOfClass
-}  = examSlice.actions;
-export const selectTests = (state) => state.exams.tests;
+export const { getAllExam, getExamById } = examSlice.actions;
+export const selectedExam = (state) => state.exam.selectedExam;
+export const exams = (state) => state.exam.exams;
 
 export default examSlice.reducer;
