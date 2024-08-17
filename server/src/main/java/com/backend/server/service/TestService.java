@@ -179,6 +179,11 @@ public class TestService {
             throw new RuntimeException("Student not found");
         }
 
+        // Khởi tạo danh sách studentTests nếu null
+        if (test.getStudentTests() == null) {
+            test.setStudentTests(new ArrayList<>());
+        }
+
         // Kiểm tra xem học sinh đã có trong danh sách bài test chưa
         boolean studentAlreadyExists = test.getStudentTests().stream()
                 .anyMatch(studentTest -> studentTest.getStudent().getId().equals(studentId));
@@ -186,6 +191,12 @@ public class TestService {
         if (!studentAlreadyExists) {
             // Nếu chưa có, tạo một StudentTest mới và thêm vào bài test
             StudentTest studentTest = new StudentTest();
+
+            StudentTestId studentTestId = new StudentTestId();
+            studentTestId.setStudentId(studentId);
+            studentTestId.setTestId(testId);
+            studentTest.setId(studentTestId);
+
             studentTest.setStudent(student);
             studentTest.setTest(test);
 
@@ -193,14 +204,17 @@ public class TestService {
             studentTest.setPoint(0); // Ví dụ điểm khởi tạo là 0
             studentTest.setStartTime(LocalDateTime.now()); // Ví dụ thời gian bắt đầu là hiện tại
 
-            test.getStudentTests().add(studentTest);
+            test.getStudentTests().add(studentTest); // Thêm StudentTest vào Test
+
             student.getClassRooms().add(test.getClassRoom()); // Nếu cần thêm học sinh vào lớp của bài test
 
-            testRepository.save(test);
+            testRepository.save(test); // Lưu Test, điều này cũng lưu StudentTest thông qua Cascade
         }
 
         return test;
     }
+
+
 
 
 
