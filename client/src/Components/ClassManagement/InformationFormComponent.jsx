@@ -1,49 +1,90 @@
 import { Form, Formik } from "formik";
 import { CreateExamSchema } from "../../Schemas";
 import CustomInputComponent from "./CustomInputComponent";
+import { Button } from "antd";
+import { CreateExam } from "../../redux/Action/ExamAction";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 
-const InformationForm = (onChange, examInfo) => {
+const InformationForm = ({ onSubmit, classId }) => {
+  const [isDisabled, setIsDisabled] = useState(false);
+  const formatTime = (time) => {
+    if (!time) return "00:00:00";
+    const [hours, minutes] = time.split(":");
+    return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}:00`;
+  };
   return (
     <div className="flex flex-col">
       <p className="text-[25px] text-black/25 mb-5">Information</p>
       <Formik
-        initialValues={{ ten: "", ngaythi: "", thoigian: "", giobatdau: "" }}
+        initialValues={{
+          testDay: "",
+          testName: "",
+          testTime: 0,
+          timeEnd: "",
+          timeStart: "",
+        }}
         validationSchema={CreateExamSchema}
+        onSubmit={(values) => {
+          const examData = { ...values, classRoomId: classId };
+          const formattedValues = {
+            ...examData,
+            timeStart: formatTime(values.timeStart),
+            timeEnd: formatTime(values.timeEnd),
+          };
+          if (onSubmit) {
+            setIsDisabled(true);
+            onSubmit(formattedValues);
+          }
+        }}
       >
-        <Form className="w-[80%] flex flex-col ml-6 ">
-          <CustomInputComponent
-            label="Tên kỳ thi"
-            name="ten"
-            type="text"
-            placeholder="Enter exam name"
-          />
+        {({ isValid, dirty }) => (
+          <Form className="w-[80%] flex flex-col ml-6 ">
+            <CustomInputComponent
+              label="Tên kỳ thi"
+              name="testName"
+              type="text"
+              placeholder="Enter exam name"
+              disabled={isDisabled}
+            />
 
-          <div className="w-[75%] flex justify-between gap-2">
-            <CustomInputComponent
-              label="Ngày thi"
-              name="ngaythi"
-              type="date"
-              onChange={onChange}
-              value={examInfo.ngaythi}
-            />
-            <CustomInputComponent
-              label="Thời gian"
-              name="thoigian"
-              type="number"
-              onChange={onChange}
-              value={examInfo.thoigian}
-            />
-          </div>
-          <div className="w-[50%] flex justify-between">
-            <CustomInputComponent
-              label="Giờ bắt đầu"
-              name="giobatdau"
-              type="time"
-              onChange={onChange}
-              value={examInfo.giobatdau}
-            />
-          </div>
-        </Form>
+            <div className="w-[75%] flex justify-between gap-2">
+              <CustomInputComponent
+                label="Ngày thi"
+                name="testDay"
+                type="date"
+                disabled={isDisabled}
+              />
+              <CustomInputComponent
+                label="Thời gian"
+                name="testTime"
+                type="number"
+                disabled={isDisabled}
+              />
+            </div>
+            <div className="w-[75%] flex justify-between gap-2">
+              <CustomInputComponent
+                label="Giờ bắt đầu"
+                name="timeStart"
+                type="time"
+                disabled={isDisabled}
+              />
+              <CustomInputComponent
+                label="Giờ kết thúc"
+                name="timeEnd"
+                type="time"
+                disabled={isDisabled}
+              />
+            </div>
+            <Button
+              htmlType="submit"
+              className="w-[75%]"
+              disabled={!isValid || !dirty || isDisabled}
+            >
+              OK
+            </Button>
+          </Form>
+        )}
       </Formik>
     </div>
   );

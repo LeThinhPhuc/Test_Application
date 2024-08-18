@@ -6,7 +6,7 @@ const classSlice = createSlice({
   name: "class",
   initialState: initialState,
   reducers: {
-    getClasses: (state, action) => {
+    getAllClassForTeacher: (state, action) => {
       state.classes = action.payload;
     },
     getClassById: (state, action) => {
@@ -18,7 +18,9 @@ const classSlice = createSlice({
   },
 });
 
-export const { getClasses, getClassById, getTestsOfClass } = classSlice.actions;
+export const { getAllClassForTeacher, getClassById, getTestsOfClass } =
+  classSlice.actions;
 export const classes = (state) => state.class.classes;
-
+export const selectedClass = (state) => state.class.selectedClass;
+export const testsOfClass = (state) => state.class.testsOfClass;
 export default classSlice.reducer;

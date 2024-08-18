@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/tests")
 public class TestController {
@@ -100,7 +100,9 @@ public class TestController {
         }
     }
 
+
     @PostMapping("/{classId}")
+    @CrossOrigin(origins = "http://localhost:5173")
     public ResponseEntity<?> createTest(@PathVariable String classId, @RequestBody TestDTO testDTO) {
         if (testDTO == null) {
             Response response = Response.of(HttpStatus.BAD_REQUEST, "Test is required");
@@ -111,7 +113,7 @@ public class TestController {
             ClassRoom classRoom = classRoomService.getClassById(classId);
             testService.addStudentsToTest(testData.getId(), classRoom.getStudents());
 
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(testData);
         } catch (Exception ex) {
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

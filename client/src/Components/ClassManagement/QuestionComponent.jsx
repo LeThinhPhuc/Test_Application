@@ -1,21 +1,18 @@
 import { useState } from "react";
 import Pagination from "./Pagination";
-import { v7 as uuidv7 } from "uuid";
+import { Empty } from "antd";
 
 const QuestionComponent = ({ toggleModal, fileData = [], handleDeleteAll }) => {
-  const id = uuidv7();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalObjects = fileData.length;
   const totalPages = Math.ceil(totalObjects / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentObjects = fileData.slice(startIndex, endIndex);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
+  const currentObjects = fileData.slice(startIndex, endIndex);
   return (
     <div className="flex flex-col w-[82%]">
       <div className="flex justify-between mb-5">
@@ -40,7 +37,7 @@ const QuestionComponent = ({ toggleModal, fileData = [], handleDeleteAll }) => {
           <table className="ml-6 w-full border-collapse border-1 border-black/50 text-[12px]">
             <thead className="bg-[#01008A] text-white text-center">
               <tr>
-                <td className="border border-white/50 p-2">Mã câu hỏi</td>
+                {/* <td className="border border-white/50 p-2">Mã câu hỏi</td> */}
                 <td className="border border-white/50 p-2">Nội dung</td>
                 <td className="border border-white/50 p-2">Câu trả lời</td>
               </tr>
@@ -48,17 +45,19 @@ const QuestionComponent = ({ toggleModal, fileData = [], handleDeleteAll }) => {
             <tbody>
               {currentObjects.map((q, i) => (
                 <tr key={i}>
-                  <td className="border border-black/50 p-2">{id}</td>
-                  <td className="border border-black/50 p-2 w-[300px] h-[100px]">
+                  {/* <td className="border border-black/50 p-2 w-[50px] h-[100px]">
+                    {q.id}
+                  </td> */}
+                  <td className="border border-black/50 p-2  h-[100px]">
                     {q.question}
                   </td>
-                  <td className="border border-black/50 p-2">
+                  <td className="border border-black/50 w-[400px] p-2">
                     <ul>
-                      {q.answers.map((answer, i) => (
+                      {q.answers.map((a, i) => (
                         <li key={i}>
                           {`${String.fromCharCode(65 + i)}. `}
-                          {answer.A || answer.B || answer.C || answer.D}:
-                          <strong>{answer.isCorrect}</strong>
+                          {a.A || a.B || a.A || a.D}:
+                          <strong>{a.isCorrect}</strong>
                         </li>
                       ))}
                     </ul>
@@ -75,7 +74,7 @@ const QuestionComponent = ({ toggleModal, fileData = [], handleDeleteAll }) => {
           />
         </>
       ) : (
-        <div className="ml-6">Chưa có câu hỏi được thêm</div>
+        <Empty className="mt-6" />
       )}
     </div>
   );

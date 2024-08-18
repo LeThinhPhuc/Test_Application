@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { v7 as uuidv7 } from "uuid";
 import { useState } from "react";
 import BackComponent from "../../../Components/ClassManagement/BackComponent";
 import InformationForm from "../../../Components/ClassManagement/InformationFormComponent";
@@ -7,9 +7,20 @@ import DetailsSetupComponent from "../../../Components/ClassManagement/DetailsSe
 import HeaderComponent from "../../../Components/ClassManagement/HeaderComponent";
 import ModalImport from "../../../Components/ClassManagement/ModalImport";
 import Modal2Component from "../../../Components/ClassManagement/Modal2Component";
+import { useDispatch } from "react-redux";
+import {
+  AddQuestionsToExam,
+  CreateExam,
+} from "../../../redux/Action/ExamAction";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CreateExamPage = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const classId = location.state;
   const navigate = useNavigate();
+  const [examId, setExamId] = useState();
+  const [createExam, setCreateExam] = useState(false);
   const [modal, setModal] = useState(false);
   const [modal2, setModal2] = useState(false);
   const [fileData, setFileData] = useState([]);
@@ -20,29 +31,66 @@ const CreateExamPage = () => {
   const toggleModal2 = () => {
     setModal2(!modal2);
   };
-  const [examInfo, setExamInfo] = useState({
-    ten: "",
-    ngaythi: "",
-    thoigian: "",
-    giobatdau: "",
-  });
   const [details, setDetails] = useState({
     displayResult: true,
     extraTime: true,
   });
 
-  const handleExamInfoChange = (e) => {
-    setExamInfo({ ...examInfo, [e.target.name]: e.target.value });
-    console.log(examInfo);
+  const [transformedData, setTransformedData] = useState();
+
+  const handleSubmit = async (values) => {
+    const examInfo = await dispatch(
+      CreateExam({ classId: classId, examData: values })
+    );
+    if (examInfo) {
+      setExamId(examInfo.id);
+      setCreateExam(true);
+    }
   };
   const handleDeleteAll = () => {
     setFileData([]);
   };
   const handleImport = (data) => {
     setFileData(data);
+    setTransformedData(
+      fileData.map((item) => ({
+        id: uuidv7(),
+        content: item.question,
+        answer: [
+          {
+            content: item.answers[0].A,
+            isCorrect: item.answers[0].isCorrect,
+          },
+          {
+            content: item.answers[1].B,
+            isCorrect: item.answers[1].isCorrect,
+          },
+          {
+            content: item.answers[2].C,
+            isCorrect: item.answers[2].isCorrect,
+          },
+          {
+            content: item.answers[3].D,
+            isCorrect: item.answers[3].isCorrect,
+          },
+        ],
+      }))
+    );
   };
   const handleChangeDetails = (e) => {
-    setDetails({ details, [e.target.name]: e.target.checked });
+    setDetails((prevDetails) => ({
+      ...prevDetails,
+      [e.target.name]: e.target.checked,
+    }));
+  };
+  const handleCreate = () => {
+    if (transformedData) {
+      console.log("🚀 ~ handleCreate ~ transformedData:", transformedData);
+      dispatch(
+        AddQuestionsToExam({ examId: examId, questions: transformedData })
+      );
+      navigate(-1);
+    }
   };
   return (
     <div className="flex flex-col w-full mx-20 mt-10 font-roboto mb-24">
@@ -50,27 +98,29 @@ const CreateExamPage = () => {
       <div className="flex flex-col gap-10">
         <HeaderComponent text="new exam" />
         {/* Information */}
-        <InformationForm onChange={handleExamInfoChange} examInfo={examInfo} />
+        <InformationForm onSubmit={handleSubmit} classId={classId} />
         {/* Question */}
-        <QuestionComponent
-          toggleModal={toggleModal}
-          fileData={fileData}
-          handleDeleteAll={handleDeleteAll}
-        />
-        {/* Details  */}
-        <DetailsSetupComponent
-          onChange={handleChangeDetails}
-          details={details}
-        />
-        {/* Button Create  */}
-        <div className="flex justify-end w-[82%]">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex justify-center ml-4 border-[1px] border-black/25  rounded-[3px] text-xl hover:text-[#01008A] px-10 py-3 text-white bg-[#01008A] hover:bg-[#01008A]/5"
-          >
-            Create
-          </button>
-        </div>
+        {createExam && (
+          <>
+            <QuestionComponent
+              toggleModal={toggleModal}
+              fileData={fileData}
+              setFileData={setFileData}
+              handleDeleteAll={handleDeleteAll}
+            />
+            {/* Details  */}
+            <DetailsSetupComponent onChange={handleChangeDetails} />
+            {/* Button Create  */}
+            <div className="flex justify-end w-[82%]">
+              <button
+                onClick={handleCreate}
+                className="flex justify-center ml-4 border-[1px] border-black/25  rounded-[3px] text-xl hover:text-[#01008A] px-10 py-3 text-white bg-[#01008A] hover:bg-[#01008A]/5"
+              >
+                Create
+              </button>
+            </div>
+          </>
+        )}
       </div>
       {modal && (
         <ModalImport toggleModal={toggleModal} toggleModal2={toggleModal2} />
@@ -89,5 +139,4 @@ const CreateExamPage = () => {
     </div>
   );
 };
-
 export default CreateExamPage;

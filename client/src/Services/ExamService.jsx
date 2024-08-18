@@ -12,6 +12,10 @@ const axiosInstance = axios.create({
 const examService = {
   getAllExam: () => axiosInstance.get("tests"),
   getExamById: (id) => axiosInstance.get(`tests/${id}`),
+  createExam: (classId, testData) =>
+    axiosInstance.post(`tests/${classId}`, testData),
+  addQuestionToExam: (testId, questions) =>
+    axiosInstance.post(`tests/${testId}/questions`, JSON.stringify(questions)),
 };
 
 export default examService;

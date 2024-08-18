@@ -1,15 +1,15 @@
 import classService from "../../Services/ClassService";
 import {
+  getAllClassForTeacher,
   getClassById,
-  getClasses,
   getTestsOfClass,
 } from "../Reducer/classSlice";
 
-export const fetchClasses = () => {
+export const fetchAllClassForTeacher = (teacherId) => {
   return async (dispatch) => {
     try {
-      const response = await classService.getAllClassrooms();
-      dispatch(getClasses(response.data));
+      const response = await classService.getAllClassforTeacher(teacherId);
+      dispatch(getAllClassForTeacher(response.data));
     } catch (error) {
       console.error("Failed to fetch classrooms:", error);
     }
