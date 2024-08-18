@@ -4,13 +4,7 @@ const initialState = {
   loading: false,
   exams: [],
   selectedExam: null,
-  questions: [
-    // {
-    //   id: "",
-    //   content: "",
-    //   answer: [{ content: "", isCorrect: "" }],
-    // },
-  ],
+  questions: [],
 };
 
 const examSlice = createSlice({

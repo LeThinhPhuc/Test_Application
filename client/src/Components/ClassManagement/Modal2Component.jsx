@@ -42,8 +42,6 @@ const Modal2Component = ({
         const workSheetName = sheet.SheetNames[0];
         const workSheet = sheet.Sheets[workSheetName];
         const data = XLSX.utils.sheet_to_json(workSheet);
-
-        console.log(data);
         if (isQuestion) {
           // Chuyển đổi dữ liệu
           const formattedData = data.map((row) => {
@@ -71,7 +69,15 @@ const Modal2Component = ({
           });
           setFileData(formattedData);
         } else {
-          setFileData(data);
+          const formattedData = data.map((row) => {
+            return {
+              id: row["ID"],
+              gender: row["Gender"],
+              name: row["Full Name"],
+              phone: row["Phone"],
+            };
+          });
+          setFileData(formattedData);
         }
       };
     } else {
@@ -114,23 +120,38 @@ const Modal2Component = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {currentObjects.map((value, index) => (
-                      <tr
-                        key={index}
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                      >
-                        <td>{value.question}</td>
-                        <td>
-                          {value.answers.map((answer, i) => (
-                            <li key={i}>
-                              {`${String.fromCharCode(65 + i)}. `}
-                              {answer.A || answer.B || answer.C || answer.D}:
-                              <strong>{answer.isCorrect}</strong>
-                            </li>
-                          ))}
-                        </td>
-                      </tr>
-                    ))}
+                    {isQuestion ? (
+                      currentObjects.map((value, index) => (
+                        <tr
+                          key={index}
+                          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        >
+                          <td>{value.question}</td>
+                          <td>
+                            {value.answers.map((answer, i) => (
+                              <li key={i}>
+                                {`${String.fromCharCode(65 + i)}. `}
+                                {answer.A || answer.B || answer.C || answer.D}:
+                                <strong>{answer.isCorrect}</strong>
+                              </li>
+                            ))}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <>
+                        {currentObjects.map((value, index) => (
+                          <tr
+                            key={index}
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                          >
+                            {Object.keys(value).map((key) => (
+                              <td key={key}>{value[key]}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </>
+                    )}
                   </tbody>
                 </table>
 

@@ -16,14 +16,7 @@ const classService = {
   getAllTestOfClass: (classId) =>
     axiosInstance.get(`classrooms/gettestsforclass/${classId}`),
   createClassAsync: (data) =>
-    axiosInstance
-      .post("classrooms", data)
-      .then((response) => {
-        return "201";
-      })
-      .catch((error) => {
-        return "error";
-      }),
+    axiosInstance.post("classrooms", JSON.stringify(data)),
 };
 
 export default classService;

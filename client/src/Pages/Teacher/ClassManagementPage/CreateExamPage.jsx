@@ -56,7 +56,7 @@ const CreateExamPage = () => {
       fileData.map((item) => ({
         id: uuidv7(),
         content: item.question,
-        answer: [
+        answers: [
           {
             content: item.answers[0].A,
             isCorrect: item.answers[0].isCorrect,
