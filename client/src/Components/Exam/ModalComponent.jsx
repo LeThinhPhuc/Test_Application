@@ -1,18 +1,4 @@
-import { Link } from "react-router-dom";
-
-const ModalComponent = ({
-  id,
-  setIsSubmit,
-  toggleModal,
-  header,
-  content,
-  setTimeLeft,
-}) => {
-  const handleConfirm = () => {
-    setIsSubmit(true);
-    setTimeLeft(0);
-    toggleModal();
-  };
+const ModalComponent = ({ handleSubmit, toggleModal, header, content }) => {
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
@@ -31,13 +17,12 @@ const ModalComponent = ({
                 Cancel
               </button>
             )}
-            <Link
-              to={"afterexam"}
+            <button
               className="px-4 py-2 bg-blue-500 text-white rounded-md"
-              onClick={handleConfirm}
+              onClick={handleSubmit}
             >
               Confirm
-            </Link>
+            </button>
           </div>
         </div>
       </div>

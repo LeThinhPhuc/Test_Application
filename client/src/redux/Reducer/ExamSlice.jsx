@@ -33,6 +33,12 @@ const examSlice = createSlice({
         );
       }
     },
+    getQuestionsForExam(state, action) {
+      state.questions = action.payload;
+    },
+    changeExamToFinish(state, action) {
+      state.selectedExam = action.payload;
+    },
   },
 });
 export const {
@@ -41,6 +47,8 @@ export const {
   createExamStart,
   createExamSuccess,
   addQuestionsToExam,
+  getQuestionsForExam,
+  changeExamToFinish,
 } = examSlice.actions;
 export const selectedExam = (state) => state.exam.selectedExam;
 export const exams = (state) => state.exam.exams;

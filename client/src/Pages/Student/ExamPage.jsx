@@ -5,60 +5,33 @@ import TimerComponent from "../../Components/Exam/TimerComponent";
 import QuestionCard from "../../Components/Exam/QuestionCard";
 import IndexCardComponent from "../../Components/Exam/IndexCardComponent";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { changeToFinish, fetchExamById } from "../../redux/Action/ExamAction";
 
 const ExamPage = () => {
-  const questions = [
-    {
-      title: "Con voi có bao nhiêu cái chân?",
-      options: ["1 chân", "2 chân", "3 chân", "4 chân"],
-    },
-    {
-      title: "Con cá có bao nhiêu cái chân?",
-      options: ["1 chân", "2 chân", "3 chân", "0 chân"],
-    },
-    {
-      title: "Mendix có phải phần mềm low-code không?",
-      options: ["Đúng", "Sai"],
-    },
-    {
-      title: "Mendix có phải phần mềm low-code không?",
-      options: ["Đúng", "Sai"],
-    },
-    {
-      title: "Mendix có phải phần mềm low-code không?",
-      options: ["Đúng", "Sai"],
-    },
-    {
-      title: "Mendix có phải phần mềm low-code không?",
-      options: ["Đúng", "Sai"],
-    },
-    {
-      title: "Mendix có phải phần mềm low-code không?",
-      options: ["Đúng", "Sai"],
-    },
-    {
-      title: "Mendix có phải phần mềm low-code không?",
-      options: ["Đúng", "Sai"],
-    },
-    {
-      title: "Mendix có phải phần mềm low-code không?",
-      options: ["Đúng", "Sai", "3 chân", "4 chân"],
-    },
-    {
-      title: "Mendix có phải phần mềm low-code không?",
-      options: ["Đúng", "Sai", "3 chân", "4 chân"],
-    },
-  ];
+  const dispatch = useDispatch();
+  const examId = "b422860d-16f4-4533-85be-b99a842a2d1e";
+
   const id = useParams();
   const navigate = useNavigate();
   const [modal, setModel] = useState(false);
   const [modal2, setModel2] = useState(false);
-  const currentTime = new Date();
-  const startTime = new Date("2024-08-15 08:15:00");
-  const endTime = new Date("2024-08-15 09:55:10");
+  const currentTime = new Date(); //"2024-08-15 08:15:00"
+  const [examData, setExamData] = useState();
   const [isSubmit, setIsSubmit] = useState(false);
   const [timeLeft, setTimeLeft] = useState();
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [score, setScore] = useState(0);
+  useEffect(() => {
+    const fetchExamData = async () => {
+      const res = await dispatch(fetchExamById(examId));
+      setExamData(res);
+    };
+    fetchExamData();
+    if (examData?.finished === true) {
+      navigate("afterexam", { state: examData });
+    }
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -75,29 +48,38 @@ const ExamPage = () => {
   }, [timeLeft]);
 
   useEffect(() => {
-    if (currentTime < startTime) {
-      navigate("/student/examnotavailable");
-      setTimeLeft(Math.floor((endTime - startTime) / 1000));
-    } else {
-      setTimeLeft(Math.floor((endTime - currentTime) / 1000));
-    }
-  }, [startTime, endTime]);
+    const parseTimeString = (timeString) => {
+      const [hours, minutes, seconds] = timeString.split(":").map(Number);
+      const now = new Date();
+      now.setHours(hours, minutes, seconds, 0);
+      return now;
+    };
+    if (examData) {
+      setSelectedOptions(Array(examData.questions.length).fill(null));
+      const timeStart = parseTimeString(examData.timeStart);
+      const timeEnd = parseTimeString(examData.timeEnd);
 
-  useEffect(() => {
-    setSelectedOptions(Array(questions.length).fill(null));
-  }, [questions.length]);
+      if (currentTime < timeStart.getTime()) {
+        navigate("/student/examnotavailable");
+        setTimeLeft(
+          Math.floor((timeEnd.getTime() - timeStart.getTime()) / 1000)
+        );
+      } else {
+        setTimeLeft(Math.floor((timeEnd.getTime() - currentTime) / 1000));
+      }
+    }
+  }, [examData]);
 
   useEffect(() => {
     if (timeLeft === 0 || modal2) {
-      navigate("afterexam");
+      navigate("afterexam", { state: { examData } });
     }
   }, [timeLeft, modal2, navigate]);
 
   useEffect(() => {
-    if (isSubmit) {
-      navigate(`/student/${id}/afterexam`);
-    }
-  }, [id, navigate]);
+    calculateScore();
+    console.log("🚀 ~  score:", score);
+  }, [selectedOptions]);
 
   const toggleModal = () => {
     setModel(!modal);
@@ -107,57 +89,80 @@ const ExamPage = () => {
     newSelectedOptions[questionIndex] = optionIndex;
     setSelectedOptions(newSelectedOptions);
   };
+  const calculateScore = () => {
+    let totalScore = 0;
+    examData?.questions.forEach((question, index) => {
+      if (
+        selectedOptions[index] !== null &&
+        question.answers[selectedOptions[index]]?.isCorrect
+      ) {
+        totalScore += 1;
+      }
+      //totalScore = (totalScore / examData?.questions.length) * 10;
+    });
+    setScore(totalScore);
+  };
 
+  const handleSubmit = () => {
+    calculateScore();
+    setTimeLeft(0);
+    setIsSubmit(true);
+    toggleModal();
+    dispatch(changeToFinish(examId));
+    navigate("afterexam", { state: { examData, score } });
+  };
   return (
     <div className={`w-full h-full`}>
-      <div className={`w-full h-full ${modal || (modal2 && "blur-sm")}`}>
+      <div
+        className={`w-full h-full relative${modal || (modal2 && "blur-sm")}`}
+      >
         <Header />
-        <div className="flex items-start mt-10 mx-[50px] mb-[100px]">
-          {/* left */}
-          <div className=" w-[60%] items-center flex flex-col gap-[36px]">
-            {questions.map((question, i) => (
-              <QuestionCard
-                question={question}
-                key={i}
-                questionIndex={i}
-                handleOptionChange={handleOptionChange}
-              />
-            ))}
-          </div>
-          {/* right */}
-          <div className="overflow-y-auto fixed w-[30%] right-20 flex-[2] top-[90px] bottom-[10px] flex flex-col gap-[20px] justify-center items-center">
-            <TimerComponent timeLeft={timeLeft} />
-            <div className="bg-white w-full px-8 flex justify-start py-5 border-black/5 border-2 rounded-[10px] flex-wrap gap-[34px]">
-              {questions.map((question, i) => (
-                <IndexCardComponent
+        {examData && (
+          <div className="flex items-start mt-10 mx-[50px] mb-[100px]">
+            {/* left */}
+            <div className=" w-[60%] items-center flex flex-col gap-[36px]">
+              {examData.questions.map((question, i) => (
+                <QuestionCard
+                  question={question}
                   key={i}
-                  questionIndex={i}
-                  selectedOptions={selectedOptions}
+                  index={i}
+                  handleOptionChange={handleOptionChange}
                 />
               ))}
             </div>
-            <button
-              className="mb-10 cursor-pointer font-montserrat w-[219px] h-[65px] rounded-[30px] bg-black/85 font-medium text-[26px] text-white"
-              onClick={toggleModal}
-            >
-              SUBMIT
-            </button>
+            {/* right */}
+            <div className="overflow-y-auto fixed h-screen py-10 w-[30%] right-20 flex-[2] top-[50px] bottom-[10px] flex flex-col gap-[20px] justify-center items-center">
+              <TimerComponent timeLeft={timeLeft} />
+              <div className="bg-white overflow-y-auto w-full px-8 flex justify-start py-5 border-black/5 border-2 rounded-[10px] flex-wrap gap-8">
+                {examData.questions.map((question, i) => (
+                  <IndexCardComponent
+                    key={i}
+                    questionIndex={i}
+                    selectedOptions={selectedOptions}
+                  />
+                ))}
+              </div>
+              <button
+                className="mb-10 cursor-pointer font-montserrat w-[219px] h-[65px] rounded-[30px] bg-black/85 font-medium text-[26px] text-white"
+                onClick={toggleModal}
+              >
+                SUBMIT
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
       {modal && (
         <ModalComponent
-          id={id}
-          setIsSubmit={setIsSubmit}
+          handleSubmit={handleSubmit}
           toggleModal={toggleModal}
           header="Confirm Submit"
           content="Are you sure you want to submit your answers?"
-          setTimeLeft={setTimeLeft}
         />
       )}
       {modal2 && (
         <ModalComponent
-          toggleModal={toggleModal}
+          handleSubmit={handleSubmit}
           header="Time Up"
           content="Time is up. Please confirm"
         />

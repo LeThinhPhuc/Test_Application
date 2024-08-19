@@ -16,6 +16,7 @@ const ClassDetailPage = () => {
   ];
 
   const students = classData?.students;
+  console.log("🚀 ~ ClassDetailPage ~ students:", students);
   const exams = classData?.tests;
 
   const renderRow = (label, value) => (
@@ -26,9 +27,9 @@ const ClassDetailPage = () => {
   );
   const getStudentColumns = (student) => [
     student.id,
-    student.ten,
-    student.gioi,
-    student.sdt,
+    student.name,
+    student.phone,
+    student.gender,
   ];
 
   const getExamColumns = (exam) => [

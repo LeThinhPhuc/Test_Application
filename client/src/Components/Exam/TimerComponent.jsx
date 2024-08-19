@@ -17,7 +17,7 @@ const TimerComponent = ({ timeLeft }) => {
     )}`;
   };
   return (
-    <div className="bg-white w-full flex flex-col items-center py-5  rounded-[10px]">
+    <div className=" w-full flex flex-col items-center py-5  rounded-[10px]">
       <h2 className=" font-roboto text-[20px] font-[800] ">FINISH BEFORE</h2>
       <div
         className={`mt-3 border-8 ${

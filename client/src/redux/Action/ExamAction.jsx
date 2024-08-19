@@ -4,15 +4,30 @@ import {
   createExamStart,
   createExamSuccess,
   getAllExam,
+  getExamById,
+  getQuestionsForExam,
+  changeExamToFinish,
 } from "../Reducer/ExamSlice";
 
 export const fetchAllExam = () => {
   return async (dispatch) => {
     try {
-      const response = await examService.get();
+      const response = await examService.getAllExam();
       dispatch(getAllExam(response.data));
     } catch (error) {
       console.log("Fail to fetch all exams");
+    }
+  };
+};
+
+export const fetchExamById = (examId) => {
+  return async (dispatch) => {
+    try {
+      const response = await examService.getExamById(examId);
+      dispatch(getExamById(response.data));
+      return response.data;
+    } catch (error) {
+      console.log("Fail to fetch exam by id");
     }
   };
 };
@@ -38,6 +53,34 @@ export const AddQuestionsToExam = ({ examId, questions }) => {
     } catch (error) {
       console.error(
         "Error adding questions to exam:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+};
+
+export const fetchQuestionsForExam = ({ examId }) => {
+  return async (dispatch) => {
+    try {
+      const response = await examService.getQuestionsForExam(examId);
+      dispatch(getQuestionsForExam(response.data));
+    } catch (error) {
+      console.error(
+        "Error fetch questions for exam:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+};
+
+export const changeToFinish = (examId) => {
+  return async (dispatch) => {
+    try {
+      const response = await examService.changeToFinish(examId);
+      dispatch(changeExamToFinish(response.data));
+    } catch (error) {
+      console.error(
+        "Error change exam finished:",
         error.response ? error.response.data : error.message
       );
     }

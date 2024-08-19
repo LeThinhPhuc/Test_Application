@@ -16,6 +16,12 @@ const examService = {
     axiosInstance.post(`tests/${classId}`, testData),
   addQuestionToExam: (testId, questions) =>
     axiosInstance.post(`tests/${testId}/questions`, JSON.stringify(questions)),
+  getQuestionsForExam: (testId) =>
+    axiosInstance.get(`tests/getquestionsfortest/${testId}`),
+  changeToFinish: (testId) =>
+    axiosInstance.post(`tests/changefinished/${testId}`),
+  changeGetScoreMode: (testId) =>
+    axiosInstance.post(`tests/changegetscore/${testId}`),
 };
 
 export default examService;
