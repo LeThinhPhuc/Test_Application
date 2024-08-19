@@ -10,7 +10,7 @@ import { changeToFinish, fetchExamById } from "../../redux/Action/ExamAction";
 
 const ExamPage = () => {
   const dispatch = useDispatch();
-  const examId = "b422860d-16f4-4533-85be-b99a842a2d1e";
+  const examId = "3eda9b72-ed04-4250-8128-c9270ad1fc83";
 
   const id = useParams();
   const navigate = useNavigate();

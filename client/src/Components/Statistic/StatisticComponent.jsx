@@ -12,6 +12,10 @@ import {
 } from "chart.js";
 import AvgComponent from "./AvgComponent";
 import StudentComponent from "./StudentComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchStatistic } from "../../redux/Action/ExamAction";
+import { statistic } from "../../redux/Reducer/ExamSlice";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -40,7 +44,13 @@ const options = {
     },
   },
 };
-const StatisticComponent = ({ examData }) => {
+const StatisticComponent = ({ exam }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchStatistic(exam?.id));
+  }, []);
+  const statisticData = useSelector(statistic);
+  console.log("🚀 ~ StatisticComponent ~ statistic:", statisticData);
   const scoreData = [
     { score: 2, total: 3 },
     { score: 3, total: 1 },
@@ -59,19 +69,17 @@ const StatisticComponent = ({ examData }) => {
     ],
   };
 
-  const avgScore = 7.5;
-  const student = { name: "Võ Thị Thu Hòa", point: 10.0 };
   return (
     <div className="flex flex-col my-5 mx-[120px]">
       <HeaderComponent text={`Phân bố điểm`} />
-      {`KỲ THI ${examData.name}`}
-      <div className="flex justify-between mt-3 gap-10">
-        <div className="w-[60%] ">
+      <p className="uppercase">{` ${exam?.testName}`}</p>
+      <div className="flex justify-between mt-3 ">
+        <div className="w-[70%] ">
           <Bar options={options} data={data} />
         </div>
-        <div className="flex-1">
-          <AvgComponent avgScore={avgScore} />
-          <StudentComponent student={student} />
+        <div className="flex-1 ml-4">
+          <AvgComponent avgScore={statisticData?.average} />
+          <StudentComponent student={statisticData?.topScorer} />
         </div>
       </div>
     </div>

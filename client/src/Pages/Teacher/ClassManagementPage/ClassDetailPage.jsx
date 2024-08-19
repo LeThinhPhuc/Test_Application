@@ -5,6 +5,7 @@ import TableComponent from "../../../Components/ClassManagement/TableComponent";
 const ClassDetailPage = () => {
   const location = useLocation();
   const classData = location.state;
+
   const thStudent = ["Mã học sinh", "Họ và Tên", "Giới tính", "Sô điện thoại"];
   const thExam = [
     "Mã kỳ thi",

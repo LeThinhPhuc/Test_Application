@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import {
   AddQuestionsToExam,
   CreateExam,
+  setDisplayScoreMode,
 } from "../../../redux/Action/ExamAction";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -32,8 +33,8 @@ const CreateExamPage = () => {
     setModal2(!modal2);
   };
   const [details, setDetails] = useState({
-    displayResult: true,
-    extraTime: true,
+    displayResult: false,
+    extraTime: false,
   });
 
   const [transformedData, setTransformedData] = useState();
@@ -89,6 +90,9 @@ const CreateExamPage = () => {
       dispatch(
         AddQuestionsToExam({ examId: examId, questions: transformedData })
       );
+      if (details.displayResult === true) {
+        dispatch(setDisplayScoreMode(examId));
+      }
       navigate(-1);
     }
   };

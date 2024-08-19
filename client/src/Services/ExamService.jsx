@@ -22,6 +22,8 @@ const examService = {
     axiosInstance.post(`tests/changefinished/${testId}`),
   changeGetScoreMode: (testId) =>
     axiosInstance.post(`tests/changegetscore/${testId}`),
+  getStatisticOfExam: (testId) =>
+    axiosInstance.get(`tests/statistics/${testId}`),
 };
 
 export default examService;

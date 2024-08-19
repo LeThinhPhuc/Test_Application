@@ -304,4 +304,48 @@ public class TestService {
         test.setGetScore(!test.isGetScore());
         return testRepository.save(test);
     }
+
+    public ExamStatisticsDTO getStudentTests(String id) {
+        List<StudentTest> studentTests = studentTestRepository.findAllByTestId(id);
+
+        // TreeMap to automatically sort scores in ascending order
+        Map<Double, Integer> scoreMap = new TreeMap<>();
+        double totalScore = 0;
+        int totalCount = 0;
+        StudentTest topScorer = null;
+
+        for (StudentTest t : studentTests) {
+            double score = t.getPoint();
+            scoreMap.put(score, scoreMap.getOrDefault(score, 0) + 1);
+            totalScore += score;
+            totalCount++;
+
+            // Determine the top scorer
+            if (topScorer == null || t.getPoint() > topScorer.getPoint()) {
+                topScorer = t;
+            }
+        }
+
+        // Calculate the average score and round to 2 decimal places
+        double average = totalCount == 0 ? 0 : totalScore / totalCount;
+        BigDecimal roundedAverage = new BigDecimal(average).setScale(2, RoundingMode.HALF_UP);
+
+        // Convert Map to List<Map<String, Object>> for score distribution
+        List<Map<String, Object>> result = new ArrayList<>();
+        scoreMap.forEach((score, total) -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("score", score);
+            map.put("total", total);
+            result.add(map);
+        });
+
+        // Create the DTO
+        ExamStatisticsDTO statisticsDTO = new ExamStatisticsDTO();
+        statisticsDTO.setAverage(roundedAverage.doubleValue());
+        statisticsDTO.setTopScorer(topScorer);
+        statisticsDTO.setScoreDistribution(result);
+
+        return statisticsDTO;
+    }
+
 }

@@ -326,4 +326,16 @@ public class TestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+    
+    @GetMapping("/statistics/{id}")
+    public ResponseEntity<?> statistics(@PathVariable String id) {
+        try {
+            ExamStatisticsDTO statistics = testService.getStudentTests(id);
+            return ResponseEntity.ok(statistics);
+        } catch (Exception ex) {
+            Response response = Response.of(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
 }

@@ -5,6 +5,7 @@ const initialState = {
   exams: [],
   selectedExam: null,
   questions: [],
+  statistic: null,
 };
 
 const examSlice = createSlice({
@@ -39,6 +40,12 @@ const examSlice = createSlice({
     changeExamToFinish(state, action) {
       state.selectedExam = action.payload;
     },
+    changeGetScoreMode(state, action) {
+      state.selectedExam = action.payload;
+    },
+    getStaticticById(state, action) {
+      state.statistic = action.payload;
+    },
   },
 });
 export const {
@@ -49,9 +56,12 @@ export const {
   addQuestionsToExam,
   getQuestionsForExam,
   changeExamToFinish,
+  changeGetScoreMode,
+  getStaticticById,
 } = examSlice.actions;
 export const selectedExam = (state) => state.exam.selectedExam;
 export const exams = (state) => state.exam.exams;
 export const questions = (state) => state.exam.questions;
+export const statistic = (state) => state.exam.statistic;
 
 export default examSlice.reducer;

@@ -1,4 +1,6 @@
 import { Empty } from "antd";
+import Pagination from "./Pagination";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const TableComponent = ({
@@ -10,6 +12,16 @@ const TableComponent = ({
 }) => {
   const navigate = useNavigate();
   console.log("🚀 ~ classData:", classData);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const totalObjects = objects?.length;
+  const totalPages = Math.ceil(totalObjects / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  const currentObjects = objects?.slice(startIndex, endIndex);
   return (
     <div className="flex flex-col">
       <div className="text-[18px] pb-5 flex justify-between">
@@ -27,29 +39,36 @@ const TableComponent = ({
           </button>
         )}
       </div>
-      {objects && objects.length > 0 ? (
-        <table className="w-full border-collapse border-1 border-black/50 text-[12px]">
-          <thead className="bg-[#01008A] text-white text-center">
-            <tr>
-              {headers.map((header, i) => (
-                <td key={i} className="border border-white/50 p-2">
-                  {header}
-                </td>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {objects.map((object, index) => (
-              <tr key={index}>
-                {getColumns(object).map((col, i) => (
-                  <td key={i} className="border border-black/50 p-2">
-                    {col}
+      {currentObjects && currentObjects.length > 0 ? (
+        <>
+          <table className="w-full border-collapse border-1 border-black/50 text-[12px]">
+            <thead className="bg-[#01008A] text-white text-center">
+              <tr>
+                {headers.map((header, i) => (
+                  <td key={i} className="border border-white/50 p-2">
+                    {header}
                   </td>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentObjects.map((object, index) => (
+                <tr key={index}>
+                  {getColumns(object).map((col, i) => (
+                    <td key={i} className="border border-black/50 p-2">
+                      {col}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       ) : (
         <Empty />
       )}

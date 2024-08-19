@@ -3,18 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import "./ExamManagement.css";
 import { exams } from "../../redux/Reducer/ExamSlice";
 import { fetchAllExam } from "../../redux/Action/ExamAction";
+import StatisticComponent from "../Statistic/StatisticComponent";
 
 const ExamManagement = () => {
   const dispatch = useDispatch();
-  const [date, setDate] = useState("");
-  const [selectedType, setSelectedType] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-
   useEffect(() => {
     dispatch(fetchAllExam());
   }, [dispatch]);
   const examsData = useSelector(exams);
-  console.log(examsData);
+  const [date, setDate] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [toggleStatistic, setToggleStatistic] = useState(false);
+  const [currentExam, setCurrentExam] = useState(examsData[0]);
+
   const handleTypeChange = (event) => {
     setSelectedType(event.target.value);
   };
@@ -27,7 +29,7 @@ const ExamManagement = () => {
     setDate(event.target.value);
   };
 
-  const filteredExams = examsData.filter((exam) => {
+  const filteredExams = examsData?.filter((exam) => {
     const matchesType =
       selectedType === "" || exam.testName.includes(selectedType);
     const matchesSearch =
@@ -37,7 +39,10 @@ const ExamManagement = () => {
     const matchesDate = date === "" || exam.testDay === date;
     return matchesType && matchesSearch && matchesDate;
   });
-
+  const handleClick = (exam) => {
+    setCurrentExam(exam);
+    setToggleStatistic(true);
+  };
   return (
     <div className="flex-1">
       <div className="max-w-2xl mx-auto flex items-center">
@@ -110,7 +115,12 @@ const ExamManagement = () => {
           <tbody className="tbody">
             {filteredExams.length > 0 ? (
               filteredExams.map((exam, index) => (
-                <tr key={index}>
+                <tr
+                  key={index}
+                  onClick={() => {
+                    handleClick(exam);
+                  }}
+                >
                   <td className="td">{exam.id}</td>
                   <td className="td">{exam.testName}</td>
                   <td className="td">{exam.testDay}</td>
@@ -128,6 +138,8 @@ const ExamManagement = () => {
           </tbody>
         </table>
       </div>
+
+      {toggleStatistic && <StatisticComponent exam={currentExam} />}
     </div>
   );
 };

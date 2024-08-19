@@ -7,6 +7,8 @@ import {
   getExamById,
   getQuestionsForExam,
   changeExamToFinish,
+  getStaticticById,
+  changeGetScoreMode,
 } from "../Reducer/ExamSlice";
 
 export const fetchAllExam = () => {
@@ -81,6 +83,34 @@ export const changeToFinish = (examId) => {
     } catch (error) {
       console.error(
         "Error change exam finished:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+};
+
+export const setDisplayScoreMode = (examId) => {
+  return async (dispatch) => {
+    try {
+      const response = await examService.changeGetScoreMode(examId);
+      dispatch(changeGetScoreMode(response.data));
+    } catch (error) {
+      console.error(
+        "Error change get score mode:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+};
+
+export const fetchStatistic = (examId) => {
+  return async (dispatch) => {
+    try {
+      const response = await examService.getStatisticOfExam(examId);
+      dispatch(getStaticticById(response.data));
+    } catch (error) {
+      console.error(
+        "Error fetch statistic of exam:",
         error.response ? error.response.data : error.message
       );
     }
