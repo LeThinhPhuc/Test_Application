@@ -19,7 +19,6 @@ const Login = () => {
 
       if (response.status === 200) {
         localStorage.setItem("user", JSON.stringify(response.data));
-        localStorage.setItem("username", username);
         const token = response.data.accessToken;
 
         const decodedToken = jwtDecode(token);
@@ -29,6 +28,7 @@ const Login = () => {
         console.log("User Role:", userRoles);
 
         if (userRoles.length == 1) {
+          localStorage.setItem("studentId", decodedToken.student.id);
           navigate("student");
         } else if (userRoles.length == 2) {
           navigate("teacher");

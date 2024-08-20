@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./ExamManagement.css";
 import { exams } from "../../redux/Reducer/ExamSlice";
-import { fetchAllExam } from "../../redux/Action/ExamAction";
+import { fetchAllExam, fetchStatistic } from "../../redux/Action/ExamAction";
 import StatisticComponent from "../Statistic/StatisticComponent";
 
 const ExamManagement = () => {
@@ -16,6 +16,7 @@ const ExamManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [toggleStatistic, setToggleStatistic] = useState(false);
   const [currentExam, setCurrentExam] = useState(examsData[0]);
+  const [statistic, setStatistic] = useState({});
 
   const handleTypeChange = (event) => {
     setSelectedType(event.target.value);
@@ -39,8 +40,9 @@ const ExamManagement = () => {
     const matchesDate = date === "" || exam.testDay === date;
     return matchesType && matchesSearch && matchesDate;
   });
-  const handleClick = (exam) => {
+  const handleClick = async (exam) => {
     setCurrentExam(exam);
+    setStatistic(await dispatch(fetchStatistic(exam?.id)));
     setToggleStatistic(true);
   };
   return (
@@ -139,7 +141,9 @@ const ExamManagement = () => {
         </table>
       </div>
 
-      {toggleStatistic && <StatisticComponent exam={currentExam} />}
+      {toggleStatistic && (
+        <StatisticComponent exam={currentExam} statistic={statistic} />
+      )}
     </div>
   );
 };

@@ -7,6 +7,7 @@ import jakarta.persistence.TemporalType;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 @Getter
@@ -22,11 +23,11 @@ public class TestDTO {
 
     @Temporal(TemporalType.TIME)
     @JsonFormat(pattern = "HH:mm:ss")
-    private Date timeStart;
+    private LocalTime timeStart;
 
     @Temporal(TemporalType.TIME)
     @JsonFormat(pattern = "HH:mm:ss")
-    private Date timeEnd;
+    private LocalTime timeEnd;
 
     private String classRoomId;
 

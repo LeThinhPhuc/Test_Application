@@ -40,10 +40,12 @@ const CreateExamPage = () => {
   const [transformedData, setTransformedData] = useState();
 
   const handleSubmit = async (values) => {
+    console.log("🚀 ~ handleSubmit ~ values:", values);
     const examInfo = await dispatch(
       CreateExam({ classId: classId, examData: values })
     );
     if (examInfo) {
+      console.log("🚀 ~ handleSubmit ~ examInfo:", examInfo);
       setExamId(examInfo.id);
       setCreateExam(true);
     }

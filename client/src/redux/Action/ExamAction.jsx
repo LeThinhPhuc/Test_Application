@@ -108,6 +108,7 @@ export const fetchStatistic = (examId) => {
     try {
       const response = await examService.getStatisticOfExam(examId);
       dispatch(getStaticticById(response.data));
+      return response.data;
     } catch (error) {
       console.error(
         "Error fetch statistic of exam:",

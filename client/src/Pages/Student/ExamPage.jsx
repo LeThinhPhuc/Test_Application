@@ -7,21 +7,23 @@ import IndexCardComponent from "../../Components/Exam/IndexCardComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changeToFinish, fetchExamById } from "../../redux/Action/ExamAction";
+import { updateScore } from "../../redux/Reducer/studentSlice";
+import { updateScoreOfExam } from "../../redux/Action/studentAction";
 
 const ExamPage = () => {
   const dispatch = useDispatch();
-  const examId = "3eda9b72-ed04-4250-8128-c9270ad1fc83";
-
-  const id = useParams();
+  const studentId = localStorage.getItem("studentId");
+  const exam = useParams();
+  const examId = exam.id;
   const navigate = useNavigate();
   const [modal, setModel] = useState(false);
   const [modal2, setModel2] = useState(false);
   const currentTime = new Date(); //"2024-08-15 08:15:00"
   const [examData, setExamData] = useState();
-  const [isSubmit, setIsSubmit] = useState(false);
   const [timeLeft, setTimeLeft] = useState();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [score, setScore] = useState(0);
+
   useEffect(() => {
     const fetchExamData = async () => {
       const res = await dispatch(fetchExamById(examId));
@@ -78,7 +80,6 @@ const ExamPage = () => {
 
   useEffect(() => {
     calculateScore();
-    console.log("🚀 ~  score:", score);
   }, [selectedOptions]);
 
   const toggleModal = () => {
@@ -94,21 +95,21 @@ const ExamPage = () => {
     examData?.questions.forEach((question, index) => {
       if (
         selectedOptions[index] !== null &&
-        question.answers[selectedOptions[index]]?.isCorrect
+        question.answers[selectedOptions[index]]?.isCorrect === "True"
       ) {
         totalScore += 1;
       }
-      //totalScore = (totalScore / examData?.questions.length) * 10;
     });
+    totalScore = (totalScore / examData?.questions.length) * 100;
+    console.log("🚀 ~ examData?.questions.forEach ~ totalScore:", totalScore);
     setScore(totalScore);
   };
-
   const handleSubmit = () => {
     calculateScore();
     setTimeLeft(0);
-    setIsSubmit(true);
     toggleModal();
     dispatch(changeToFinish(examId));
+    dispatch(updateScoreOfExam({ examId, studentId, score }));
     navigate("afterexam", { state: { examData, score } });
   };
   return (

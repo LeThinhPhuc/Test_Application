@@ -10,6 +10,7 @@
     import lombok.Setter;
     import org.hibernate.annotations.ColumnDefault;
 
+    import java.time.LocalTime;
     import java.util.ArrayList;
     import java.util.Date;
     import java.util.List;
@@ -40,12 +41,12 @@
         @Column(name = "timeStart")
         @Temporal(TemporalType.TIME)
         @JsonFormat(pattern = "HH:mm:ss")
-        private Date timeStart;
+        private LocalTime timeStart;
 
         @Column(name = "timeEnd")
         @Temporal(TemporalType.TIME)
         @JsonFormat(pattern = "HH:mm:ss")
-        private Date timeEnd;
+        private LocalTime timeEnd;
 
         @Column(name="isGetScore")
         private boolean isGetScore=false;
