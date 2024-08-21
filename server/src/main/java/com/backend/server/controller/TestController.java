@@ -224,7 +224,7 @@ public class TestController {
             Test test = testService.getTestById(testId);
             if(test != null){
                 testService.toggleIsGetScore(testId);
-                return ResponseEntity.ok("Finished mode is : "+ testService.getTestById(testId).isFinished());
+                return ResponseEntity.ok("Get Score mode is : "+ testService.getTestById(testId).isGetScore());
             }else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
             }
