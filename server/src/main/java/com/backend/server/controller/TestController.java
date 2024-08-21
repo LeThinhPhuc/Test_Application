@@ -1,14 +1,11 @@
 package com.backend.server.controller;
 
 import com.backend.server.DTO.ExamStatisticsDTO;
+import com.backend.server.DTO.StudentTestDTO;
 import com.backend.server.DTO.TestDTO;
-import com.backend.server.model.ClassRoom;
+import com.backend.server.model.*;
 
 import com.backend.server.DTO.QuestionAnswerDTO;
-import com.backend.server.model.Question;
-import com.backend.server.model.Response;
-import com.backend.server.model.Student;
-import com.backend.server.model.Test;
 import com.backend.server.service.ClassRoomService;
 import com.backend.server.service.TeacherService;
 import com.backend.server.service.StudentService;
@@ -102,8 +99,8 @@ public class TestController {
 
     @PostMapping("/{classId}")
     public ResponseEntity<?> createTest(@PathVariable String classId, @RequestBody TestDTO testDTO) {
-        if (testDTO == null) {
-            Response response = Response.of(HttpStatus.BAD_REQUEST, "Test is required");
+        if (testDTO.getClassRoomId() == null) {
+            Response response = Response.of(HttpStatus.BAD_REQUEST, "ClassroomId is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try {
@@ -208,7 +205,7 @@ public class TestController {
         try {
             Test test = testService.getTestById(testId);
             if(test != null){
-                testService.toggleIsFinished(testId);
+                testService.toggleIsFixed(testId);
                 return ResponseEntity.ok("Fixed mode is : "+ testService.getTestById(testId).isFixed());
             }else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
@@ -224,7 +221,7 @@ public class TestController {
         try {
             Test test = testService.getTestById(testId);
             if(test != null){
-                testService.toggleIsFinished(testId);
+                testService.toggleIsGetScore(testId);
                 return ResponseEntity.ok("Finished mode is : "+ testService.getTestById(testId).isFinished());
             }else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found");
@@ -255,16 +252,16 @@ public class TestController {
         }
     }
 
-    @PutMapping("/{id}/studentscore/{studentId}")
-    public ResponseEntity<?> updateScoreForStudent(@PathVariable String id, @PathVariable String studentId, @RequestBody double score){
+    @PatchMapping("/{id}/studentscore/{studentId}")
+    public ResponseEntity<?> updateScoreForStudent(@PathVariable String id, @PathVariable String studentId, @RequestBody StudentTestDTO studentTest){
         if(studentId==null||id==null){
             Response response = Response.of(HttpStatus.BAD_REQUEST, "ID Test and ID Student is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try {
             if(testService.getTestById(id)!=null||studentService.getStudentById(studentId)==null){
-                testService.updateScoreForStudent(id, studentId, score);
-                return ResponseEntity.ok("Update score success for student id +"+studentId+"with score "+score);
+                testService.updateScoreForStudent(id, studentId, studentTest.getPoint());
+                return ResponseEntity.ok("Update score success for student id "+studentId+" with score "+studentTest.getPoint());
             }else{
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test or Student not found with ID");
             }
@@ -274,16 +271,16 @@ public class TestController {
         }
     }
 
-    @PutMapping("/{id}/studenttimestart/{studentId}")
-    public ResponseEntity<?> updateTimeStartForStudent(@PathVariable String id, @PathVariable String studentId, @RequestBody String timeStart){
+    @PatchMapping("/{id}/studenttimestart/{studentId}")
+    public ResponseEntity<?> updateTimeStartForStudent(@PathVariable String id, @PathVariable String studentId, @RequestBody StudentTestDTO studentTest){
         if(studentId==null||id==null){
             Response response = Response.of(HttpStatus.BAD_REQUEST, "ID Test and ID Student is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try {
             if(testService.getTestById(id)!=null||studentService.getStudentById(studentId)==null){
-                testService.updateStartDoTest(id, studentId, timeStart);
-                return ResponseEntity.ok("Update score success for student id +"+studentId+"with timestart "+timeStart);
+                testService.updateStartDoTest(id, studentId, String.valueOf(studentTest.getStartTime()));
+                return ResponseEntity.ok("Update time start do test success for student id "+studentId+" with timestart "+studentTest.getStartTime());
             }else{
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test or Student not found with ID");
             }

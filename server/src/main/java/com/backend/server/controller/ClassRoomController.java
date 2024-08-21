@@ -1,6 +1,7 @@
 package com.backend.server.controller;
 
 import com.backend.server.DTO.ClassRoomDTO;
+import com.backend.server.DTO.StudentDTO;
 import com.backend.server.model.*;
 import com.backend.server.service.ClassRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,8 +91,8 @@ public class ClassRoomController {
 
     @PostMapping
     public ResponseEntity<?> createClassRoom(@RequestBody ClassRoomDTO classRoomDTO){
-        if(classRoomDTO==null){
-            Response response = Response.of(HttpStatus.BAD_REQUEST, "Classroom is required");
+        if(classRoomDTO.getTeacherId()==null){
+            Response response = Response.of(HttpStatus.BAD_REQUEST, "TeacherId is required");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try{
@@ -104,11 +105,11 @@ public class ClassRoomController {
     }
 
     @PostMapping("/{classroomId}/student")
-    public ResponseEntity<?> addStudentToClassroom(@PathVariable String classroomId, @RequestBody Student student){
+    public ResponseEntity<?> addStudentToClassroom(@PathVariable String classroomId, @RequestBody StudentDTO studentDTO){
         try{
             ClassRoom classRoom = classRoomService.getClassById(classroomId);
             if(classRoom != null){
-                classRoomService.addStudentToClass(classroomId, student);
+                classRoomService.addStudentToClass(classroomId, studentDTO);
                 return ResponseEntity.ok("Add student to class success");
             }else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Class not found");
@@ -121,7 +122,7 @@ public class ClassRoomController {
     }
 
     @PostMapping("/{classroomId}/students")
-    public ResponseEntity<?> addStudentsToClassroom(@PathVariable String classroomId, @RequestBody List<Student> students){
+    public ResponseEntity<?> addStudentsToClassroom(@PathVariable String classroomId, @RequestBody List<StudentDTO> students){
         try{
             ClassRoom classRoom = classRoomService.getClassById(classroomId);
             if(classRoom != null){
