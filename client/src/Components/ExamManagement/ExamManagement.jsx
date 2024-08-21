@@ -18,10 +18,10 @@ const ExamManagement = () => {
   const [currentExam, setCurrentExam] = useState(examsData[0]);
   const [statistic, setStatistic] = useState({});
 
-  useEffect(() => {
-    dispatch(fetchTests());
-  }, [dispatch]);
-  const examsData = useSelector(exams);
+  // useEffect(() => {
+  //   dispatch(fetchTests());
+  // }, [dispatch]);
+  // const examsData = useSelector(exams);
   console.log(examsData);
   const handleTypeChange = (event) => {
     setSelectedType(event.target.value);
