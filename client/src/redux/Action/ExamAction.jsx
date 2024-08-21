@@ -9,6 +9,7 @@ import {
   changeExamToFinish,
   getStaticticById,
   changeGetScoreMode,
+  changeFixedMode,
 } from "../Reducer/ExamSlice";
 
 export const fetchAllExam = () => {
@@ -97,6 +98,20 @@ export const setDisplayScoreMode = (examId) => {
     } catch (error) {
       console.error(
         "Error change get score mode:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+};
+
+export const setMixUpMode = (examId) => {
+  return async (dispatch) => {
+    try {
+      const response = await examService.changeMixUpMode(examId);
+      dispatch(changeFixedMode(response.data));
+    } catch (error) {
+      console.error(
+        "Error change mix up question mode:",
         error.response ? error.response.data : error.message
       );
     }

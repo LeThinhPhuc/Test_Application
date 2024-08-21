@@ -6,7 +6,8 @@ const AfterExamPage = () => {
   const location = useLocation();
   const score = location.state?.score;
   const displayScore = location.state?.examData?.getScore;
-  console.log("🚀 ~ AfterExamPage ~ score:", location.state?.score);
+  console.log("🚀 ~ AfterExamPage ~ examData:", location.state?.examData);
+  console.log("🚀 ~ AfterExamPage ~ displayScore:", displayScore);
   return (
     <div className="">
       <Header />

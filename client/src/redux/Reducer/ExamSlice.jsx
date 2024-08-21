@@ -43,6 +43,9 @@ const examSlice = createSlice({
     changeGetScoreMode(state, action) {
       state.selectedExam = action.payload;
     },
+    changeFixedMode(state, action) {
+      state.selectedExam = action.payload;
+    },
     getStaticticById(state, action) {
       state.statistic = action.payload;
     },
@@ -57,6 +60,7 @@ export const {
   getQuestionsForExam,
   changeExamToFinish,
   changeGetScoreMode,
+  changeFixedMode,
   getStaticticById,
 } = examSlice.actions;
 export const selectedExam = (state) => state.exam.selectedExam;

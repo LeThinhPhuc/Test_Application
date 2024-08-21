@@ -1,5 +1,5 @@
 import { v7 as uuidv7 } from "uuid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BackComponent from "../../../Components/ClassManagement/BackComponent";
 import InformationForm from "../../../Components/ClassManagement/InformationFormComponent";
 import QuestionComponent from "../../../Components/ClassManagement/QuestionComponent";
@@ -12,6 +12,7 @@ import {
   AddQuestionsToExam,
   CreateExam,
   setDisplayScoreMode,
+  setMixUpMode,
 } from "../../../redux/Action/ExamAction";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -34,18 +35,16 @@ const CreateExamPage = () => {
   };
   const [details, setDetails] = useState({
     displayResult: false,
-    extraTime: false,
+    mixUp: false,
   });
 
   const [transformedData, setTransformedData] = useState();
 
   const handleSubmit = async (values) => {
-    console.log("🚀 ~ handleSubmit ~ values:", values);
     const examInfo = await dispatch(
       CreateExam({ classId: classId, examData: values })
     );
     if (examInfo) {
-      console.log("🚀 ~ handleSubmit ~ examInfo:", examInfo);
       setExamId(examInfo.id);
       setCreateExam(true);
     }
@@ -81,19 +80,25 @@ const CreateExamPage = () => {
     );
   };
   const handleChangeDetails = (e) => {
+    const { name, checked } = e.target;
     setDetails((prevDetails) => ({
       ...prevDetails,
-      [e.target.name]: e.target.checked,
+      [name]: checked,
     }));
   };
+  useEffect(() => {
+    console.log("🚀 ~ handleCreate ~ details:", details);
+  }, [details]);
   const handleCreate = () => {
     if (transformedData) {
-      console.log("🚀 ~ handleCreate ~ transformedData:", transformedData);
       dispatch(
         AddQuestionsToExam({ examId: examId, questions: transformedData })
       );
       if (details.displayResult === true) {
         dispatch(setDisplayScoreMode(examId));
+      }
+      if (details.mixUp === true) {
+        dispatch(setMixUpMode(examId));
       }
       navigate(-1);
     }

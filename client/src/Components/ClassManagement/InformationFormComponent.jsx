@@ -58,19 +58,19 @@ const InformationForm = ({ onSubmit, classId }) => {
                 disabled={isDisabled}
               />
 
-              <div className="w-[75%] flex justify-between gap-2">
+              <div className=" flex justify-between gap-2">
                 <CustomInputComponent
                   label="Ngày thi"
                   name="testDay"
                   type="date"
                   disabled={isDisabled}
                 />
-                <CustomInputComponent
+                {/* <CustomInputComponent
                   label="Thời gian"
                   name="testTime"
                   type="number"
                   disabled={true}
-                />
+                /> */}
               </div>
               <div className="w-[75%] flex justify-between gap-2">
                 <CustomInputComponent
