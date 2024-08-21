@@ -100,7 +100,7 @@ public class AccountController {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 //        }
 //    }
-
+@CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody RegistryDTO registryDTO) {
         try {

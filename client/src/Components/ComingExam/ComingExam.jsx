@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./ComingExam.css";
 import { Link } from "react-router-dom";
 
-const ComingExam = (props) => {
+const ComingExam = ({ exam }) => {
   const [modal, setModal] = useState(false);
 
   const toggleModal = () => {
@@ -16,14 +16,14 @@ const ComingExam = (props) => {
       >
         <a href="#">
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {props.className}
+            {exam.testName}
           </h5>
         </a>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          Date: {props.date}
+          Date: {exam.testDay}
         </p>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          Duration: {props.duration}
+          Duration: {exam.testTime}
         </p>
 
         <button
@@ -97,15 +97,15 @@ const ComingExam = (props) => {
                   </h3>
 
                   <p className="text-left">
-                    <div className="mb-5">Tên cuộc thi : {props.className}</div>
+                    <div className="mb-5">Tên cuộc thi : {exam.testName}</div>
 
-                    <div className="mb-5">Date : {props.date}</div>
+                    <div className="mb-5">Date : {exam.testDay}</div>
 
-                    <div className="mb-5">Time Start : {props.startTime}</div>
+                    <div className="mb-5">Time Start : {exam.timeStart}</div>
                   </p>
 
                   <Link
-                    to={`/student/${props.id}`}
+                    to={`/student/${exam.id}`}
                     onClick={toggleModal}
                     data-modal-hide="popup-modal"
                     type="button"

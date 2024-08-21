@@ -40,38 +40,27 @@ const options = {
     },
   },
 };
-const StatisticComponent = ({ examData }) => {
-  const scoreData = [
-    { score: 2, total: 3 },
-    { score: 3, total: 1 },
-    { score: 3.5, total: 1 },
-    { score: 4, total: 3 },
-    { score: 5, total: 1 },
-    { score: 5, total: 1 },
-    { score: 6, total: 2 },
-    { score: 7.5, total: 2 },
-    { score: 10, total: 1 },
-  ];
+const StatisticComponent = ({ exam, statistic }) => {
+  console.log("🚀 ~ StatisticComponent ~ statistic:", statistic);
+  const scoreData = statistic.scoreDistribution;
   const data = {
-    labels: scoreData.map((s) => s.score),
+    labels: scoreData.map((s) => parseFloat(s.score).toFixed(2)),
     datasets: [
       { label: "Số lượng", data: scoreData.map((s) => Math.round(s.total)) },
     ],
   };
 
-  const avgScore = 7.5;
-  const student = { name: "Võ Thị Thu Hòa", point: 10.0 };
   return (
     <div className="flex flex-col my-5 mx-[120px]">
       <HeaderComponent text={`Phân bố điểm`} />
-      {`KỲ THI ${examData.name}`}
-      <div className="flex justify-between mt-3 gap-10">
-        <div className="w-[60%] ">
+      <p className="uppercase">{` ${exam?.testName}`}</p>
+      <div className="flex justify-between mt-3 ">
+        <div className="w-[70%] ">
           <Bar options={options} data={data} />
         </div>
-        <div className="flex-1">
-          <AvgComponent avgScore={avgScore} />
-          <StudentComponent student={student} />
+        <div className="flex-1 ml-4">
+          <AvgComponent avgScore={statistic?.average} />
+          <StudentComponent student={statistic?.topScorer} />
         </div>
       </div>
     </div>

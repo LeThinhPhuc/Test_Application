@@ -10,7 +10,9 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@redux-devtools/extension": "^3.3.0",
         "@reduxjs/toolkit": "^2.2.7",
+        "antd": "^5.20.1",
         "axios": "^1.7.4",
         "chart.js": "^4.4.3",
         "formik": "^2.4.6",

@@ -72,7 +72,7 @@ public class StudentController {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
 //        }
 //    }
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/tests/{studentId}")
     public ResponseEntity<?> getTestsForStudent(@PathVariable String studentId) {
         try {

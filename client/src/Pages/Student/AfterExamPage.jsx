@@ -1,7 +1,12 @@
 import Header from "../../Components/Header/Header";
 import tickVetor from "../../Assets/tick_vector.png";
+import { useLocation } from "react-router-dom";
 
 const AfterExamPage = () => {
+  const location = useLocation();
+  const score = location.state?.score;
+  const displayScore = location.state?.examData?.getScore;
+  console.log("🚀 ~ AfterExamPage ~ score:", location.state?.score);
   return (
     <div className="">
       <Header />
@@ -14,8 +19,11 @@ const AfterExamPage = () => {
             <h1 className=" font-semibold text-[40px]">
               You Finished Your Exam
             </h1>
-            <p className="font-thin text-[25px]">
-              Your teacher will release your results shortly, All the best 😍
+
+            <p className="font-light text-[25px]">
+              {displayScore === true
+                ? `Your score is: ${parseFloat(score.toFixed(2))} `
+                : "Your teacher will release your results shortly, All the best 😍"}
             </p>
           </div>
         </div>

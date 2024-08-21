@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/classrooms")
 public class ClassRoomController {
@@ -96,8 +96,8 @@ public class ClassRoomController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try{
-            classRoomService.createClass(classRoomDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            ClassRoom classData = classRoomService.createClass(classRoomDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(classData);
         }catch (Exception ex){
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

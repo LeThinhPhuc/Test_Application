@@ -1,72 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./ExamManagement.css";
+import { exams } from "../../redux/Reducer/ExamSlice";
+import { fetchAllExam, fetchStatistic } from "../../redux/Action/ExamAction";
 import StatisticComponent from "../Statistic/StatisticComponent";
 
 const ExamManagement = () => {
-  const examData = [
-    {
-      code: "00080423",
-      name: "LẬP TRÌNH NÂNG CAO - GIỮA KỲ 1",
-      date: "2024-08-08",
-      startTime: "08:00",
-      endTime: "08:00",
-    },
-    {
-      code: "00081024",
-      name: "LẬP TRÌNH NÂNG CAO - GIỮA KỲ 2",
-      date: "2024-09-09",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087825",
-      name: "LẬP TRÌNH NÂNG CAO - GIỮA KỲ 1",
-      date: "2024-08-10",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087826",
-      name: "LẬP TRÌNH NÂNG CAO - GIỮA KỲ 1",
-      date: "2024-08-11",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087833",
-      name: "LẬP TRÌNH NÂNG CAO - CUỐI KÌ 1",
-      date: "2024-08-12",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087834",
-      name: "LẬP TRÌNH NÂNG CAO - CUỐI KÌ 1",
-      date: "2024-08-13",
-      startTime: "",
-      endTime: "",
-    },
-    {
-      code: "00087835",
-      name: "LẬP TRÌNH NÂNG CAO - CUỐI KÌ 2",
-      date: "2024-09-14",
-      startTime: "",
-      endTime: "",
-    },
-  ];
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchAllExam());
+  }, [dispatch]);
+  const examsData = useSelector(exams);
   const [date, setDate] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [statistic, setStatistic] = useState(false);
-  const [currentExam, setCurrentExam] = useState();
-  const handleClick = (exam) => {
-    setStatistic(true);
-    setCurrentExam(exam);
-  };
-  const handleDateChange = (event) => {
-    setDate(event.target.value);
-  };
+  const [toggleStatistic, setToggleStatistic] = useState(false);
+  const [currentExam, setCurrentExam] = useState(examsData[0]);
+  const [statistic, setStatistic] = useState({});
 
   const handleTypeChange = (event) => {
     setSelectedType(event.target.value);
@@ -76,16 +26,25 @@ const ExamManagement = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredExams = examData.filter((exam) => {
-    const matchesType = selectedType === "" || exam.name.includes(selectedType);
+  const handleDateChange = (event) => {
+    setDate(event.target.value);
+  };
+
+  const filteredExams = examsData?.filter((exam) => {
+    const matchesType =
+      selectedType === "" || exam.testName.includes(selectedType);
     const matchesSearch =
       searchTerm === "" ||
-      exam.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      exam.code.includes(searchTerm);
-    const matchesDate = date === "" || exam.date === date;
+      exam.testName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      exam.classRoomId.includes(searchTerm);
+    const matchesDate = date === "" || exam.testDay === date;
     return matchesType && matchesSearch && matchesDate;
   });
-
+  const handleClick = async (exam) => {
+    setCurrentExam(exam);
+    setStatistic(await dispatch(fetchStatistic(exam?.id)));
+    setToggleStatistic(true);
+  };
   return (
     <div className="flex-1">
       <div className="max-w-2xl mx-auto flex items-center">
@@ -156,19 +115,35 @@ const ExamManagement = () => {
             </tr>
           </thead>
           <tbody className="tbody">
-            {filteredExams.map((exam, index) => (
-              <tr key={index} onClick={() => handleClick(exam)}>
-                <td className="td">{exam.code}</td>
-                <td className="td">{exam.name}</td>
-                <td className="td">{exam.date}</td>
-                <td className="td">{exam.startTime}</td>
-                <td className="td">{exam.endTime}</td>
+            {filteredExams.length > 0 ? (
+              filteredExams.map((exam, index) => (
+                <tr
+                  key={index}
+                  onClick={() => {
+                    handleClick(exam);
+                  }}
+                >
+                  <td className="td">{exam.id}</td>
+                  <td className="td">{exam.testName}</td>
+                  <td className="td">{exam.testDay}</td>
+                  <td className="td">{exam.timeStart}</td>
+                  <td className="td">{exam.timeEnd}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="td text-center">
+                  No exams found
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
-      {statistic && <StatisticComponent examData={currentExam} />}
+
+      {toggleStatistic && (
+        <StatisticComponent exam={currentExam} statistic={statistic} />
+      )}
     </div>
   );
 };

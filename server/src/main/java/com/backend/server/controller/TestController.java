@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/tests")
 public class TestController {
@@ -97,7 +97,9 @@ public class TestController {
         }
     }
 
+
     @PostMapping("/{classId}")
+    @CrossOrigin(origins = "http://localhost:5173")
     public ResponseEntity<?> createTest(@PathVariable String classId, @RequestBody TestDTO testDTO) {
         if (testDTO.getClassRoomId() == null) {
             Response response = Response.of(HttpStatus.BAD_REQUEST, "ClassroomId is required");
@@ -108,7 +110,7 @@ public class TestController {
             ClassRoom classRoom = classRoomService.getClassById(classId);
             testService.addStudentsToTest(testData.getId(), classRoom.getStudents());
 
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(testData);
         } catch (Exception ex) {
             Response response = Response.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -321,4 +323,16 @@ public class TestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+    
+    @GetMapping("/statistics/{id}")
+    public ResponseEntity<?> statistics(@PathVariable String id) {
+        try {
+            ExamStatisticsDTO statistics = testService.getStudentTests(id);
+            return ResponseEntity.ok(statistics);
+        } catch (Exception ex) {
+            Response response = Response.of(HttpStatus.NOT_FOUND, ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
 }
