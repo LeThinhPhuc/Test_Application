@@ -41,7 +41,7 @@ const ExamManagement = () => {
     const matchesSearch =
       searchTerm === "" ||
       exam.testName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      exam.classRoomId.includes(searchTerm);
+      exam.id.includes(searchTerm);
     const matchesDate = date === "" || exam.testDay === date;
     return matchesType && matchesSearch && matchesDate;
   });
@@ -105,6 +105,8 @@ const ExamManagement = () => {
           <option value="GIỮA KỲ 2">GIỮA KÌ 2</option>
           <option value="CUỐI KÌ 1">CUỐI KÌ 1</option>
           <option value="CUỐI KÌ 2">CUỐI KÌ 2</option>
+          <option value="GIỮA KỲ 2"> HÈ </option>
+
         </select>
       </div>
 
