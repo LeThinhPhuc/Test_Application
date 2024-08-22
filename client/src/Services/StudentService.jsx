@@ -12,8 +12,8 @@ const axiosInstance = axios.create({
 const studentService = {
   getExamsForStudent: (studentId) =>
     axiosInstance.get(`students/tests/${studentId}`),
-  updateScore: (examId, studentId, score) =>
-    axiosInstance.put(`tests/${examId}/studentscore/${studentId}`, score),
+  updateScore: (examId, studentId, point) =>
+    axiosInstance.put(`tests/${examId}/studentscore/${studentId}`, { point }),
 };
 
 export default studentService;

@@ -253,8 +253,8 @@ public class TestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
-    @PatchMapping("/{id}/studentscore/{studentId}")
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PutMapping("/{id}/studentscore/{studentId}")
     public ResponseEntity<?> updateScoreForStudent(@PathVariable String id, @PathVariable String studentId, @RequestBody StudentTestDTO studentTest){
         if(studentId==null||id==null){
             Response response = Response.of(HttpStatus.BAD_REQUEST, "ID Test and ID Student is required");

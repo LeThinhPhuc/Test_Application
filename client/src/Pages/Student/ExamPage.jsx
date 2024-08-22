@@ -29,8 +29,13 @@ const ExamPage = () => {
       const res = await dispatch(fetchExamById(examId));
       setExamData(res);
     };
+
     fetchExamData();
-    if (examData?.finished === true) {
+
+    if (
+      examData?.finished === true ||
+      examData?.studentTests.some((s) => s.point !== 0)
+    ) {
       navigate("afterexam", { state: examData });
     }
   }, []);
@@ -48,24 +53,25 @@ const ExamPage = () => {
     }
     return () => clearInterval(timer);
   }, [timeLeft]);
-
+  const parseTimeString = (timeString) => {
+    const [hours, minutes, seconds] = timeString.split(":").map(Number);
+    const now = new Date();
+    now.setHours(hours, minutes, seconds, 0);
+    return now;
+  };
   useEffect(() => {
-    const parseTimeString = (timeString) => {
-      const [hours, minutes, seconds] = timeString.split(":").map(Number);
-      const now = new Date();
-      now.setHours(hours, minutes, seconds, 0);
-      return now;
-    };
     if (examData) {
       setSelectedOptions(Array(examData.questions.length).fill(null));
-      const timeStart = parseTimeString(examData.timeStart);
-      const timeEnd = parseTimeString(examData.timeEnd);
+      const timeStart = parseTimeString(examData?.timeStart);
+      const timeEnd = parseTimeString(examData?.timeEnd);
 
       if (currentTime < timeStart.getTime()) {
         navigate("/student/examnotavailable");
         setTimeLeft(
           Math.floor((timeEnd.getTime() - timeStart.getTime()) / 1000)
         );
+      } else if (currentTime >= timeEnd.getTime()) {
+        dispatch(changeToFinish(examId));
       } else {
         setTimeLeft(Math.floor((timeEnd.getTime() - currentTime) / 1000));
       }
@@ -101,14 +107,12 @@ const ExamPage = () => {
       }
     });
     totalScore = (totalScore / examData?.questions.length) * 100;
-    console.log("🚀 ~ examData?.questions.forEach ~ totalScore:", totalScore);
     setScore(totalScore);
   };
   const handleSubmit = () => {
     calculateScore();
     setTimeLeft(0);
     toggleModal();
-    dispatch(changeToFinish(examId));
     dispatch(updateScoreOfExam({ examId, studentId, score }));
     navigate("afterexam", { state: { examData, score } });
   };
