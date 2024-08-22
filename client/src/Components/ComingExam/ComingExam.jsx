@@ -8,6 +8,10 @@ const ComingExam = ({ exam }) => {
   const toggleModal = () => {
     setModal(!modal);
   };
+  const testDayDate = new Date(exam.testDay);
+  testDayDate.setDate(testDayDate.getDate() + 1);
+  const formattedTestDay = testDayDate.toISOString().split("T")[0]; // yyyy-mm-dd format
+
   return (
     <>
       <div
@@ -20,7 +24,7 @@ const ComingExam = ({ exam }) => {
           </h5>
         </a>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          Date: {exam.testDay}
+          Date: {formattedTestDay}
         </p>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
           Duration: {exam.testTime}
@@ -99,7 +103,7 @@ const ComingExam = ({ exam }) => {
                   <p className="text-left">
                     <div className="mb-5">Tên cuộc thi : {exam.testName}</div>
 
-                    <div className="mb-5">Date : {exam.testDay}</div>
+                    <div className="mb-5">Date : {formattedTestDay}</div>
 
                     <div className="mb-5">Time Start : {exam.timeStart}</div>
                   </p>
