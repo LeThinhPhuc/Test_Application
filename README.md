@@ -85,7 +85,7 @@ Open your `SQL Server Management Studio` <br>
 5. Select `status` and select options like the picture ![](https://i.ibb.co/NmFWy0D/image.png) and click OK
 6. Restart your SQL Server ![](https://i.ibb.co/NjKjC8X/image.png)
 7. Right click your SQL Server and select properties ![](https://i.ibb.co/FK47Bpf/image.png)
-8. Select `Sercurity` and select `SQL Server and Windows Authentication mode` ![](https://i.ibb.co/G5K4Bt4/image.png[) and click OK
+8. Select `Sercurity` and select `SQL Server and Windows Authentication mode` ![](https://i.ibb.co/G5K4Bt4/image.png) and click OK
 9. Disconnect your SQL Server and reconnect with `SQL Server Authentication` mode ![](https://i.ibb.co/JHvPpPf/image.png)
 10. Enter you account you have already created (`sa` and `sa`)
 11. If you can login, you have created successfully
@@ -95,8 +95,8 @@ Open your `SQL Server Management Studio` <br>
 Next, install `Extension Pack for Java` extension in VS Code ![](https://i.ibb.co/d0MKH4D/image.png) <br>
 Click `Run and Debug` and select `Spring boot` and it will build and create database automatically for you <br>
 After successfully running the program for the first time, follow these steps to install roles and create a Teacher account to login :<br>
-1. Insert data to Authority table ![](https://ibb.co/zbN9fbj)
-2. Go to this workspace https://app.getpostman.com/join-team?invite_code=ee07ed972ce8e2c3010a64b416e4c655&target_code=680f661ecfecaea3d01fe1aa490a1e64 to create teacher account ![](https://ibb.co/hBddk5K)
+1. Insert data to Authority table ![](https://i.ibb.co/xG395GP/Screenshot-2024-08-25-093115.png)
+2. Go to this workspace https://app.getpostman.com/join-team?invite_code=ee07ed972ce8e2c3010a64b416e4c655&target_code=680f661ecfecaea3d01fe1aa490a1e64 to create teacher account ![](https://i.ibb.co/c688P5N/Screenshot-2024-08-25-092050.png)<br>
 That's all
 
 
