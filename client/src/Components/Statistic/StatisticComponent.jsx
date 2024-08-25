@@ -58,7 +58,7 @@ const StatisticComponent = ({ exam, statistic }) => {
         <div className="w-[70%] ">
           <Bar options={options} data={data} />
         </div>
-        <div className="flex-1 ml-4">
+        <div className="flex-1 ml-5">
           <AvgComponent avgScore={statistic?.average} />
           <StudentComponent student={statistic?.topScorer} />
         </div>
