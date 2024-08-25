@@ -23,7 +23,7 @@ const AfterExamPage = () => {
 
             <p className="font-light text-[25px]">
               {displayScore === true
-                ? `Your score is: ${parseFloat(score.toFixed(2))} `
+                ? `Your score is: ${parseFloat(score?.toFixed(2))} `
                 : "Your teacher will release your results shortly, All the best 😍"}
             </p>
           </div>
